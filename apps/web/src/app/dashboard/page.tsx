@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ScoreCard } from "@/components/developer/score-card"
+import ScorePieChart from "@/components/developer/score-pie-chart"
 import { VisibilityToggle } from "@/components/developer/visibility-toggle"
 import { mockDevelopers, mockContactRequests, mockAnalysisResult } from "@/data/mock-data"
 import { ArrowRight, GitBranch, Inbox, Search } from "lucide-react"
@@ -20,17 +20,18 @@ export default function DashboardPage() {
         </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-        <ScoreCard
-          score={developer.score}
-          showBreakdown
-          breakdown={{
-            codeQuality: 92,
-            architecture: 88,
-            security: 95,
-            gitPractices: 90,
-            documentation: 85,
-          }}
-        />
+        <Card className="p-6">
+          <ScorePieChart
+            scores={{
+              codeQuality: 92,
+              architecture: 88,
+              security: 95,
+              gitPractices: 90,
+              documentation: 85,
+            }}
+            totalScore={developer.score}
+          />
+        </Card>
 
         <div className="space-y-6">
           <VisibilityToggle initialValue={developer.isOpenToRecruiters} score={developer.score} />
