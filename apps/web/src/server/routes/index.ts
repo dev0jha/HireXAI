@@ -1,0 +1,7 @@
+import { Elysia } from "elysia"
+
+const indexRouter = new Elysia()
+
+indexRouter.get("/", () => "Welcome to the Elysia server!")
+
+export default indexRouter
