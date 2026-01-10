@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card"
 import { mockAnalysisResult } from "@/data/mock-data"
 import ScorePieChart from "@/components/developer/score-pie-chart"
@@ -11,11 +10,13 @@ export default function ResultsPage() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 mt-4 sm:mt-6">
       <div className="space-y-8">
         <div className="mb-6">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">Analysis Results</h1>
-          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Detailed breakdown of your repository analysis</p>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold">Analysis Results</h1>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+              Detailed breakdown of your repository analysis
+            </p>
+          </div>
         </div>
-      </div>
 
       <Card className="p-6">
         <div className="mb-6">
