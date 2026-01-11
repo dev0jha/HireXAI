@@ -1,7 +1,16 @@
 import { HealthService } from "@/server/services"
-import { Elysia } from "elysia"
+import { Context, Elysia } from "elysia"
 import { openapi } from "@elysiajs/openapi"
 import { auth } from "@/lib/auth"
+
+// const betterAuthView = (context: Context) => {
+//     const BETTER_AUTH_ACCEPT_METHODS = ["POST", "GET"]
+//     if(BETTER_AUTH_ACCEPT_METHODS.includes(context.request.method)) {
+//         return auth.handler(context.request);
+//     } else {
+//         context.status(405)
+//     }
+// }
 
 const betterAuth = new Elysia({ name: "better-auth" })
   .mount(auth.handler)
