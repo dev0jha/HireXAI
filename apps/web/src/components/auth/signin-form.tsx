@@ -1,24 +1,27 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { signIn } from "@/lib/auth-client";
-import  Form  from "next/form";
-import { SignInUser, SignUpUser } from "@/actions/auth-action";
-import { useFormStatus } from "react-dom";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import Form from "next/form"
+import { SignInUser } from "@/actions/auth-action"
+import { useForm } from "react-hook-form"
+import { signInSchema, type SignInSchema } from "@/utils/validation/signIn.validation"
+
+import { zodResolver } from "@hookform/resolvers/zod"
 
 export function SignInForm() {
-  const { pending } = useFormStatus();
+  const { handleSubmit } = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
   return (
     <Form action={SignInUser} className="space-y-4">
-      {/* {error && (
-        <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-          {error}
-        </div>
-      )} */}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -45,5 +48,6 @@ export function SignInForm() {
         {pending ? "Signing in..." : "Sign In"}
       </Button>
     </Form>
-  );
+  )
 }
+

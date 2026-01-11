@@ -7,10 +7,18 @@ import { VisibilityToggle } from "@/components/developer/visibility-toggle"
 import { mockDevelopers, mockContactRequests, mockAnalysisResult } from "@/data/mock-data"
 import { ArrowRight, GitBranch, Inbox, Search } from "lucide-react"
 import GearIcon from "@/components/ui/gear-icon"
+import { apiClient } from "@/lib/eden"
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   const developer = mockDevelopers[0]
   const pendingRequests = mockContactRequests.filter(r => r.status === "pending")
+
+  const { data, error } = await apiClient.user.get()
+  if (error) {
+    console.log("error", error)
+    return
+  }
+  console.log("user", data)
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 mt-4 sm:mt-6">
@@ -24,21 +32,21 @@ export default function DashboardPage() {
           </p>
         </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-        <Card className="p-6">
-          <ScorePieChart
-            scores={{
-              codeQuality: 92,
-              architecture: 88,
-              security: 95,
-              gitPractices: 90,
-              documentation: 85,
-            }}
-            totalScore={developer.score}
-          />
-        </Card>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+          <Card className="p-6">
+            <ScorePieChart
+              scores={{
+                codeQuality: 92,
+                architecture: 88,
+                security: 95,
+                gitPractices: 90,
+                documentation: 85,
+              }}
+              totalScore={developer.score}
+            />
+          </Card>
 
-        <div className="space-y-6">
+          <div className="space-y-6">
             <VisibilityToggle initialValue={developer.isOpenToRecruiters} score={developer.score} />
 
             <Card className="p-6">
