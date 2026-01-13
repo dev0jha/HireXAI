@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { useState } from "react"
+import LogoutBtn from "@/components/auth/logout-btn"
 
 const navItems = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -86,13 +87,7 @@ export function DashboardSidebar() {
                 <p className="truncate text-xs text-muted-foreground">alex@example.com</p>
               </div>
             )}
-            {!collapsed && (
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Link href="/">
-                  <LogOut className="h-4 w-4" />
-                </Link>
-              </Button>
-            )}
+            {!collapsed && <LogoutBtn />}
           </div>
         </div>
       </div>

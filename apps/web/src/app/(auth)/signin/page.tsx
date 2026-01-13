@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
   Card,
   CardContent,
@@ -12,14 +11,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useSignIn } from "@/hooks/screens/signIn.hook"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form } from "@/components/ui/form"
+import EmailField from "@/components/auth/primitives/email-field"
+import PassField from "@/components/auth/primitives/pass-fields"
 
 export default function SignInPage() {
   const { form, onSubmitFormAction } = useSignIn()
@@ -39,41 +33,8 @@ export default function SignInPage() {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="name@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Password</FormLabel>
-                      <Link
-                        href="/forgot-password"
-                        className="text-sm text-primary hover:underline"
-                      >
-                        Forgot password?
-                      </Link>
-                    </div>
-                    <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <EmailField control={form.control} />
+              <PassField control={form.control} />
             </CardContent>
 
             <CardFooter className="flex flex-col gap-4">
@@ -94,4 +55,3 @@ export default function SignInPage() {
     </Form>
   )
 }
-

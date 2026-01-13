@@ -1,37 +1,45 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
+import { useClientOnly } from "@/hooks/use-clientonly"
 import { cn } from "@/lib/utils"
 import { IconLock } from "@tabler/icons-react"
-import { CheckCircle2, CircleDashed, Server } from "lucide-react"
+import { CheckCircle2, CircleDashed } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
 
+const logs = [
+  {
+    id: 1,
+    method: "POST",
+    endpoint: "/v1/analyze/repo",
+    status: "success",
+    duration: "240ms",
+    time: "10:24:01",
+  },
+  {
+    id: 2,
+    method: "GET",
+    endpoint: "/v1/vectors/embed",
+    status: "success",
+    duration: "45ms",
+    time: "10:24:02",
+  },
+  {
+    id: 3,
+    method: "WS",
+    endpoint: "socket.io/stream",
+    status: "processing",
+    duration: "connected",
+    time: "10:24:05",
+  },
+]
+
 export const SystemLogs = () => {
-  const logs = [
-    {
-      id: 1,
-      method: "POST",
-      endpoint: "/v1/analyze/repo",
-      status: "success",
-      duration: "240ms",
-      time: "10:24:01",
-    },
-    {
-      id: 2,
-      method: "GET",
-      endpoint: "/v1/vectors/embed",
-      status: "success",
-      duration: "45ms",
-      time: "10:24:02",
-    },
-    {
-      id: 3,
-      method: "WS",
-      endpoint: "socket.io/stream",
-      status: "processing",
-      duration: "connected",
-      time: "10:24:05",
-    },
-  ]
+  const { isHyderated } = useClientOnly()
+  if (!isHyderated) {
+    return null
+  }
 
   return (
     <div className="relative w-full h-full p-6 text-[10px] md:text-xs leading-relaxed overflow-hidden select-none">

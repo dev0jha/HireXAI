@@ -7,18 +7,10 @@ import { VisibilityToggle } from "@/components/developer/visibility-toggle"
 import { mockDevelopers, mockContactRequests, mockAnalysisResult } from "@/data/mock-data"
 import { ArrowRight, GitBranch, Inbox, Search } from "lucide-react"
 import GearIcon from "@/components/ui/gear-icon"
-import { apiClient } from "@/lib/eden"
 
 export default async function DashboardPage() {
   const developer = mockDevelopers[0]
   const pendingRequests = mockContactRequests.filter(r => r.status === "pending")
-
-  const { data, error } = await apiClient.user.get()
-  if (error) {
-    console.log("error", error)
-    return
-  }
-  console.log("user", data)
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 mt-4 sm:mt-6">

@@ -1,3 +1,4 @@
+import { userRoles } from "@/db/schema/enums"
 import {
   emailValidationSchema,
   passwordValidationSchema,
@@ -20,6 +21,7 @@ export const signUpSchema = z
 
     email: emailValidationSchema,
     password: passwordValidationSchema,
+    role: z.enum(userRoles.enumValues, { message: "Invalid user role" }),
     confirmPassword: z.string({ message: "Please confirm your password" }),
   })
   .refine(data => data.password === data.confirmPassword, {

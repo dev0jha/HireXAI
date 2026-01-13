@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signUpSchema, type SignUpSchema } from "@/utils/validation/register.validation"
-import { SignUpUserAction } from "@/actions/auth.actions"
+import { signUpUserAction } from "@/actions/auth.actions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
@@ -19,13 +19,14 @@ export function useSignUp() {
       email: "",
       password: "",
       confirmPassword: "",
+      role: "candidate",
     },
   })
 
   async function onSubmit(values: SignUpSchema) {
     const toastId = toast.loading("creating account....")
 
-    const response = await SignUpUserAction(values)
+    const response = await signUpUserAction(values)
     if (!response.success) {
       toast.error(response.error, { id: toastId })
       return

@@ -10,12 +10,12 @@ export default function page() {
     <>
       <main className="relative bg-black">
         <SchematicBackground />
-          <Container>
+        <Container>
           <Navbar />
           <HeroSection />
           <HowItWorks />
           <FeaturesSection />
-         </Container>
+        </Container>
       </main>
     </>
   )

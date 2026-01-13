@@ -1,4 +1,4 @@
-import { SignInUserAction } from "@/actions/auth.actions"
+import { signInUserAction } from "@/actions/auth.actions"
 import { useForm } from "react-hook-form"
 import { signInSchema } from "@/utils/validation/signIn.validation"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -23,7 +23,7 @@ export function useSignIn() {
   async function onSubmit(values: SignInSchema) {
     const toastId = toast.loading("Logging you in...")
 
-    const response = await SignInUserAction(values)
+    const response = await signInUserAction(values)
     if (!response.success) {
       toast.error(response.error, { id: toastId })
       return

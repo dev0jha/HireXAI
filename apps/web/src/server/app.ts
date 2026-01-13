@@ -1,10 +1,12 @@
 import { HealthService } from "@/server/services"
 import { Elysia } from "elysia"
 import { openapi } from "@elysiajs/openapi"
-import { UserService } from "@/server/services/user.service"
+import { betterAuthmiddleware } from "@/server/middlewares/auth.middleware"
 
 export const app = new Elysia({ prefix: "/api" })
-  .get("/user", UserService.getUser)
   .use(openapi())
+  .use(betterAuthmiddleware)
+  .get("/user", ({ user }) => user, { auth: true })
   .get("/health", HealthService.getStatus)
+
 export type API = typeof app

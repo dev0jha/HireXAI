@@ -8,7 +8,8 @@ const baseCardClass =
 const developerFeatures: BentoCardProps[] = [
   {
     name: "AI Code Analysis",
-    description: "Get detailed feedback on code quality, architecture, and best practices from our AI.",
+    description:
+      "Get detailed feedback on code quality, architecture, and best practices from our AI.",
     href: "#",
     cta: "Learn More",
     className: baseCardClass,
@@ -70,9 +71,9 @@ export function FeaturesSection() {
     <section className="relative w-full bg-black py-24 lg:py-32 border-t border-zinc-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl md:text-5xl  font-semibold text-white mb-8 tracking-tight">
-            Feartures <br />
-            <span className="text-zinc-600">Showcase your real skills</span>
-          </h2>
+          Feartures <br />
+          <span className="text-zinc-600">Showcase your real skills</span>
+        </h2>
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
           <div>
             <p className="text-sm font-medium font-poppins text-success mb-3">For Developers</p>
@@ -80,7 +81,8 @@ export function FeaturesSection() {
               Showcase your real skills
             </h2>
             <p className="text-zinc-400 mb-10">
-              No more resume games. Let your code speak for itself and connect with opportunities that match your abilities.
+              No more resume games. Let your code speak for itself and connect with opportunities
+              that match your abilities.
             </p>
             <div className="space-y-4">
               {developerFeatures.map((feature, idx) => (
@@ -95,7 +97,8 @@ export function FeaturesSection() {
               Find proven talent
             </h2>
             <p className="text-zinc-400 mb-10">
-              Skip the guesswork. Discover developers with verified technical skills through their actual code contributions.
+              Skip the guesswork. Discover developers with verified technical skills through their
+              actual code contributions.
             </p>
             <div className="space-y-4">
               {recruiterFeatures.map((feature, idx) => (
