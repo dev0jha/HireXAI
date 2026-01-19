@@ -52,7 +52,7 @@ export function GitHubAnalysisFlow() {
           >
             <TrendingUp className="h-6 w-6 md:h-10 md:w-10 text-success" />
           </div>
-          <span className="text-[10px] md:text-sm font-medium text-muted-foreground text-center">
+          <span className="text-[10px] md:text-sm font-medium text-muted-foreground text-center tecon">
             Developer Score
           </span>
         </div>

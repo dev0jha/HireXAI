@@ -36,11 +36,6 @@ const logs = [
 ]
 
 export const SystemLogs = () => {
-  const { isHyderated } = useClientOnly()
-  if (!isHyderated) {
-    return null
-  }
-
   return (
     <div className="relative w-full h-full p-6 text-[10px] md:text-xs leading-relaxed overflow-hidden select-none">
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
@@ -180,17 +175,7 @@ export const DevIdCardSkeleton = ({ className }: { className?: string }) => {
         </div>
 
         <div className="mt-auto pt-4 border-t border-zinc-900 flex justify-between items-end opacity-50">
-          <div className="flex items-end gap-0.5 h-4">
-            {[...Array(15)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="w-0.5 bg-zinc-700"
-                animate={{ height: ["40%", "100%", "60%"] }}
-                transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
-                style={{ height: Math.random() * 10 + 5 }}
-              />
-            ))}
-          </div>
+          <Placeholder />
           <div className="h-2 w-20 bg-zinc-900 rounded animate-pulse" />
         </div>
       </div>
@@ -356,6 +341,26 @@ export const SecurityHash = () => {
           </div>
         </motion.div>
       </div>
+    </div>
+  )
+}
+
+function Placeholder() {
+  const { isHyderated } = useClientOnly()
+  if (!isHyderated) {
+    return null
+  }
+  return (
+    <div className="flex items-end gap-0.5 h-4">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="w-0.5 bg-zinc-700"
+          animate={{ height: ["40%", "100%", "60%"] }}
+          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+          style={{ height: Math.random() * 10 + 5 }}
+        />
+      ))}
     </div>
   )
 }

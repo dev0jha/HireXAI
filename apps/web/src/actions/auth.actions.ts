@@ -18,7 +18,7 @@ export async function signInUserAction(formValues: SignInSchema): Promise<Action
     console.error("Failed sign In", result.error)
     return {
       success: false,
-      error: result.error.message ?? "Sign in failed!",
+      error: "Sign in failed!",
     }
   }
 
