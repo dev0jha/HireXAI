@@ -1,7 +1,7 @@
 import { treaty } from "@elysiajs/eden"
 import type { API } from "@/server/app"
 
-let apiClient: any
+let apiClient: ReturnType<typeof treaty<API>>["api"]
 
 if (typeof window === "undefined") {
   /**
