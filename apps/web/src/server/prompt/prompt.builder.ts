@@ -1,18 +1,15 @@
-export const buildPrompt = (repoData: any, readme: string | null, languages: any) => {
+export const buildPrompt = (repoData: any) => {
   return `
 	Analyze this GitHub repository and provide scores and feedback based on the following criteria:
 
 	Repository: ${repoData.name}
-	Description: ${repoData.description || "No description"}
+	Description: ${repoData.description ?? "No description"}
 	Language: ${repoData.language}
 	Stars: ${repoData.stargazers_count}
 	Forks: ${repoData.forks_count}
 	Issues: ${repoData.open_issues_count}
 
-	README Content:
-	${readme || "No README found"}
-
-	Languages: ${JSON.stringify(languages)}
+	You can use the available tools to fetch additional information like README content and programming languages used in the repository to provide a more accurate analysis.
 
 	Please provide a detailed analysis in the following JSON format:
 	{
@@ -38,5 +35,5 @@ export const buildPrompt = (repoData: any, readme: string | null, languages: any
 
 
 	DONT GIVE ME JSON BLOCK ONLY RETURN THE RAW JSON IN A FORMAT , I CAN PARSE IT DIRECTLY!
-`
+	`
 }

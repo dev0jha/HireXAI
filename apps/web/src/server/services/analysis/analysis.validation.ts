@@ -1,7 +1,7 @@
 import { t } from "elysia"
 import z from "zod/v3"
 
-export const repoAnalysisRequestBody = t.Object({
+export const repoAnalysisRequestBodySchema = t.Object({
   repoUrl: t.String(),
 })
 

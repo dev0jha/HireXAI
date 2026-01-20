@@ -30,14 +30,14 @@ const scoreCategories = [
 
 export default function AnalyzePage() {
   const {
+    state,
     repoUrl,
-    isAnalyzing,
     setRepoUrl,
-    analysisComplete,
-    error,
     handleAnalyze,
     scoreValues,
-    analysisResult,
+    isError,
+    isComplete,
+    isAnalyzing,
   } = useAnalysis()
 
   return (
@@ -90,41 +90,48 @@ export default function AnalyzePage() {
 
           {isAnalyzing && (
             <div className="mt-8 space-y-4">
-              <p>Analyzing...</p>
+              <div className="flex items-center gap-3">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <p className="text-sm">
+                  {state.status === "responding" ? state.currentStatus : ""}
+                </p>
+              </div>
             </div>
           )}
         </Card>
 
-        {error && (
+        {isError && (
           <Card className="p-6 mt-8 border-destructive/50 bg-destructive/5">
             <div className="flex items-center gap-3">
               <div className="h-5 w-5 rounded-full border-2 border-destructive flex items-center justify-center">
                 <span className="text-destructive text-xs">!</span>
               </div>
-              <p className="text-sm text-destructive">{error}</p>
+              <p className="text-sm text-destructive">
+                {state.status === "error" ? state.error : ""}
+              </p>
             </div>
           </Card>
         )}
 
-        {analysisComplete && analysisResult && (
+        {isComplete && state.status === "complete" && (
           <div className="space-y-8 mt-8">
             <Card className="p-6">
               <h3 className="text-xl font-semibold mb-4">Analysis Flow</h3>
-              <AnalysisCanvas analysisResult={analysisResult} />
+              <AnalysisCanvas analysisResult={state.result} />
             </Card>
 
             <div className="grid gap-6 lg:grid-cols-2">
               <Card className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-xl font-semibold">{analysisResult.name}</h2>
-                    <p className="text-sm text-muted-foreground">{analysisResult.url}</p>
+                    <h2 className="text-xl font-semibold">{state.result.name}</h2>
+                    <p className="text-sm text-muted-foreground">{state.result.url}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-muted-foreground">Total Score</p>
                     <div className="flex items-baseline gap-1">
                       <span className="text-3xl font-bold text-primary">
-                        {analysisResult.totalScore}
+                        {state.result.totalScore}
                       </span>
                       <span className="text-muted-foreground">/100</span>
                     </div>
@@ -132,8 +139,8 @@ export default function AnalyzePage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-6">
-                  <Badge variant="outline">{analysisResult.language}</Badge>
-                  <Badge variant="outline">{analysisResult.stars} stars</Badge>
+                  <Badge variant="outline">{state.result.language}</Badge>
+                  <Badge variant="outline">{state.result.stars} stars</Badge>
                 </div>
 
                 <div className="space-y-4">
@@ -159,7 +166,7 @@ export default function AnalyzePage() {
               <Card className="p-6">
                 <h3 className="text-xl font-semibold mb-4">AI Feedback</h3>
                 <div className="space-y-4">
-                  {analysisResult.feedback.map((item: string, index: number) => (
+                  {state.result.feedback.map((item: string, index: number) => (
                     <div key={index} className="flex gap-3 p-3 rounded-lg bg-muted/50">
                       <div className="mt-0.5">
                         {index < 2 ? (
