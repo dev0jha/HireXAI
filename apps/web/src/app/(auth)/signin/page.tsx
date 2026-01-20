@@ -1,58 +1,72 @@
 "use client"
-
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { SchematicBackground } from "@/components/semantic-background"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { useSignIn } from "@/hooks/screens/signIn.hook"
 import { Form } from "@/components/ui/form"
 import EmailField from "@/components/auth/primitives/email-field"
 import PassField from "@/components/auth/primitives/pass-fields"
+import { CornerDecorations } from "@/components/ui/corner-decorations"
+import { AuthBackgroundsPatterns } from "@/components/auth-bg-patterns"
 
 export default function SignInPage() {
   const { form, onSubmitFormAction } = useSignIn()
-
   const {
     formState: { isSubmitting },
   } = form
 
   return (
     <Form {...form}>
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black p-4 bg-[radial-gradient(35%_80%_at_50%_0%,--theme(--color-foreground/.1),transparent)]">
-        <SchematicBackground />
-        <Card className="z-10 w-full max-w-md bg-black border-dashed border-1">
-          <form onSubmit={onSubmitFormAction}>
-            <CardHeader className="text-start mb-4">
-              <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-              <CardDescription>Enter your credentials to access your account</CardDescription>
-            </CardHeader>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black p-4">
+        <div className="absolute inset-0 z-0">
+          <AuthBackgroundsPatterns />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_100%)]" />
+        </div>
 
-            <CardContent className="space-y-4 mb-4">
-              <EmailField control={form.control} />
-              <PassField control={form.control} />
-            </CardContent>
+        <div className="relative z-10 w-full max-w-100">
+          <CornerDecorations />
 
-            <CardFooter className="flex flex-col gap-4">
-              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Signing In..." : "Sign In"}
-              </Button>
-
-              <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup" className="font-medium text-primary hover:underline">
-                  Sign Up
-                </Link>
+          <div className="border-2 border-zinc-800/30 bg-neutral-900/10 backdrop-blur-md p-8 shadow-2xl">
+            <form onSubmit={onSubmitFormAction} className="flex flex-col gap-6">
+              <div className="space-y-2 text-center sm:text-left">
+                <h1 className="text-3xl font-bold tracking-tight text-white">Welcome back</h1>
+                <p className="text-sm text-zinc-400">Authenticate to access your profile.</p>
               </div>
-            </CardFooter>
-          </form>
-        </Card>
+
+              <div className="space-y-5">
+                <EmailField control={form.control} />
+                <PassField control={form.control} />
+              </div>
+
+              <div className="space-y-4 pt-2">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-white text-black hover:bg-zinc-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 font-medium"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-zinc-400" />
+                      Verifying...
+                    </span>
+                  ) : (
+                    "Login"
+                  )}
+                </Button>
+
+                <div className="text-center text-xs text-zinc-500">
+                  No Account?
+                  <Link
+                    href="/signup"
+                    className="text-zinc-300 hover:text-white hover:underline underline-offset-4 transition-colors px-1"
+                  >
+                    Create one
+                  </Link>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </Form>
   )

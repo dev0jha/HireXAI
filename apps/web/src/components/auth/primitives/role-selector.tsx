@@ -18,22 +18,26 @@ export default function RoleSelectorField({ control }: RoleSelectorProps) {
       name="role"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Role</FormLabel>
+          <FormLabel className="text-xs tracking-wider text-zinc-500">Role</FormLabel>
           <Select onValueChange={field.onChange} value={field.value} name={field.name}>
             <FormControl>
-              <SelectTrigger>
+              <SelectTrigger className="bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-700 focus:ring-1 focus:ring-zinc-400 focus:border-zinc-700 h-11">
                 <SelectValue />
               </SelectTrigger>
             </FormControl>
-            <SelectContent>
+            <SelectContent className="bg-zinc-950 border-zinc-800 text-zinc-200">
               {USER_ROLE_VALUES.map(role => (
-                <SelectItem key={role} value={role}>
+                <SelectItem
+                  key={role}
+                  value={role}
+                  className="focus:bg-zinc-800 focus:text-white cursor-pointer"
+                >
                   {role.charAt(0).toUpperCase() + role.slice(1)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <FormMessage />
+          <FormMessage className="text-xs" />
         </FormItem>
       )}
     />

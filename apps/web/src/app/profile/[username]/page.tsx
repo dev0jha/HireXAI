@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Navbar } from "@/components/core/Navbar"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -46,7 +45,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
       <main className="pt-24 pb-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <Card className="p-8">

@@ -16,11 +16,15 @@ function NameFields({ control }: NameFieldsProps) {
         name="firstName"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>First Name</FormLabel>
+            <FormLabel className="text-xs tracking-wider text-zinc-500">First Name</FormLabel>
             <FormControl>
-              <Input placeholder="John" {...field} />
+              <Input
+                placeholder="Aniket"
+                {...field}
+                className="bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-700 focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:border-zinc-700 h-11"
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
@@ -30,11 +34,15 @@ function NameFields({ control }: NameFieldsProps) {
         name="lastName"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Last Name</FormLabel>
+            <FormLabel className="text-xs tracking-wider text-zinc-500">Last Name</FormLabel>
             <FormControl>
-              <Input placeholder="Doe" {...field} />
+              <Input
+                placeholder="Nishad"
+                {...field}
+                className="bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-700 focus-visible:ring-1 focus-visible:ring-zinc-400 focus-visible:border-zinc-700 h-11"
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />

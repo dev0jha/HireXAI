@@ -2,60 +2,70 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { SchematicBackground } from "@/components/semantic-background"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
 import { useSignUp } from "@/hooks/screens/signUp.hook"
 import NameFields from "@/components/auth/primitives/name-fields"
 import EmailField from "@/components/auth/primitives/email-field"
 import PassField from "@/components/auth/primitives/pass-fields"
 import RoleSelectorField from "@/components/auth/primitives/role-selector"
+import { CornerDecorations } from "@/components/ui/corner-decorations"
+import { AuthBackgroundsPatterns } from "@/components/auth-bg-patterns"
 
 export default function SignUpPage() {
   const { form, submitFormAction } = useSignUp()
-
   const {
     formState: { isSubmitting },
   } = form
 
   return (
     <Form {...form}>
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black p-4 bg-[radial-gradient(35%_80%_at_50%_0%,--theme(--color-foreground/.1),transparent)]">
-        <SchematicBackground />
-        <Card className="z-10 w-full max-w-md bg-black border-dashed border-1">
-          <form onSubmit={submitFormAction}>
-            <CardHeader className="text-start mb-4">
-              <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-              <CardDescription>Enter your information to get started</CardDescription>
-            </CardHeader>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black p-4">
+        <div className="absolute inset-0 z-0">
+          <AuthBackgroundsPatterns />
 
-            <CardContent className="space-y-4 mb-4">
-              <NameFields control={form.control} />
-              <EmailField control={form.control} />
-              <PassField control={form.control} confirmPassword />
-              <RoleSelectorField control={form.control} />
-            </CardContent>
-            <CardFooter className="flex flex-col gap-4">
-              <Button type="submit" size="lg" className="w-full " disabled={isSubmitting}>
-                {isSubmitting ? "Signing Up..." : "Sign Up"}
-              </Button>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_100%)]" />
+        </div>
 
-              <div className="text-center text-sm">
-                Already have an account?{" "}
-                <Link href="/signin" className="font-medium text-primary hover:underline">
-                  Sign In
-                </Link>
+        <div className="relative z-10 w-full max-w-120">
+          <CornerDecorations />
+
+          <div className="border-2 border-zinc-800/30 bg-neutral-900/10 backdrop-blur-md p-8 shadow-2xl">
+            <form onSubmit={submitFormAction} className="flex flex-col gap-6">
+              <div className="space-y-2 text-center sm:text-left">
+                <h1 className="text-3xl font-bold tracking-tight text-white">Create an account</h1>
+                <p className="text-sm text-zinc-400">Create your account on HireXAI.</p>
               </div>
-            </CardFooter>
-          </form>
-        </Card>
+
+              <div className="space-y-5">
+                <NameFields control={form.control} />
+                <EmailField control={form.control} />
+                <RoleSelectorField control={form.control} />
+                <PassField control={form.control} confirmPassword />
+              </div>
+
+              <div className="space-y-4 pt-2">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-white text-black hover:bg-zinc-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 font-medium"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Creating your account..." : "Create account"}
+                </Button>
+
+                <div className="text-center text-xs text-zinc-500">
+                  Already verified?
+                  <Link
+                    href="/signin"
+                    className="text-zinc-300 hover:text-white hover:underline underline-offset-4 transition-colors px-1"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </Form>
   )
