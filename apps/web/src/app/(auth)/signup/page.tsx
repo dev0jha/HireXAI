@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { SchematicBackground } from "@/components/semantic-background"
 import {
   Card,
   CardContent,
@@ -26,23 +27,23 @@ export default function SignUpPage() {
 
   return (
     <Form {...form}>
-      <div className="flex min-h-screen items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black p-4 bg-[radial-gradient(35%_80%_at_50%_0%,--theme(--color-foreground/.1),transparent)]">
+        <SchematicBackground />
+        <Card className="z-10 w-full max-w-md bg-black border-dashed border-1">
           <form onSubmit={submitFormAction}>
-            <CardHeader>
+            <CardHeader className="text-start mb-4">
               <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
               <CardDescription>Enter your information to get started</CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 mb-4">
               <NameFields control={form.control} />
               <EmailField control={form.control} />
               <PassField control={form.control} confirmPassword />
               <RoleSelectorField control={form.control} />
             </CardContent>
-
             <CardFooter className="flex flex-col gap-4">
-              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+              <Button type="submit" size="lg" className="w-full " disabled={isSubmitting}>
                 {isSubmitting ? "Signing Up..." : "Sign Up"}
               </Button>
 

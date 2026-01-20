@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { SchematicBackground } from "@/components/semantic-background"
 import {
   Card,
   CardContent,
@@ -24,15 +25,16 @@ export default function SignInPage() {
 
   return (
     <Form {...form}>
-      <div className="flex min-h-screen items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black p-4 bg-[radial-gradient(35%_80%_at_50%_0%,--theme(--color-foreground/.1),transparent)]">
+        <SchematicBackground />
+        <Card className="z-10 w-full max-w-md bg-black border-dashed border-1">
           <form onSubmit={onSubmitFormAction}>
-            <CardHeader>
+            <CardHeader className="text-start mb-4">
               <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
               <CardDescription>Enter your credentials to access your account</CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 mb-4">
               <EmailField control={form.control} />
               <PassField control={form.control} />
             </CardContent>

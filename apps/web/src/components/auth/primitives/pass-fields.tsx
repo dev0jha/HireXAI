@@ -9,7 +9,7 @@ interface PassFieldsProps extends FormFieldsProps {
 
 export default function PassField({ control, confirmPassword }: PassFieldsProps) {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <FormField
         control={control}
         name="password"
