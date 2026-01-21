@@ -1,3 +1,4 @@
+
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -5,8 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import ScorePieChart from "@/components/developer/score-pie-chart"
 import { VisibilityToggle } from "@/components/developer/visibility-toggle"
 import { mockDevelopers, mockContactRequests, mockAnalysisResult } from "@/data/mock-data"
-import { ArrowRight, GitBranch, Inbox, Search } from "lucide-react"
+import { ArrowRight, GitBranch, Inbox, PlusIcon, Search } from "lucide-react"
 import GearIcon from "@/components/ui/gear-icon"
+
 
 export default async function DashboardPage() {
   const developer = mockDevelopers[0]
@@ -25,23 +27,30 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-          <Card className="p-6">
-            <ScorePieChart
-              scores={{
-                codeQuality: 92,
-                architecture: 88,
-                security: 95,
-                gitPractices: 90,
-                documentation: 85,
-              }}
-              totalScore={developer.score}
-            />
+          <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+            <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <h2 className="text-lg font-semibold mb-2 text-white px-2">Score Breakdown</h2>
+            <div className="flex items-center justify-center py-4">
+              <ScorePieChart
+                scores={{
+                  codeQuality: 92,
+                  architecture: 88,
+                  security: 95,
+                  gitPractices: 90,
+                  documentation: 85,
+                }}
+                totalScore={developer.score}
+              />
+            </div>
           </Card>
 
           <div className="space-y-6">
             <VisibilityToggle initialValue={developer.isOpenToRecruiters} score={developer.score} />
 
-            <Card className="p-6">
+            <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Inbox className="h-5 w-5 text-muted-foreground" />
@@ -64,10 +73,18 @@ export default async function DashboardPage() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
+              <PlusIcon
+                className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6"
+                strokeWidth={2}
+              />
+              <PlusIcon
+                className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6"
+                strokeWidth={2}
+              />
             </Card>
           </div>
 
-          <Card className="p-6">
+          <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
             <div className="flex items-center gap-2 mb-4">
               <GitBranch className="h-5 w-5 text-muted-foreground" />
               <span className="font-semibold">Recent Analysis</span>
@@ -92,6 +109,14 @@ export default async function DashboardPage() {
                 </Button>
               </Link>
             </div>
+            <PlusIcon
+              className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6"
+              strokeWidth={2}
+            />
+            <PlusIcon
+              className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6"
+              strokeWidth={2}
+            />
           </Card>
         </div>
 
@@ -99,28 +124,28 @@ export default async function DashboardPage() {
           <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Link href="/dashboard/analyze">
-              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
+              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer border-dashed border-1 rounded-none bg-transparent before:rounded-none">
                 <Search className="h-8 w-8 text-primary mb-2" />
                 <h3 className="font-semibold">Analyze Repository</h3>
                 <p className="text-sm text-muted-foreground">Get AI feedback on your code</p>
               </Card>
             </Link>
             <Link href="/dashboard/requests">
-              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
+              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer border-dashed border-1 rounded-none bg-transparent before:rounded-none">
                 <Inbox className="h-8 w-8 text-primary mb-2" />
                 <h3 className="font-semibold">View Requests</h3>
                 <p className="text-sm text-muted-foreground">Manage recruiter contacts</p>
               </Card>
             </Link>
             <Link href={`/profile/${developer.username}`}>
-              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
+              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer border-dashed border-1 rounded-none bg-transparent before:rounded-none">
                 <GitBranch className="h-8 w-8 text-primary mb-2" />
                 <h3 className="font-semibold">Public Profile</h3>
                 <p className="text-sm text-muted-foreground">See how recruiters view you</p>
               </Card>
             </Link>
             <Link href="/dashboard/settings">
-              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
+              <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer border-dashed border-1 rounded-none bg-transparent before:rounded-none">
                 <GearIcon size={32} className="text-primary mb-2" />
                 <h3 className="font-semibold">Settings</h3>
                 <p className="text-sm text-muted-foreground">Update your preferences</p>

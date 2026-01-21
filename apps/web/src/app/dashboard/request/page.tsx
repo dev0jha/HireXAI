@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { mockContactRequests } from "@/data/mock-data"
-import type { ContactRequest } from "@/types"
-import { Check, X, Building2, Mail, Clock } from "lucide-react"
+import { ContactRequest } from "@/types"
+import { Check, X, Building2, Mail, Clock, PlusIcon } from "lucide-react"
 
 export default function RequestsPage() {
   const [requests, setRequests] = useState<ContactRequest[]>(mockContactRequests)
@@ -31,7 +31,11 @@ export default function RequestsPage() {
 
   function RequestCard({ request }: { request: ContactRequest }) {
     return (
-      <Card className="p-6">
+      <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+        <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+        <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+        <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+        <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
@@ -135,7 +139,9 @@ export default function RequestsPage() {
 
           <TabsContent value="pending" className="mt-6">
             {pendingRequests.length === 0 ? (
-              <Card className="p-8 text-center">
+              <Card className="p-8 text-center border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+                <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-800" strokeWidth={2} />
+                <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-800" strokeWidth={2} />
                 <p className="text-muted-foreground">No pending requests</p>
               </Card>
             ) : (
@@ -149,7 +155,9 @@ export default function RequestsPage() {
 
           <TabsContent value="accepted" className="mt-6">
             {acceptedRequests.length === 0 ? (
-              <Card className="p-8 text-center">
+              <Card className="p-8 text-center border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+                <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-800" strokeWidth={2} />
+                <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-800" strokeWidth={2} />
                 <p className="text-muted-foreground">No accepted requests</p>
               </Card>
             ) : (
@@ -163,7 +171,9 @@ export default function RequestsPage() {
 
           <TabsContent value="rejected" className="mt-6">
             {rejectedRequests.length === 0 ? (
-              <Card className="p-8 text-center">
+              <Card className="p-8 text-center border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+                <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-800" strokeWidth={2} />
+                <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-800" strokeWidth={2} />
                 <p className="text-muted-foreground">No declined requests</p>
               </Card>
             ) : (

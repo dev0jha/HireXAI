@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Eye, EyeOff, AlertCircle } from "lucide-react"
+import { Eye, EyeOff, AlertCircle, PlusIcon } from "lucide-react"
 
 interface VisibilityToggleProps {
   initialValue: boolean
@@ -17,7 +17,7 @@ export function VisibilityToggle({ initialValue, score }: VisibilityToggleProps)
   const canBeVisible = score >= 80
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
           {isOpen && canBeVisible ? (
@@ -64,6 +64,14 @@ export function VisibilityToggle({ initialValue, score }: VisibilityToggleProps)
           </Badge>
         </div>
       )}
+      <PlusIcon
+        className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6"
+        strokeWidth={2}
+      />
+      <PlusIcon
+        className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6"
+        strokeWidth={2}
+      />
     </Card>
   )
 }
