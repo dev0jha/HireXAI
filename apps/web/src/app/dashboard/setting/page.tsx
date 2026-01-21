@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { mockDevelopers } from "@/data/mock-data"
-import { Camera, Loader2 } from "lucide-react"
+import { Camera, Loader2, PlusIcon } from "lucide-react"
 
 export default function SettingsPage() {
   const developer = mockDevelopers[0]
@@ -36,8 +36,12 @@ export default function SettingsPage() {
 
         <form onSubmit={handleSave}>
           <div className="space-y-6">
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Profile Information</h2>
+            <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+              <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <h2 className="text-lg font-semibold mb-4 text-white">Profile Information</h2>
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">
                 <div className="relative">
@@ -97,8 +101,12 @@ export default function SettingsPage() {
               </div>
             </Card>
 
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Recruiter Visibility</h2>
+            <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+              <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <h2 className="text-lg font-semibold mb-4 text-white">Recruiter Visibility</h2>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
                 <div>
                   <p className="font-medium">Open to Recruiters</p>
@@ -115,8 +123,12 @@ export default function SettingsPage() {
               )}
             </Card>
 
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Notifications</h2>
+            <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+              <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <h2 className="text-lg font-semibold mb-4 text-white">Notifications</h2>
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
                   <div>

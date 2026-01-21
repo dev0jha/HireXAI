@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { mockDevelopers, mockAnalysisResult } from "@/data/mock-data"
 import { getScoreLabel } from "@/types"
+import { CornerDecorations } from "@/components/ui/corner-decorations"
 import {
   MapPin,
   Globe,
@@ -18,7 +19,9 @@ import {
   FileText,
   Layers,
   ExternalLink,
+  PlusIcon,
 } from "lucide-react"
+import ScorePieChart from "@/components/developer/score-pie-chart"
 import Footer from "@/components/layout/footer"
 
 const scoreCategories = [
@@ -44,10 +47,14 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const scoreLabel = getScoreLabel(developer.score)
 
   return (
-    <div className="min-h-screen">
-      <main className="pt-24 pb-20">
+    <div className="min-h-screen bg-black">
+      <main className="pt-20 pb-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <Card className="p-8">
+          <div className="relative p-6 border-dashed border-1 rounded-none bg-transparent before:rounded-none">
+            <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
             <div className="flex flex-col md:flex-row gap-8">
               <div className="flex flex-col items-center md:items-start">
                 <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-primary/20">
@@ -67,11 +74,11 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               </div>
 
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-3xl font-bold">{developer.name}</h1>
+                <h1 className="text-3xl font-poppins font-bold">{developer.name}</h1>
                 <p className="text-muted-foreground">@{developer.username}</p>
 
                 {developer.location && (
-                  <div className="flex items-center justify-center md:justify-start gap-2 mt-3 text-muted-foreground">
+                  <div className="flex items-center justify-center md:justify-start text-muted-foreground">
                     <MapPin className="h-4 w-4" />
                     {developer.location}
                   </div>
@@ -114,8 +121,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 </div>
               </div>
 
+
               <div className="flex flex-col items-center">
-                <div className="text-center p-6 rounded-xl bg-card border border-border">
+                <div className="text-center p-6 rounded-xl bg-transparent border border-dashed">
                   <p className="text-sm text-muted-foreground">Developer Score</p>
                   <div className="flex items-baseline justify-center gap-1 mt-1">
                     <span className="text-4xl font-bold text-primary">{developer.score}</span>
@@ -138,35 +146,35 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 ))}
               </div>
             </div>
-          </Card>
+          </div>
 
           <div className="grid gap-6 mt-8 md:grid-cols-2">
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Score Breakdown</h2>
-              <div className="space-y-4">
-                {scoreCategories.map(category => {
-                  const score =
-                    mockAnalysisResult.scores[
-                      category.key as keyof typeof mockAnalysisResult.scores
-                    ]
-                  return (
-                    <div key={category.key} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <category.icon className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{category.name}</span>
-                        </div>
-                        <span className="text-sm font-semibold">{score}</span>
-                      </div>
-                      <Progress value={score} className="h-2" />
-                    </div>
-                  )
-                })}
+            <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+              <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <h2 className="text-lg font-semibold mb-4 text-white">Score Breakdown</h2>
+              <div className="flex items-center justify-center py-4">
+                <ScorePieChart
+                  scores={{
+                    codeQuality: mockAnalysisResult.scores.codeQuality,
+                    architecture: mockAnalysisResult.scores.architecture,
+                    security: mockAnalysisResult.scores.security,
+                    gitPractices: mockAnalysisResult.scores.gitPractices,
+                    documentation: mockAnalysisResult.scores.documentation,
+                  }}
+                  totalScore={developer.score}
+                />
               </div>
             </Card>
 
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Featured Project</h2>
+            <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+              <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6" strokeWidth={2} />
+              <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6" strokeWidth={2} />
+              <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6" strokeWidth={2} />
+              <h2 className="text-lg font-semibold mb-4 text-white">Featured Project</h2>
               <div className="rounded-lg border border-border p-4">
                 <div className="flex items-start justify-between">
                   <div>
