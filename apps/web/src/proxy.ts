@@ -1,5 +1,6 @@
 import { UserRole } from "@/db/schema/enums"
 import { auth } from "@/lib/auth"
+import { attempt } from "@/utils/attempt"
 import { NextRequest, NextResponse } from "next/server"
 
 const publicRoutes = ["/", "/signin", "/signup", "/about"]
@@ -9,40 +10,68 @@ const allowedRoutesByRole: Record<UserRole, string[]> = {
   recruiter: ["/recruiter"],
 }
 
-const privateRoutes = Object.values(allowedRoutesByRole).flat()
+const privateRoutesPrefixes = Object.values(allowedRoutesByRole).flat()
 
 const hybridRoutes: string[] = []
 
-export async function proxy(request: NextRequest) {
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  })
+/*
+ *
+ * request redirector
+ * **/
 
-  const role = session?.user.role as UserRole | undefined
+function createRequestRedirector(request: NextRequest) {
+  return (url: string) => NextResponse.redirect(new URL(url, request.url))
+}
+
+/*
+ *
+ *match route utility
+ * **/
+
+const matchRoute = (pathname: string, routes: string[]) => {
+  return routes.some(route => pathname === route || pathname.startsWith(route + "/"))
+}
+
+export async function proxy(request: NextRequest) {
+  const redirectTo = createRequestRedirector(request)
 
   const pathName = request.nextUrl.pathname
 
+  const sessionRes = await attempt(() =>
+    auth.api.getSession({
+      headers: request.headers,
+    })
+  )
+
+  if (!sessionRes.ok) {
+    console.error("Error fetching session:", sessionRes.error)
+
+    if (matchRoute(pathName, publicRoutes) || matchRoute(pathName, hybridRoutes)) {
+      return NextResponse.next()
+    }
+
+    return redirectTo("/signin")
+  }
+
+  const session = sessionRes.data
+
   /*
-   * helper functio to redirect user to a specific URL
+   * rednering logic
    * **/
-  const redirectTo = (url: string) => NextResponse.redirect(new URL(url, request.url))
+  const role = session?.user.role as UserRole | undefined
 
   /*
    * authenticated user cannot access public routes
    * **/
-  if (role && publicRoutes.includes(pathName)) {
+  if (role && matchRoute(pathName, publicRoutes)) {
     return redirectTo(allowedRoutesByRole[role][0])
   }
 
   /*
    * unauthenticated user cannot access private routes
    * **/
-  if (
-    !role &&
-    privateRoutes.some(route => pathName.startsWith(route)) &&
-    !hybridRoutes.some(route => pathName.startsWith(route))
-  ) {
-    return redirectTo("/sginin")
+  if (!role && matchRoute(pathName, privateRoutesPrefixes) && !matchRoute(pathName, hybridRoutes)) {
+    return redirectTo("/signin")
   }
 
   /*
@@ -50,8 +79,8 @@ export async function proxy(request: NextRequest) {
    * **/
   if (
     role &&
-    privateRoutes.some(route => pathName.startsWith(route)) &&
-    !allowedRoutesByRole[role].some(route => pathName.startsWith(route))
+    matchRoute(pathName, privateRoutesPrefixes) &&
+    !matchRoute(pathName, allowedRoutesByRole[role])
   ) {
     return redirectTo(allowedRoutesByRole[role][0])
   }
