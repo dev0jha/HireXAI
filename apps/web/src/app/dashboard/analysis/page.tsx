@@ -7,25 +7,27 @@ import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import AnalysisCanvas from "@/components/analysis-canvas"
-import {
-  Github,
-  Search,
-  Loader2,
-  Code2,
-  Shield,
-  GitBranch,
-  FileText,
-  Layers,
-  CheckCircle,
-} from "lucide-react"
 import { useAnalysis } from "@/hooks/screens/analysis.hook"
+import {
+  IconBrandGithub,
+  IconCheck,
+  IconCode,
+  IconFileText,
+  IconGitBranch,
+  IconLayersOff,
+  IconLoader2,
+  IconSearch,
+  IconShield,
+} from "@tabler/icons-react"
+import { DashboardCard } from "@/components/layout/dashboard-card"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 
 const scoreCategories = [
-  { name: "Code Quality", icon: Code2, weight: "30%" },
-  { name: "Architecture", icon: Layers, weight: "20%" },
-  { name: "Security", icon: Shield, weight: "20%" },
-  { name: "Git Practices", icon: GitBranch, weight: "15%" },
-  { name: "Documentation", icon: FileText, weight: "15%" },
+  { name: "Code Quality", icon: IconCode, weight: "30%" },
+  { name: "Architecture", icon: IconLayersOff, weight: "20%" },
+  { name: "Security", icon: IconShield, weight: "20%" },
+  { name: "Git Practices", icon: IconGitBranch, weight: "15%" },
+  { name: "Documentation", icon: IconFileText, weight: "15%" },
 ]
 
 export default function AnalyzePage() {
@@ -41,7 +43,7 @@ export default function AnalyzePage() {
   } = useAnalysis()
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 mt-4 sm:mt-6">
+    <div className="">
       <div className="space-y-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold">Analyze Repository</h1>
@@ -50,22 +52,25 @@ export default function AnalyzePage() {
           </p>
         </div>
 
-        <Card className="p-6">
+        <DashboardCard className="p-6">
           <form onSubmit={handleAnalyze} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="repo-url">GitHub Repository URL</Label>
               <div className="flex flex-col sm:flex-row gap-2">
-                <div className="relative flex-1">
-                  <Github className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black dark:text-muted-foreground z-10 pointer-events-none" />
-                  <Input
-                    id="repo-url"
-                    type="url"
-                    placeholder="github.com/username/repo"
-                    value={repoUrl}
-                    onChange={e => setRepoUrl(e.target.value)}
-                    className="pl-10"
-                    disabled={isAnalyzing}
-                  />
+                <div className="relative flex-1 items-center justify-center">
+                  <InputGroup className="flex-1">
+                    <InputGroupInput
+                      id="repo-url"
+                      type="url"
+                      value={repoUrl}
+                      onChange={e => setRepoUrl(e.target.value)}
+                      disabled={isAnalyzing}
+                    />
+                    <InputGroupAddon className="absolute left-0 ml-3 text-red-500">
+                      <IconBrandGithub className="h-4 w-4" />
+                    </InputGroupAddon>
+                    <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+                  </InputGroup>
                 </div>
                 <Button
                   type="submit"
@@ -74,12 +79,12 @@ export default function AnalyzePage() {
                 >
                   {isAnalyzing ? (
                     <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <IconLoader2 className="h-4 w-4 animate-spin" />
                       Analyzing
                     </>
                   ) : (
                     <>
-                      <Search className="h-4 w-4" />
+                      <IconSearch className="h-4 w-4" />
                       Analyze
                     </>
                   )}
@@ -91,14 +96,14 @@ export default function AnalyzePage() {
           {isAnalyzing && (
             <div className="mt-8 space-y-4">
               <div className="flex items-center gap-3">
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <IconLoader2 className="h-5 w-5 animate-spin" />
                 <p className="text-sm">
                   {state.status === "responding" ? state.currentStatus : ""}
                 </p>
               </div>
             </div>
           )}
-        </Card>
+        </DashboardCard>
 
         {isError && (
           <Card className="p-6 mt-8 border-destructive/50 bg-destructive/5">
@@ -170,7 +175,7 @@ export default function AnalyzePage() {
                     <div key={index} className="flex gap-3 p-3 rounded-lg bg-muted/50">
                       <div className="mt-0.5">
                         {index < 2 ? (
-                          <CheckCircle className="h-5 w-5 text-primary" />
+                          <IconCheck className="h-5 w-5 text-primary" />
                         ) : (
                           <div className="h-5 w-5 rounded-full border-2 border-warning flex items-center justify-center">
                             <span className="text-warning text-xs">!</span>

@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Eye, EyeOff, AlertCircle, PlusIcon } from "lucide-react"
+import { DashboardCard } from "@/components/layout/dashboard-card"
+import { IconAlertCircle, IconEye, IconEyeOff } from "@tabler/icons-react"
 
 interface VisibilityToggleProps {
   initialValue: boolean
@@ -17,16 +17,16 @@ export function VisibilityToggle({ initialValue, score }: VisibilityToggleProps)
   const canBeVisible = score >= 80
 
   return (
-    <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
+    <DashboardCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
           {isOpen && canBeVisible ? (
-            <div className="rounded-lg bg-primary/10 p-2">
-              <Eye className="h-5 w-5 text-primary" />
+            <div className="rounded-lg p-2">
+              <IconEye className="h-5 w-5" />
             </div>
           ) : (
             <div className="rounded-lg bg-muted p-2">
-              <EyeOff className="h-5 w-5 text-muted-foreground" />
+              <IconEyeOff className="h-5 w-5" />
             </div>
           )}
           <div>
@@ -50,7 +50,7 @@ export function VisibilityToggle({ initialValue, score }: VisibilityToggleProps)
 
       {!canBeVisible && (
         <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted p-3">
-          <AlertCircle className="h-4 w-4 text-muted-foreground" />
+          <IconAlertCircle className="h-4 w-4 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">
             You need a score of 80+ to be visible to recruiters. Current: {score}
           </p>
@@ -64,14 +64,6 @@ export function VisibilityToggle({ initialValue, score }: VisibilityToggleProps)
           </Badge>
         </div>
       )}
-      <PlusIcon
-        className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6"
-        strokeWidth={2}
-      />
-      <PlusIcon
-        className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6"
-        strokeWidth={2}
-      />
-    </Card>
+    </DashboardCard>
   )
 }

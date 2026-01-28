@@ -18,11 +18,12 @@ function Input({ className, size = "default", unstyled = false, ...props }: Inpu
           `
           relative isolate inline-flex w-full items-stretch rounded-lg
           transition-colors
-          ring-2
-		  ring-zinc-300/20
+          ring-1
+          ring-zinc-700/50
+          bg-zinc-800/50
           has-focus-visible:border-zinc-500
-          has-focus-visible:ring-2 
-          has-focus-visible:ring-zinc-100/40
+          has-focus-visible:ring-1 
+          has-focus-visible:ring-zinc-500/50
           has-aria-invalid:border-red-500
           has-aria-invalid:border-0
           has-aria-invalid:ring-1
@@ -37,9 +38,9 @@ function Input({ className, size = "default", unstyled = false, ...props }: Inpu
           `
           w-full h-full
           rounded-[inherit]
-          bg-background
-          text-foreground
-          placeholder:text-muted-foreground/70
+          bg-transparent
+          text-zinc-100
+          placeholder:text-zinc-500/70
           outline-none
           border-0
           px-3

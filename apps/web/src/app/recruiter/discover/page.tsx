@@ -3,14 +3,14 @@
 import { useState, Suspense } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger,} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { DeveloperCard } from "@/components/recruiter/developer-card"
 import { ContactModal } from "@/components/recruiter/contact-modal"
 import { mockDevelopers } from "@/data/mock-data"
 import type { Developer } from "@/types"
 import { Search, TrendingUp } from "lucide-react"
-import { toastManager } from "@/components/ui/toast"
 import Container from "@/components/core/Container"
+import { toast } from "sonner"
 
 const techOptions = ["All", "React", "TypeScript", "Node.js", "Python", "Go", "AWS", "Docker"]
 const scoreOptions = ["All", "90+", "80-89", "70-79"]
@@ -23,15 +23,14 @@ function DiscoverContent() {
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
-  // Only show developers who are open to recruiters and have score >= 80
-  const visibleDevelopers = mockDevelopers.filter((dev) => dev.isOpenToRecruiters && dev.score >= 80)
+  const visibleDevelopers = mockDevelopers.filter(dev => dev.isOpenToRecruiters && dev.score >= 80)
 
-  const filteredDevelopers = visibleDevelopers.filter((dev) => {
+  const filteredDevelopers = visibleDevelopers.filter(dev => {
     const matchesSearch =
       dev.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      dev.techStack.some((tech) => tech.toLowerCase().includes(searchQuery.toLowerCase()))
+      dev.techStack.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()))
 
-    const matchesTech = techFilter === "All" || dev.techStack.some((tech) => tech === techFilter)
+    const matchesTech = techFilter === "All" || dev.techStack.some(tech => tech === techFilter)
 
     const matchesScore =
       scoreFilter === "All" ||
@@ -63,10 +62,7 @@ function DiscoverContent() {
   }
 
   function handleSendRequest() {
-    toastManager.create({
-      title: "Request Sent",
-      description: `Your contact request has been sent to ${selectedDeveloper?.name}.`,
-    })
+    toast.success("Contact request sent to developer!")
   }
 
   return (
@@ -91,7 +87,7 @@ function DiscoverContent() {
                   id="search"
                   placeholder="Search by name or technology..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -100,14 +96,14 @@ function DiscoverContent() {
               <Label htmlFor="tech-filter" className="sr-only">
                 Technology
               </Label>
-              <Select value={techFilter} onValueChange={(value) => value && setTechFilter(value)}>
+              <Select value={techFilter} onValueChange={value => value && setTechFilter(value)}>
                 <SelectTrigger id="tech-filter">
                   <span className="truncate">
                     {techFilter === "All" ? "All Technologies" : techFilter}
                   </span>
                 </SelectTrigger>
                 <SelectContent>
-                  {techOptions.map((tech) => (
+                  {techOptions.map(tech => (
                     <SelectItem key={tech} value={tech}>
                       {tech === "All" ? "All Technologies" : tech}
                     </SelectItem>
@@ -119,14 +115,14 @@ function DiscoverContent() {
               <Label htmlFor="score-filter" className="sr-only">
                 Score Range
               </Label>
-              <Select value={scoreFilter} onValueChange={(value) => value && setScoreFilter(value)}>
+              <Select value={scoreFilter} onValueChange={value => value && setScoreFilter(value)}>
                 <SelectTrigger id="score-filter">
                   <span className="truncate">
                     {scoreFilter === "All" ? "All Scores" : `Score ${scoreFilter}`}
                   </span>
                 </SelectTrigger>
                 <SelectContent>
-                  {scoreOptions.map((score) => (
+                  {scoreOptions.map(score => (
                     <SelectItem key={score} value={score}>
                       {score === "All" ? "All Scores" : `Score ${score}`}
                     </SelectItem>
@@ -138,17 +134,17 @@ function DiscoverContent() {
               <Label htmlFor="sort-by" className="sr-only">
                 Sort By
               </Label>
-              <Select value={sortBy} onValueChange={(value) => value && setSortBy(value)}>
+              <Select value={sortBy} onValueChange={value => value && setSortBy(value)}>
                 <SelectTrigger id="sort-by">
                   <span className="flex items-center gap-2 truncate">
                     <TrendingUp className="h-4 w-4 shrink-0" />
                     {sortBy === "score-desc"
                       ? "Highest Score"
                       : sortBy === "score-asc"
-                      ? "Lowest Score"
-                      : sortBy === "name-asc"
-                      ? "Name A-Z"
-                      : "Name Z-A"}
+                        ? "Lowest Score"
+                        : sortBy === "name-asc"
+                          ? "Name A-Z"
+                          : "Name Z-A"}
                   </span>
                 </SelectTrigger>
                 <SelectContent>
@@ -167,42 +163,43 @@ function DiscoverContent() {
           </div>
         </div>
 
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          Showing {sortedDevelopers.length} developer{sortedDevelopers.length !== 1 ? "s" : ""} sorted by{" "}
-          {sortBy === "score-desc"
-            ? "highest score"
-            : sortBy === "score-asc"
-              ? "lowest score"
-              : sortBy === "name-asc"
-                ? "name (A-Z)"
-                : "name (Z-A)"}
-        </p>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {sortedDevelopers.map((developer, index) => (
-          <DeveloperCard
-            key={developer.id}
-            developer={developer}
-            onContact={() => handleContact(developer)}
-            rank={sortBy === "score-desc" ? index + 1 : undefined}
-          />
-        ))}
-      </div>
-
-      {sortedDevelopers.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">No developers found matching your criteria.</p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Showing {sortedDevelopers.length} developer{sortedDevelopers.length !== 1 ? "s" : ""}{" "}
+            sorted by{" "}
+            {sortBy === "score-desc"
+              ? "highest score"
+              : sortBy === "score-asc"
+                ? "lowest score"
+                : sortBy === "name-asc"
+                  ? "name (A-Z)"
+                  : "name (Z-A)"}
+          </p>
         </div>
-      )}
 
-      <ContactModal
-        developer={selectedDeveloper}
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        onSend={handleSendRequest}
-      />
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {sortedDevelopers.map((developer, index) => (
+            <DeveloperCard
+              key={developer.id}
+              developer={developer}
+              onContact={() => handleContact(developer)}
+              rank={sortBy === "score-desc" ? index + 1 : undefined}
+            />
+          ))}
+        </div>
+
+        {sortedDevelopers.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No developers found matching your criteria.</p>
+          </div>
+        )}
+
+        <ContactModal
+          developer={selectedDeveloper}
+          open={modalOpen}
+          onOpenChange={setModalOpen}
+          onSend={handleSendRequest}
+        />
       </div>
     </Container>
   )

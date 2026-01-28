@@ -16,10 +16,10 @@ import { useSession } from "@/lib/auth-client"
 
 export function DashboardHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { data: session, error } = useSession()
+  const { data: session } = useSession()
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-md md:left-64">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b-2 border-white/2 bg-[#161618] backdrop-blur-md md:left-64">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-4">
           <Button
@@ -37,19 +37,27 @@ export function DashboardHeader() {
             <span className="font-bold text-white">HireXAI</span>
           </Link>
         </div>
- <DropdownMenu>
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-3 hover:bg-white/5 pl-2 pr-0">
               <div className="text-right hidden md:block">
                 <p className="text-sm font-semibold text-white leading-none">Admin</p>
               </div>
               <Avatar className="h-9 w-9 border border-white/10">
-                <AvatarImage src={session?.user.image || "/developer-portrait-male-asian.jpg"} alt={session?.user.name || "User"} />
-                <AvatarFallback className="bg-white/10 text-white">{session?.user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                <AvatarImage
+                  src={session?.user.image || "/developer-portrait-male-asian.jpg"}
+                  alt={session?.user.name || "User"}
+                />
+                <AvatarFallback className="bg-white/10 text-white">
+                  {session?.user.name?.charAt(0).toUpperCase() || "U"}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 bg-[#09090b] border-white/10 text-zinc-300">
+          <DropdownMenuContent
+            align="end"
+            className="w-56 bg-[#09090b] border-white/10 text-zinc-300"
+          >
             <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white">
               <Link href="/profile/alexchen" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -62,10 +70,12 @@ export function DashboardHeader() {
                 Settings
               </Link>
             </DropdownMenuItem>{" "}
-
             <DropdownMenuSeparator className="bg-white/10" />
             <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white">
-              <Link href="/" className="flex items-center gap-2 text-destructive hover:text-red-400">
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-destructive hover:text-red-400"
+              >
                 <LogOut className="h-4 w-4" />
                 Sign Out
               </Link>
@@ -78,22 +88,34 @@ export function DashboardHeader() {
         <div className="border-t border-white/10 p-4 md:hidden bg-black">
           <nav className="space-y-2">
             <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10"
+              >
                 Overview
               </Button>
             </Link>
             <Link href="/dashboard/analysis" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10"
+              >
                 Analyze Repo
               </Button>
             </Link>
             <Link href="/dashboard/request" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10"
+              >
                 Requests
               </Button>
             </Link>
             <Link href="/dashboard/setting" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-zinc-400 hover:text-white hover:bg-white/10"
+              >
                 Settings
               </Button>
             </Link>
