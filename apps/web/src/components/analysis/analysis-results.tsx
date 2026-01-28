@@ -7,6 +7,7 @@ import {
   IconGitBranch,
   IconLayersOff,
   IconShield,
+  IconCheck,
 } from "@tabler/icons-react"
 
 import { Card } from "@/components/ui/card"
