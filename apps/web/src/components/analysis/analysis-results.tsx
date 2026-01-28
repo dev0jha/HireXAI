@@ -2,6 +2,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import AnalysisCanvas from "@/components/analysis/analysis-canvas"
 import {
+  IconCheck,
   IconCode,
   IconFileText,
   IconGitBranch,
@@ -10,8 +11,7 @@ import {
 } from "@tabler/icons-react"
 
 import { Card } from "@/components/ui/card"
-
-import type { AnalysisState } from "@/hooks/screens/analysis.hook"
+import { useAnalysisState } from "@/hooks/screens/analysis.hooks"
 
 const scoreCategories = [
   { name: "Code Quality", icon: IconCode, weight: "30%" },
@@ -21,14 +21,9 @@ const scoreCategories = [
   { name: "Documentation", icon: IconFileText, weight: "15%" },
 ]
 
-interface ResultsProps {
-  refresh?: () => void
-  state: AnalysisState
-  isComplete: boolean
-  scoreValues: number[]
-}
+export function Results() {
+  const { state, isComplete, scoreValues } = useAnalysisState()
 
-export function Results({ state, isComplete, scoreValues }: ResultsProps) {
   return (
     <>
       {isComplete && state.status === "complete" && (

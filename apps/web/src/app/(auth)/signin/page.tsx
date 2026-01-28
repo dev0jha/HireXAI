@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { useSignIn } from "@/hooks/screens/signIn.hook"
+import { useSignIn } from "@/hooks/screens/signIn.hooks"
 import { Form } from "@/components/ui/form"
 import EmailField from "@/components/auth/primitives/email-field"
 import PassField from "@/components/auth/primitives/pass-fields"

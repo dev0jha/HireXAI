@@ -1,25 +1,20 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { IconBrandGithub, IconLoader2, IconSearch } from "@tabler/icons-react"
 import { DashboardCard } from "@/components/layout/dashboard-card"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
+import {
+  useAnalysisActions,
+  useAnalysisInput,
+  useAnalysisState,
+} from "@/hooks/screens/analysis.hooks"
 
-import type { AnalysisState } from "@/hooks/screens/analysis.hook"
+export function AnalysisInputTrigger() {
+  const [repoURL, setRepoURL] = useAnalysisInput()
+  const { handleAnalyze } = useAnalysisActions()
+  const { isAnalyzing, state } = useAnalysisState()
 
-interface AnalysisInputTriggerProps {
-  handleAnalyze: (e: React.FormEvent) => void
-  repoUrl: string
-  isAnalyzing: boolean
-  setRepoUrl: (url: string) => void
-  state: AnalysisState
-}
-
-export function AnalysisInputTrigger({
-  state,
-  handleAnalyze,
-  repoUrl,
-  isAnalyzing,
-  setRepoUrl,
-}: AnalysisInputTriggerProps) {
   return (
     <DashboardCard className="p-6 flex-1 border bg-neutral-800/40 relative">
       <form onSubmit={handleAnalyze} className="space-y-4">
@@ -34,8 +29,8 @@ export function AnalysisInputTrigger({
                 id="repo-url"
                 type="url"
                 placeholder="https://github.com/user/repository"
-                value={repoUrl}
-                onChange={e => setRepoUrl(e.target.value)}
+                value={repoURL}
+                onChange={e => setRepoURL(e.target.value)}
                 disabled={isAnalyzing}
               />
             </InputGroup>
@@ -43,7 +38,7 @@ export function AnalysisInputTrigger({
             <div className="flex items-center justify-center">
               <Button
                 type="submit"
-                disabled={isAnalyzing || !repoUrl}
+                disabled={isAnalyzing || !repoURL}
                 className="gap-2 h-14 border-2 border-neutral-50/10 py-4 w-full sm:w-auto"
               >
                 {isAnalyzing ? (

@@ -1,119 +1,141 @@
-import { createStore } from "zustand/vanilla"
 import { createContext, use, useRef } from "react"
-import { useStore } from "zustand"
+import { Provider as JotaiProvider, useAtom } from "jotai"
 
-import type { StoreApi } from "zustand/vanilla"
+import type { Atom, WritableAtom } from "jotai"
 
 /**
- * Store initializer signature.
+ * Extract the value type carried by a Jotai Atom.
  *
- * This mirrors Zustand's internal initializer shape but is made explicit
- * so the abstraction remains fully type-safe and self-documenting.
- *
- * - `set` mutates state
- * - `get` reads current state
- *
- * The function must return the complete state shape.
+ * Example:
+ *   Atom<string> -> string
  */
-type Intializer<T> = (set: StoreApi<T>["setState"], get: StoreApi<T>["getState"]) => T
+type AtomValue<A> = A extends Atom<infer V> ? V : never
 
 /**
- * Creates a component-scoped Zustand store with:
+ * Extract the setter signature from a writable atom.
  *
- * - Full type safety
- * - Zero prop-drilling
- * - No global state leakage
- * - Built-in initial state hydration
+ * This preserves the exact write semantics:
+ *   - set(value)
+ *   - set(prev => next)
+ */
+type AtomSetter<A> =
+  A extends WritableAtom<any, infer Args, infer Result> ? (...args: Args) => Result : never
+
+/**
+ * A map of named atoms.
  *
- * The store instance is created once per Provider tree and
- * lives for the lifetime of that subtree.
+ * Each atom may carry a different value type.
+ * This map represents a cohesive state "module".
+ */
+type AtomMap = Record<string, Atom<any>>
+
+/**
+ * Creates a **scoped atom registry**.
  *
- * @param initialState - Partial initial values merged over the base state
- * @param initializer - Zustand-style state creator
+ * This is a thin abstraction over Jotai atoms that:
+ * - Keeps *related atoms together* as a logical unit
+ * - Scopes those atoms to a specific component subtree
+ * - Preserves Jotai's fine-grained subscriptions (one atom = one subscription)
+ * - Avoids global atoms and selector indirection
+ *
+ * Conceptually:
+ * - Atoms remain the primitive
+ * - This abstraction provides *structure and scoping*, not new state semantics
+ *
+ * Each Provider instance creates a fresh, isolated atom registry.
+ * Multiple Providers can coexist without sharing state.
+ *
+ * @param factory
+ *   A function that creates and returns a map of atoms.
+ *   It is executed exactly once per Provider instance.
  *
  * @returns An object containing:
- * - Provider: React component that owns the store instance
- * - useStore: Hook for selecting state slices
+ * - Provider: scopes the atom registry to a component tree
+ * - useAtom: type-safe access to individual atoms by key
  */
-export function createScopedStore<TState>(
-  initialState: Partial<TState>,
-  initializer: Intializer<TState>
-) {
+export function createScopedAtoms<T extends AtomMap>(factory: () => T) {
   /**
-   * React Context holding the Zustand store instance.
+   * Context holding the atom registry.
    *
-   * We store the *StoreApi*, not the state itself.
-   * This enables selector-based subscriptions and avoids re-renders.
+   * Important:
+   * - This stores *atom instances*, not atom values
+   * - Actual state lives inside Jotai
+   * - Context is only used to locate the correct atom set
    */
-  const StoreContext = createContext<StoreApi<TState> | null>(null)
+  const StoreContext = createContext<T | null>(null)
 
   /**
-   * Provider component responsible for:
+   * Provider responsible for instantiating and scoping the atom registry.
    *
-   * - Creating the store exactly once
-   * - Scoping it to a component subtree
-   * - Preventing re-creation on re-render
+   * Guarantees:
+   * - Atom registry is created once per Provider
+   * - Atom identity remains stable across renders
+   * - State is isolated per Provider instance
    */
-  function Provider({ children }: { children: React.ReactNode }) {
+  function Provider({ children }: React.PropsWithChildren) {
     /**
-     * `useRef` ensures the store instance is stable across renders.
-     * This is critical — recreating the store would reset all state.
+     * The atom registry must never be recreated,
+     * otherwise all state would reset.
      */
-    const storeRef = useRef<StoreApi<TState> | null>(null)
+    const atomsRef = useRef<T | null>(null)
 
-    if (!storeRef.current) {
-      /**
-       * Create the Zustand store.
-       *
-       * 1. Build the base state via the initializer
-       * 2. Merge the provided initial state over it
-       *
-       * Initial state wins over defaults but does not replace actions.
-       */
-      storeRef.current = createStore<TState>((set, get) => {
-        const base = initializer(set, get)
-        return { ...base, ...initialState }
-      })
+    if (!atomsRef.current) {
+      atomsRef.current = factory()
     }
 
-    return <StoreContext.Provider value={storeRef.current}>{children}</StoreContext.Provider>
+    return (
+      <JotaiProvider>
+        <StoreContext.Provider value={atomsRef.current}>{children}</StoreContext.Provider>
+      </JotaiProvider>
+    )
   }
 
   /**
-   * Hook for consuming the scoped store.
+   * Access a specific atom from the scoped registry.
    *
-   * This enforces:
-   * - Provider presence
-   * - Selector-based subscriptions
-   * - Minimal re-renders
+   * Characteristics:
+   * - Enforces Provider presence
+   * - Subscribes only to the selected atom
+   * - Preserves the atom's exact value and setter types
    *
-   * @param selector - Function selecting a slice of state
+   * This is intentionally key-based:
+   * - The registry provides structure
+   * - Atoms remain independent reactive units
+   *
+   * @param key
+   *   The key of the atom to access from the registry
    */
-  function useScopedStore<TSelected>(selector: (state: TState) => TSelected): TSelected {
-    /**
-     * `use(StoreContext)` reads from context in React 19.
-     * Replace with `useContext` if targeting stable React.
-     */
+  function useScopedAtom<K extends keyof T>(key: K): [AtomValue<T[K]>, AtomSetter<T[K]>] {
     const store = use(StoreContext)
 
     if (!store) {
-      throw new Error("ScopedStore used outside its Provider")
+      throw new Error("Scoped atoms used outside Provider")
     }
 
-    return useStore(store, selector)
+    /**
+     * TypeScript cannot fully express the relationship between
+     * the atom registry and `useAtom`, so we reassert the types here.
+     *
+     * This assertion is safe:
+     * - `store[key]` is the exact atom instance
+     * - `useAtom` is already generic over that atom
+     */
+    return useAtom(store[key]) as [AtomValue<T[K]>, AtomSetter<T[K]>]
   }
 
   /**
-   * Public API.
+   * Public API surface.
    *
-   * The consumer only sees:
-   * - Provider
-   * - useStore
+   * Consumers only interact with:
+   * - Provider → to establish scope
+   * - useAtom → to read/write atom state
    *
-   * No Zustand imports required at call sites.
+   * No selectors.
+   * No global atoms.
+   * No shared mutable state.
    */
   return {
     Provider,
-    useStore: useScopedStore,
+    useAtom: useScopedAtom,
   }
 }

@@ -1,6 +1,9 @@
 import { Card } from "@/components/ui/card"
+import { useAnalysisState } from "@/hooks/screens/analysis.hooks"
 
-export function ErrorMessage({ isError, state }: { isError: boolean; state: AnalysisState }) {
+export function ErrorMessage() {
+  const { isError, state } = useAnalysisState()
+
   return (
     <>
       {isError && (
