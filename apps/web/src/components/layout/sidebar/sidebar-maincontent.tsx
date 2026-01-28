@@ -21,7 +21,9 @@ export function MainContent({ collapsed }: { collapsed?: boolean }) {
     <SidebarContent>
       <nav className="flex-1 px-3 py-4 space-y-1">
         {navItems.map((item, idx) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+          const isActive =
+            pathname === item.href ||
+            (pathname.startsWith(item.href + "/") && item.href !== "/dashboard")
 
           return (
             <Link key={`${idx}-${item.href}`} href={item.href}>

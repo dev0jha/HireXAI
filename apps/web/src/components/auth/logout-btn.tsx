@@ -5,8 +5,13 @@ import { authClient } from "@/lib/auth-client"
 import { LogOut } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
-export default function LogoutBtn() {
+interface LogoutBtnProps {
+  className?: string
+}
+
+export default function LogoutBtn({ className }: LogoutBtnProps) {
   const router = useRouter()
   /*
    *
@@ -32,7 +37,10 @@ export default function LogoutBtn() {
   return (
     <Button
       onClick={handleSignoutClick}
-      className="text-xs dark:bg-white bg-black text-white dark:text-black w-full hover:bg-black rounded-lg shadow-xl"
+      className={cn(
+        "text-xs text-white dark:text-black w-full hover:bg-black rounded-lg shadow-xl",
+        className
+      )}
     >
       <LogOut />
       Sign out

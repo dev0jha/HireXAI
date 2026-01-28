@@ -6,18 +6,18 @@ import { DashboardSidebar } from "@/components/layout/sidebar/sidebar"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen bg-[#161618] relative flex">
+    <SidebarProvider className="flex bg-[#121212]">
+      <div className="min-h-screen bg-[#121212] relative flex rounded-lg">
         <Sidebar>
-          <SidebarContent>
+          <SidebarContent className="bg-[#121212]">
             <DashboardSidebar />
           </SidebarContent>
         </Sidebar>
       </div>
 
-      <SidebarInset className="w-full bg-[#161618]">
+      <SidebarInset className="w-full bg-[#121212] p-6 gap-4">
         <DashboardHeader />
-        <div className="p-0 text-zinc-100">{children}</div>
+        <div className="p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   )

@@ -4,10 +4,9 @@ import { notFound } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import { mockDevelopers, mockAnalysisResult } from "@/data/mock-data"
 import { getScoreLabel } from "@/types"
-import { CornerDecorations } from "@/components/ui/corner-decorations"
+
 import {
   MapPin,
   Globe,
@@ -51,10 +50,22 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <main className="pt-20 pb-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="relative p-6 border-dashed border-1 rounded-none bg-transparent before:rounded-none">
-            <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
-            <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
-            <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
-            <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+            <PlusIcon
+              className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600"
+              strokeWidth={2}
+            />
+            <PlusIcon
+              className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600"
+              strokeWidth={2}
+            />
+            <PlusIcon
+              className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600"
+              strokeWidth={2}
+            />
+            <PlusIcon
+              className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600"
+              strokeWidth={2}
+            />
             <div className="flex flex-col md:flex-row gap-8">
               <div className="flex flex-col items-center md:items-start">
                 <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-primary/20">
@@ -121,7 +132,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 </div>
               </div>
 
-
               <div className="flex flex-col items-center">
                 <div className="text-center p-6 rounded-xl bg-transparent border border-dashed">
                   <p className="text-sm text-muted-foreground">Developer Score</p>
@@ -150,10 +160,22 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
           <div className="grid gap-6 mt-8 md:grid-cols-2">
             <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
-              <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
-              <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
-              <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
-              <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600" strokeWidth={2} />
+              <PlusIcon
+                className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600"
+                strokeWidth={2}
+              />
+              <PlusIcon
+                className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600"
+                strokeWidth={2}
+              />
+              <PlusIcon
+                className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6 text-zinc-600"
+                strokeWidth={2}
+              />
+              <PlusIcon
+                className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6 text-zinc-600"
+                strokeWidth={2}
+              />
               <h2 className="text-lg font-semibold mb-4 text-white">Score Breakdown</h2>
               <div className="flex items-center justify-center py-4">
                 <ScorePieChart
@@ -171,9 +193,18 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
             <Card className="p-6 border-dashed border-1 rounded-none bg-transparent relative before:rounded-none">
               <PlusIcon className="-top-[12.5px] -left-[12.5px] absolute h-6 w-6" strokeWidth={2} />
-              <PlusIcon className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6" strokeWidth={2} />
-              <PlusIcon className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6" strokeWidth={2} />
-              <PlusIcon className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6" strokeWidth={2} />
+              <PlusIcon
+                className="-top-[12.5px] -right-[12.5px] absolute h-6 w-6"
+                strokeWidth={2}
+              />
+              <PlusIcon
+                className="-bottom-[12.5px] -left-[12.5px] absolute h-6 w-6"
+                strokeWidth={2}
+              />
+              <PlusIcon
+                className="-bottom-[12.5px] -right-[12.5px] absolute h-6 w-6"
+                strokeWidth={2}
+              />
               <h2 className="text-lg font-semibold mb-4 text-white">Featured Project</h2>
               <div className="rounded-lg border border-border p-4">
                 <div className="flex items-start justify-between">

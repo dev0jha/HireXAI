@@ -6,6 +6,7 @@ import { VisibilityToggle } from "@/components/developer/visibility-toggle"
 import { mockDevelopers, mockContactRequests, mockAnalysisResult } from "@/data/mock-data"
 import { DashboardCard } from "@/components/layout/dashboard-card"
 import { IconArrowRight, IconGitBranch, IconInbox } from "@tabler/icons-react"
+import DashTitleShell from "@/components/dash-screentitle-text"
 
 export default async function DashboardPage() {
   const developer = mockDevelopers[0]
@@ -15,12 +16,10 @@ export default async function DashboardPage() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-8 lg:py-10 mt-4 sm:mt-6">
       <div className="">
         <div className="mb-6">
-          <h1 className="text-xl font-bold line-clamp-4">
-            Welcome back, {developer.name.split(" ")[0]}
-          </h1>
-          <p className="text-muted-foreground mt-1 text-md">
-            Here&apos;s an overview of your developer profile
-          </p>
+          <DashTitleShell
+            title={`Welcome back, ${developer.name.split(" ")[0]}`}
+            description="Here's an overview of your developer profile"
+          />
         </div>
 
         {/* Top Grid */}
