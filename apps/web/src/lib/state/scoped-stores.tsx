@@ -1,7 +1,13 @@
-import { createContext, use, useRef } from "react"
+import { createContext, useContext, useRef } from "react"
 import { Provider as JotaiProvider, useAtom } from "jotai"
+import type { Atom, WritableAtom, SetStateAction } from "jotai"
 
-import type { Atom, WritableAtom } from "jotai"
+/*
+ * Defaults for state values
+ */
+type AtomDefaults<T> = {
+  [K in keyof T]?: AtomValue<T[K]>
+}
 
 /**
  * Extract the value type carried by a Jotai Atom.
@@ -12,22 +18,16 @@ import type { Atom, WritableAtom } from "jotai"
 type AtomValue<A> = A extends Atom<infer V> ? V : never
 
 /**
- * Extract the setter signature from a writable atom.
- *
- * This preserves the exact write semantics:
- *   - set(value)
- *   - set(prev => next)
+ * Extract the return type of useAtom for a given atom
  */
-type AtomSetter<A> =
-  A extends WritableAtom<any, infer Args, infer Result> ? (...args: Args) => Result : never
-
-/**
- * A map of named atoms.
- *
- * Each atom may carry a different value type.
- * This map represents a cohesive state "module".
- */
-type AtomMap = Record<string, Atom<any>>
+type UseAtomReturn<A> =
+  A extends WritableAtom<infer V, infer Args, infer Result>
+    ? Args extends [SetStateAction<V>]
+      ? [V, (update: SetStateAction<V>) => Result]
+      : [V, (...args: Args) => Result]
+    : A extends Atom<infer V>
+      ? [V, React.Dispatch<SetStateAction<V>>]
+      : never
 
 /**
  * Creates a **scoped atom registry**.
@@ -53,7 +53,9 @@ type AtomMap = Record<string, Atom<any>>
  * - Provider: scopes the atom registry to a component tree
  * - useAtom: type-safe access to individual atoms by key
  */
-export function createScopedAtoms<T extends AtomMap>(factory: () => T) {
+export function createScopedAtoms<T extends Record<string, WritableAtom<any, any[], any>>>(
+  factory: (defaults?: AtomDefaults<T>) => T
+) {
   /**
    * Context holding the atom registry.
    *
@@ -72,17 +74,18 @@ export function createScopedAtoms<T extends AtomMap>(factory: () => T) {
    * - Atom identity remains stable across renders
    * - State is isolated per Provider instance
    */
-  function Provider({ children }: React.PropsWithChildren) {
+  function Provider({
+    children,
+    defaults,
+  }: React.PropsWithChildren<{ defaults?: AtomDefaults<T> }>) {
     /**
      * The atom registry must never be recreated,
      * otherwise all state would reset.
      */
     const atomsRef = useRef<T | null>(null)
-
     if (!atomsRef.current) {
-      atomsRef.current = factory()
+      atomsRef.current = factory(defaults)
     }
-
     return (
       <JotaiProvider>
         <StoreContext.Provider value={atomsRef.current}>{children}</StoreContext.Provider>
@@ -105,22 +108,13 @@ export function createScopedAtoms<T extends AtomMap>(factory: () => T) {
    * @param key
    *   The key of the atom to access from the registry
    */
-  function useScopedAtom<K extends keyof T>(key: K): [AtomValue<T[K]>, AtomSetter<T[K]>] {
-    const store = use(StoreContext)
-
+  function useScopedAtom<K extends keyof T>(key: K): UseAtomReturn<T[K]> {
+    const store = useContext(StoreContext)
     if (!store) {
       throw new Error("Scoped atoms used outside Provider")
     }
 
-    /**
-     * TypeScript cannot fully express the relationship between
-     * the atom registry and `useAtom`, so we reassert the types here.
-     *
-     * This assertion is safe:
-     * - `store[key]` is the exact atom instance
-     * - `useAtom` is already generic over that atom
-     */
-    return useAtom(store[key]) as [AtomValue<T[K]>, AtomSetter<T[K]>]
+    return useAtom(store[key]) as UseAtomReturn<T[K]>
   }
 
   /**
