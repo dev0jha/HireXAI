@@ -18,13 +18,13 @@ export default function AnalyzePage() {
             />
           </div>
 
+          {/* input  */}
           <AnalysisInputTrigger />
 
           {/* Error */}
           <ErrorMessage />
 
           {/* Results */}
-
           <Results />
         </div>
       </div>

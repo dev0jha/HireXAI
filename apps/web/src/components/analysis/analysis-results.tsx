@@ -2,7 +2,6 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import AnalysisCanvas from "@/components/analysis/analysis-canvas"
 import {
-  IconCheck,
   IconCode,
   IconFileText,
   IconGitBranch,
@@ -35,7 +34,6 @@ export function Results() {
           </Card>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            {/* Score */}
             <Card className="p-6">
               <div className="flex items-start justify-between mb-6 gap-4">
                 <div>

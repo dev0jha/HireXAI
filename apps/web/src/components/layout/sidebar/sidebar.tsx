@@ -14,7 +14,7 @@ export function DashboardSidebar() {
   return (
     <aside
       className={cn(
-        "hidden md:block fixed left-0 top-0 z-40 h-screen bg-[#191919] transition-all duration-300 shadow-xl border border-r border-[#2c2c2c] overflow-hidden rounded-md",
+        "hidden md:block fixed left-0 top-0 z-40 h-screen bg-[#191919] transition-all duration-300 shadow-xl border border-r border-[#2c2c2c] overflow-hidden",
         collapsed ? "w-16" : "w-64"
       )}
     >

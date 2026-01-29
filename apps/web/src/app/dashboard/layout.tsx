@@ -7,7 +7,7 @@ import { DashboardSidebar } from "@/components/layout/sidebar/sidebar"
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider className="flex bg-[#121212]">
-      <div className="min-h-screen bg-[#121212] relative flex rounded-lg">
+      <div className="min-h-screen bg-[#121212] relative flex">
         <Sidebar>
           <SidebarContent className="bg-[#121212]">
             <DashboardSidebar />

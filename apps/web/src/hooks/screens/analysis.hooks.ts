@@ -8,7 +8,11 @@ import { mockAnalysisResult } from "@/data/mock-data"
  * read usage for analysis repo url
  * **/
 export function useAnalysisInput() {
-  return AnalysisStore.useAtom("repoUrl")
+  const [repoURL, setRepoURL] = AnalysisStore.useAtom("repoUrl")
+  return {
+    repoURL,
+    setRepoURL,
+  }
 }
 
 /**
@@ -38,12 +42,13 @@ export function useAnalysisState() {
  * actions for analysis state
  * ***/
 export function useAnalysisActions() {
-  const [repoUrl] = AnalysisStore.useAtom("repoUrl")
+  const { repoURL, setRepoURL } = useAnalysisInput()
+
   const [, setState] = AnalysisStore.useAtom("state")
 
   async function handleAnalyze(e: React.FormEvent) {
     e.preventDefault()
-    if (!repoUrl) return
+    if (!repoURL) return
 
     setState({
       status: "responding",
@@ -53,7 +58,7 @@ export function useAnalysisActions() {
     const fetchResponse = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ repoUrl }),
+      body: JSON.stringify({ repoURL }),
     })
 
     if (!fetchResponse.ok) {
@@ -98,11 +103,17 @@ export function useAnalysisActions() {
           if (chunk.error) throw new Error(chunk.error)
 
           if (chunk.status) {
-            setState({ status: "responding", currentStatus: chunk.status })
+            setState({
+              status: "responding",
+              currentStatus: chunk.status,
+            })
           }
 
           if (chunk.result) {
-            setState({ status: "complete", result: chunk.result })
+            setState({
+              status: "complete",
+              result: chunk.result,
+            })
             gotResult = true
             return true
           }
@@ -116,9 +127,16 @@ export function useAnalysisActions() {
     reader.releaseLock()
 
     if (!streamAttempt.ok) {
-      setState({ status: "error", error: streamAttempt.error.message })
+      setState({
+        status: "error",
+        error: streamAttempt.error.message,
+      })
     }
   }
 
-  return { handleAnalyze }
+  return {
+    handleAnalyze,
+    setRepoURL,
+    repoURL,
+  }
 }

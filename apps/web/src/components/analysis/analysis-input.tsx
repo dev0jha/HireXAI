@@ -4,16 +4,11 @@ import { Button } from "@/components/ui/button"
 import { IconBrandGithub, IconLoader2, IconSearch } from "@tabler/icons-react"
 import { DashboardCard } from "@/components/layout/dashboard-card"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
-import {
-  useAnalysisActions,
-  useAnalysisInput,
-  useAnalysisState,
-} from "@/hooks/screens/analysis.hooks"
+import { useAnalysisActions, useAnalysisState } from "@/hooks/screens/analysis.hooks"
 
 export function AnalysisInputTrigger() {
-  const [repoURL, setRepoURL] = useAnalysisInput()
-  const { handleAnalyze } = useAnalysisActions()
   const { isAnalyzing, state } = useAnalysisState()
+  const { handleAnalyze, repoURL, setRepoURL } = useAnalysisActions()
 
   return (
     <DashboardCard className="p-6 flex-1 border bg-neutral-800/40 relative">
