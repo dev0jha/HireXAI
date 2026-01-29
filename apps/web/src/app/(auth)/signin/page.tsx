@@ -1,4 +1,5 @@
 "use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useSignIn } from "@/hooks/screens/signIn.hooks"
@@ -31,7 +32,7 @@ export default function SignInPage() {
               "border-2 border-zinc-800/30 bg-neutral-900/10 backdrop-blur-md p-8 shadow-2xl"
             )}
           >
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-4">
               <div className="absolute inset-0 bg-[repeating-linear-gradient(315deg,background_0,background_1px,transparent_0,transparent_50%)] bg-size-[8px_8px] pointer-events-none select-none" />
             </div>
 

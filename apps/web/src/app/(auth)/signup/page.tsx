@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
-import { useSignUp } from "@/hooks/screens/signUp.hook"
+import { useSignUp } from "@/hooks/screens/signUp.hooks"
 import NameFields from "@/components/auth/primitives/name-fields"
 import EmailField from "@/components/auth/primitives/email-field"
 import PassField from "@/components/auth/primitives/pass-fields"
@@ -32,10 +32,12 @@ export default function SignUpPage() {
 
           <div
             className={cn(
-              "border-2 border-zinc-800/30 bg-neutral-900/10 backdrop-blur-3xl p-8 shadow-2xl",
-              "bg-[repeating-linear-gradient(315deg,background_0,background_1px,transparent_0,transparent_50%)] bg-size-[8px_8px] -z-10"
+              "border-2 border-zinc-800/30 bg-neutral-900/10 backdrop-blur-3xl p-8 shadow-2xl"
             )}
           >
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-4">
+              <div className="absolute inset-0 bg-[repeating-linear-gradient(315deg,background_0,background_1px,transparent_0,transparent_50%)] bg-size-[8px_8px] pointer-events-none select-none" />
+            </div>
             <form onSubmit={submitFormAction} className="flex flex-col gap-6">
               <div className="space-y-2 text-center sm:text-left">
                 <h1 className="text-3xl font-bold tracking-tight text-white">Create an account</h1>
