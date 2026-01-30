@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
@@ -10,15 +10,18 @@ import { RequestCard } from "@/components/requests/request-card"
 import DashTitleShell from "@/components/dash-screentitle-text"
 import { IconMailForward } from "@tabler/icons-react"
 
-export default function RequestsPage() {
-  const [requests, setRequests] = useState<ContactRequest[]>(mockContactRequests)
 
-  const pendingRequests = requests.filter(r => r.status === "pending")
-  const acceptedRequests = requests.filter(r => r.status === "accepted")
-  const rejectedRequests = requests.filter(r => r.status === "rejected")
+
+export default function RequestsPage() {
+  const [requests, setRequests] =
+    useState<ContactRequest[]>(mockContactRequests);
+
+  const pendingRequests = requests.filter((r) => r.status === "pending");
+  const acceptedRequests = requests.filter((r) => r.status === "accepted");
+  const rejectedRequests = requests.filter((r) => r.status === "rejected");
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-2">
+    <div className="container mx-auto mt-2 px-4 py-8 sm:px-6 lg:px-8">
       <div className="space-y-8">
         {/* Header */}
         <div className="w-full px-6">
@@ -29,7 +32,7 @@ export default function RequestsPage() {
         </div>
 
         <Tabs defaultValue="pending" className="w-full p-4">
-          <TabsList className="w-full sm:w-fit h-auto bg-zinc-900/50 border border-zinc-800 p-1.5 rounded-md flex gap-1">
+          <TabsList className="flex h-auto w-full gap-1 rounded-md border border-zinc-800 bg-zinc-900/50 p-1.5 sm:w-fit">
             <TabsTrigger
               value="pending"
               className="rounded-full px-6 py-2.5 h-10 text-sm font-medium data-[state=active]:bg-zinc-100 data-[state=active]:text-zinc-950 text-zinc-400 hover:text-zinc-200 transition-all ring-0"
@@ -38,7 +41,7 @@ export default function RequestsPage() {
               {pendingRequests.length > 0 && (
                 <Badge
                   variant="secondary"
-                  className="ml-2 h-5 min-w-5 rounded-full bg-zinc-200/90 text-zinc-900 px-1.5 text-[11px]"
+                  className="ml-2 h-5 min-w-5 rounded-full bg-zinc-200/90 px-1.5 text-[11px] text-zinc-900"
                 >
                   {pendingRequests.length}
                 </Badge>
@@ -64,8 +67,12 @@ export default function RequestsPage() {
               <EmptyState message="No pending requests" />
             ) : (
               <div className="space-y-4">
-                {pendingRequests.map(request => (
-                  <RequestCard key={request.id} request={request} setRequests={setRequests} />
+                {pendingRequests.map((request) => (
+                  <RequestCard
+                    key={request.id}
+                    request={request}
+                    setRequests={setRequests}
+                  />
                 ))}
               </div>
             )}
@@ -77,8 +84,12 @@ export default function RequestsPage() {
               <EmptyState message="No accepted requests" />
             ) : (
               <div className="space-y-4">
-                {acceptedRequests.map(request => (
-                  <RequestCard key={request.id} request={request} setRequests={setRequests} />
+                {acceptedRequests.map((request) => (
+                  <RequestCard
+                    key={request.id}
+                    request={request}
+                    setRequests={setRequests}
+                  />
                 ))}
               </div>
             )}
@@ -90,8 +101,12 @@ export default function RequestsPage() {
               <EmptyState message="No declined requests" />
             ) : (
               <div className="space-y-4">
-                {rejectedRequests.map(request => (
-                  <RequestCard key={request.id} request={request} setRequests={setRequests} />
+                {rejectedRequests.map((request) => (
+                  <RequestCard
+                    key={request.id}
+                    request={request}
+                    setRequests={setRequests}
+                  />
                 ))}
               </div>
             )}
@@ -99,7 +114,7 @@ export default function RequestsPage() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
 
 const EmptyState = ({ message }: { message: string }) => (

@@ -1,12 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Menu, X, TrendingUp, Eye, Clock } from "lucide-react"
+import { useState } from "react";
+
 
 export function DashboardHeader() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#121212]/80 backdrop-blur-md md:left-64">
@@ -16,10 +17,14 @@ export function DashboardHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden text-zinc-400"
+            className="text-zinc-400 md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
         </div>
 
@@ -54,7 +59,7 @@ export function DashboardHeader() {
 
       {/* MOBILE MENU */}
       {mobileMenuOpen && (
-        <div className="border-t border-white/5 p-4 md:hidden bg-[#121212]">
+        <div className="border-t border-white/5 bg-[#121212] p-4 md:hidden">
           <nav className="space-y-2">
             {[
               ["Overview", "/dashboard"],
@@ -75,5 +80,5 @@ export function DashboardHeader() {
         </div>
       )}
     </header>
-  )
+  );
 }
