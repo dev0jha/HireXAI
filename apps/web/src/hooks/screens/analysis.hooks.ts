@@ -8,9 +8,9 @@ import { mockAnalysisResult } from "@/data/mock-data"
  * read usage for analysis repo url
  * **/
 export function useAnalysisInput() {
-  const [repoURL, setRepoURL] = AnalysisStore.useAtom("repoUrl")
+  const [repoUrl, setRepoURL] = AnalysisStore.useAtom("repoUrl")
   return {
-    repoURL,
+    repoUrl,
     setRepoURL,
   }
 }
@@ -42,13 +42,13 @@ export function useAnalysisState() {
  * actions for analysis state
  * ***/
 export function useAnalysisActions() {
-  const { repoURL, setRepoURL } = useAnalysisInput()
+  const { repoUrl, setRepoURL } = useAnalysisInput()
 
   const [, setState] = AnalysisStore.useAtom("state")
 
   async function handleAnalyze(e: React.FormEvent) {
     e.preventDefault()
-    if (!repoURL) return
+    if (!repoUrl) return
 
     setState({
       status: "responding",
@@ -58,7 +58,7 @@ export function useAnalysisActions() {
     const fetchResponse = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ repoURL }),
+      body: JSON.stringify({ repoUrl }),
     })
 
     if (!fetchResponse.ok) {
@@ -137,6 +137,6 @@ export function useAnalysisActions() {
   return {
     handleAnalyze,
     setRepoURL,
-    repoURL,
+    repoUrl,
   }
 }

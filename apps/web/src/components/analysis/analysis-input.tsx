@@ -8,7 +8,7 @@ import { useAnalysisActions, useAnalysisState } from "@/hooks/screens/analysis.h
 
 export function AnalysisInputTrigger() {
   const { isAnalyzing, state } = useAnalysisState()
-  const { handleAnalyze, repoURL, setRepoURL } = useAnalysisActions()
+  const { handleAnalyze, repoUrl, setRepoURL } = useAnalysisActions()
 
   return (
     <DashboardCard className="p-6 flex-1 border bg-neutral-800/40 relative">
@@ -24,7 +24,7 @@ export function AnalysisInputTrigger() {
                 id="repo-url"
                 type="url"
                 placeholder="https://github.com/user/repository"
-                value={repoURL}
+                value={repoUrl}
                 onChange={e => setRepoURL(e.target.value)}
                 disabled={isAnalyzing}
               />
@@ -33,7 +33,7 @@ export function AnalysisInputTrigger() {
             <div className="flex items-center justify-center">
               <Button
                 type="submit"
-                disabled={isAnalyzing || !repoURL}
+                disabled={isAnalyzing || !repoUrl}
                 className="gap-2 h-14 border-2 border-neutral-50/10 py-4 w-full sm:w-auto"
               >
                 {isAnalyzing ? (
