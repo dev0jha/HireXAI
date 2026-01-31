@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const emptySubscribe = () => () => {};
 
 export function useClientOnly() {
-  /*
-   * this is to prevent the hydration mismatch error in Next.js
-   * **/
-  const [isHyderated, setIsHyderated] = useState<boolean>(false);
-  useEffect(() => {
-    setIsHyderated(true);
-  }, []);
+  const isHydrated = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   return {
-    isHyderated,
+    isHydrated,
   };
 }

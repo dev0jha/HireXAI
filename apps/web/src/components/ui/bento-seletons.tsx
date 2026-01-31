@@ -221,7 +221,7 @@ export const ReactProfile = () => {
         <span className="text-blue-400">useMemo</span>
         <span className="text-zinc-500">(()</span>{" "}
         <span className="text-purple-400">=&gt;</span>{" "}
-        <span className="text-emerald-400">"Top 1%"</span>
+        <span className="text-emerald-400">&quot;Top 1%&quot;</span>
         <span className="text-zinc-500">, [])</span>
       </div>
 
@@ -251,9 +251,9 @@ export const ReactProfile = () => {
         <span className="text-sky-300">stack</span>
         <span className="text-zinc-500">=</span>
         <span className="text-zinc-500">{"{["}</span>
-        <span className="text-emerald-400">"NextJS"</span>
+        <span className="text-emerald-400">&quot;NextJS&quot;</span>
         <span className="text-zinc-500">,</span>{" "}
-        <span className="text-emerald-400">"TS"</span>
+        <span className="text-emerald-400">&quot;TS&quot;</span>
         <span className="text-zinc-500">{"]}"}</span>
       </div>
 
@@ -360,8 +360,8 @@ export const SecurityHash = () => {
 };
 
 function Placeholder() {
-  const { isHyderated } = useClientOnly();
-  if (!isHyderated) {
+  const { isHydrated } = useClientOnly();
+  if (!isHydrated) {
     return null;
   }
   return (
@@ -372,7 +372,7 @@ function Placeholder() {
           className="w-0.5 bg-zinc-700"
           animate={{ height: ["40%", "100%", "60%"] }}
           transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
-          style={{ height: Math.random() * 10 + 5 }}
+          style={{ height: i % 3 === 0 ? 12 : i % 2 === 0 ? 8 : 15 }}
         />
       ))}
     </div>

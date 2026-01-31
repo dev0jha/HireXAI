@@ -1,4 +1,6 @@
-import { createContext, useContext, useRef } from "react";
+"use client";
+
+import { createContext, useContext, useRef, useState } from "react";
 
 import { Provider as JotaiProvider, useAtom } from "jotai";
 import type { Atom, SetStateAction, WritableAtom } from "jotai";
@@ -55,6 +57,7 @@ type UseAtomReturn<A> =
  * - useAtom: type-safe access to individual atoms by key
  */
 export function createScopedAtoms<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends Record<string, WritableAtom<any, any[], any>>,
 >(factory: (defaults?: AtomDefaults<T>) => T) {
   /**
@@ -82,16 +85,13 @@ export function createScopedAtoms<
     /**
      * The atom registry must never be recreated,
      * otherwise all state would reset.
+     * We use useState with an initializer to guarantee once-per-provider creation.
      */
-    const atomsRef = useRef<T | null>(null);
-    if (!atomsRef.current) {
-      atomsRef.current = factory(defaults);
-    }
+    const [atoms] = useState(() => factory(defaults));
+
     return (
       <JotaiProvider>
-        <StoreContext.Provider value={atomsRef.current}>
-          {children}
-        </StoreContext.Provider>
+        <StoreContext.Provider value={atoms}>{children}</StoreContext.Provider>
       </JotaiProvider>
     );
   }

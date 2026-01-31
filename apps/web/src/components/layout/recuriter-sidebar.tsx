@@ -11,24 +11,37 @@ import {
   Code2,
   LogOut,
   Search,
+  Settings,
   Users,
 } from "lucide-react";
 import { toast } from "sonner";
 
+import LogoutBtn from "@/components/auth/logout-btn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+import { RecruiterSettingStore } from "@/hooks/scopedstores/recruiter-settings.store";
+import { authClient, useSession } from "@/lib/auth-client";
+import { grabUserNameInitials } from "@/lib/info";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/recruiter/discover", label: "Discover", icon: Search },
   { href: "/recruiter/candidates", label: "My Candidates", icon: Users },
+  { href: "/recruiter/settings", label: "Settings", icon: Settings },
 ];
 
 export function RecruiterSidebar() {
+  const { data: session } = useSession();
+  const [nameOverride] = RecruiterSettingStore.useAtom("name");
+  const [companyOverride] = RecruiterSettingStore.useAtom("company");
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+
+  const user = session?.user;
+  const displayName = nameOverride || user?.name || "Recruiter";
+  const displayCompany =
+    companyOverride || (user as any)?.company || "My Company";
 
   const handleSignout = async () => {
     await authClient.signOut({
@@ -95,31 +108,45 @@ export function RecruiterSidebar() {
 
         <div className="border-sidebar-border border-t p-4">
           <div
-            className={cn(
-              "flex items-center gap-3",
-              collapsed && "justify-center"
-            )}
+            className={cn("flex flex-col gap-4", collapsed && "items-center")}
           >
-            <Avatar className="h-9 w-9">
-              <AvatarImage
-                src="/recruiter-portrait-male-professional.jpg"
-                alt="John Smith"
-              />
-              <AvatarFallback>JS</AvatarFallback>
-            </Avatar>
             {!collapsed && (
-              <div className="flex-1 overflow-hidden">
-                <p className="truncate text-sm font-medium">John Smith</p>
-                <p className="text-muted-foreground truncate text-xs">
-                  TechCorp
-                </p>
+              <div className="px-1 text-xs text-neutral-500">Signed in as</div>
+            )}
+
+            <div
+              className={cn("flex gap-3", collapsed && "flex-col items-center")}
+            >
+              <Avatar className="h-8 w-8 border border-white/10">
+                <AvatarImage src={user?.image || ""} alt={displayName} />
+                <AvatarFallback>
+                  {grabUserNameInitials(displayName)}
+                </AvatarFallback>
+              </Avatar>
+
+              {!collapsed && (
+                <div className="flex-1 overflow-hidden">
+                  <p className="truncate text-sm leading-tight font-medium text-white">
+                    {displayName}
+                  </p>
+                  <p className="truncate text-xs text-neutral-500">
+                    {displayCompany}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {!collapsed && (
+              <div className="pb-2">
+                <LogoutBtn className="rounded-md bg-white py-2 text-xs text-black hover:bg-white/90" />
               </div>
             )}
-            {!collapsed && (
+
+            {collapsed && (
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className="h-8 w-8 text-neutral-400 hover:text-white"
                 onClick={handleSignout}
               >
                 <LogOut className="h-4 w-4" />

@@ -54,7 +54,7 @@ export async function attempt<T, E = ErrorType>(
     const result = await fn();
 
     return ok(result as T);
-  } catch (error: any) {
+  } catch (error: unknown) {
     //Axios specific error handling
 
     return err(error as E);
@@ -81,7 +81,7 @@ export async function andThenAsync<T, E, U>(
 export function attemptSync<T, E = Error>(fn: () => T): Result<T, E> {
   try {
     return ok(fn());
-  } catch (error: any) {
+  } catch (error: unknown) {
     return err(error as E);
   }
 }

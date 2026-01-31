@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -11,9 +10,7 @@ import {
   Code2,
   LogOut,
   Menu,
-  Moon,
   Settings,
-  Sun,
   User,
   X,
 } from "lucide-react";
@@ -27,13 +24,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 
 export function RecruiterHeader() {
+  const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const isDark = theme === "dark";
+
+  const user = session?.user;
 
   const handleSignout = async () => {
     await authClient.signOut({
@@ -72,49 +70,20 @@ export function RecruiterHeader() {
           </Link>
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="gap-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src="/recruiter-portrait-male-professional.jpg"
-                  alt="John Smith"
-                />
-                <AvatarFallback>JS</AvatarFallback>
-              </Avatar>
-              <span className="hidden sm:inline">John Smith</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuItem className="flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              TechCorp
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="flex cursor-pointer items-center gap-2"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
-            </DropdownMenuItem>{" "}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={handleSignout}
-              className="text-destructive flex cursor-pointer items-center gap-2"
-            >
-              <LogOut className="h-4 w-4" />
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex flex-1 items-center justify-end">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
       </div>
 
       {mobileMenuOpen && (

@@ -117,9 +117,10 @@ export class AnalysisService {
     return ok(content.data);
   }
 
-  private static parseAIResponse(data: any): Result<string, Error> {
+  private static parseAIResponse(data: unknown): Result<string, Error> {
     const content = attemptSync(() =>
-      Buffer.from(data.content, "base64").toString("utf-8")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Buffer.from((data as any).content, "base64").toString("utf-8")
     );
     if (!content.ok) {
       return err(new Error("Failed to decode README content"));
@@ -154,9 +155,9 @@ export class AnalysisService {
   public static async analyze(
     owner: string,
     repo: string,
-    repoData: any
+    repoData: unknown
   ): PromiseRes<AnalysisResponse, Error> {
-    const prompt = buildPrompt(repoData);
+    const prompt = buildPrompt(repoData as any);
 
     const resultAttempt = await attempt(() =>
       generateText({
