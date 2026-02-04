@@ -1,18 +1,15 @@
 "use client"
 
 import { IconMailForward } from "@tabler/icons-react"
-
-import DashTitleShell from "@/components/dash-screentitle-text"
 import { RequestCard } from "@/components/requests/request-card"
-import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { CustomPagination } from "@/components/ui/custom-pagination"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useContactRequestsPagination } from "@/hooks/use-contact-requests"
+import type { ContactRequest } from "@/lib/queries/queryOptions"
 
 export default function RequestsPage() {
    const {
-      data,
       meta,
       isLoading,
       error,
@@ -26,82 +23,38 @@ export default function RequestsPage() {
       goToPage,
    } = useContactRequestsPagination()
 
-   if (isLoading) {
-      return (
-         <div className="container mx-auto mt-2 px-4 py-8 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center h-64">
-               <div className="text-zinc-400">Loading contact requests...</div>
-            </div>
-         </div>
-      )
-   }
+   switch (true) {
+      case isLoading:
+         return <LoadingState />
 
-   if (error) {
-      return (
-         <div className="container mx-auto mt-2 px-4 py-8 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center h-64">
-               <div className="text-red-400">Error loading contact requests</div>
-            </div>
-         </div>
-      )
-   }
+      case !!error:
+         return <ErrorState />
 
-   return (
-      <div className="container mx-auto mt-2 px-4 py-8 sm:px-6 lg:px-8">
-         <div className="space-y-8">
-            {/* Header */}
-            <div className="w-full px-6">
-               <DashTitleShell
-                  title="Contact Requests"
-                  description="Manage contact requests from recruiters"
-               />
-            </div>
-
-            <Tabs defaultValue="pending" className="w-full p-4">
-               <TabsList className="flex h-auto w-full gap-1 rounded-md border border-zinc-800 bg-zinc-900/50 p-1.5 sm:w-fit">
-                  <TabsTrigger
-                     value="pending"
-                     className="h-10 rounded-full px-6 py-2.5 text-sm font-medium text-zinc-400 ring-0 transition-all hover:text-zinc-200 data-[state=active]:bg-zinc-100 data-[state=active]:text-zinc-950"
-                  >
-                     Pending
-                     {pendingRequests.length > 0 && (
-                        <Badge
-                           variant="secondary"
-                           className="ml-2 h-5 min-w-5 rounded-full bg-zinc-200/90 px-1.5 text-[11px] text-zinc-900"
-                        >
-                           {pendingRequests.length}
-                        </Badge>
-                     )}
-                  </TabsTrigger>
-                  <TabsTrigger
-                     value="accepted"
-                     className="h-10 rounded-full px-6 py-2.5 text-sm font-medium text-zinc-400 ring-0 transition-all hover:text-zinc-200 data-[state=active]:bg-zinc-100 data-[state=active]:text-zinc-950"
-                  >
-                     Accepted
-                  </TabsTrigger>
-                  <TabsTrigger
-                     value="rejected"
-                     className="h-10 rounded-full px-6 py-2.5 text-sm font-medium text-zinc-400 ring-0 transition-all hover:text-zinc-200 data-[state=active]:bg-zinc-100 data-[state=active]:text-zinc-950"
-                  >
-                     Declined
-                  </TabsTrigger>
-               </TabsList>
-
-               {/* Pending Content */}
-               <TabsContent value="pending" className="mt-6">
-                  {pendingRequests.length === 0 ? (
-                     <EmptyState message="No pending requests" />
-                  ) : (
-                     <div className="space-y-4">
-                        {pendingRequests.map(request => (
-                           <RequestCard
-                              key={request.id}
-                              request={request}
-                              onUpdateStatus={updateStatus}
+      default:
+         return (
+            <div className="container mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+               <div className="space-y-6">
+                  <Tabs defaultValue="pending" className="w-full mt-12">
+                     <div className="mb-6 flex items-center border-b border-zinc-800 pb-4">
+                        <TabsList className="h-9 w-full gap-2 bg-transparent p-0">
+                           <TabItem
+                              value="pending"
+                              count={pendingRequests.length}
+                              label="Pending"
                            />
-                        ))}
-                        {meta && meta.totalPages > 1 && (
-                           <div className="mt-6">
+                           <TabItem value="accepted" count={0} label="Accepted" />
+                           <TabItem value="rejected" count={0} label="Declined" />
+                        </TabsList>
+                     </div>
+
+                     <TabsContent value="pending">
+                        <RequestGrid
+                           requests={pendingRequests}
+                           emptyMsg="No pending requests"
+                           onUpdate={updateStatus}
+                        />
+                        {meta && meta.totalPages > 1 && pendingRequests.length > 0 && (
+                           <div className="mt-8">
                               <CustomPagination
                                  currentPage={currentPage}
                                  totalPages={meta.totalPages}
@@ -113,54 +66,87 @@ export default function RequestsPage() {
                               />
                            </div>
                         )}
-                     </div>
-                  )}
-               </TabsContent>
+                     </TabsContent>
 
-               {/* Accepted Content */}
-               <TabsContent value="accepted" className="mt-6">
-                  {acceptedRequests.length === 0 ? (
-                     <EmptyState message="No accepted requests" />
-                  ) : (
-                     <div className="space-y-4">
-                        {acceptedRequests.map(request => (
-                           <RequestCard
-                              key={request.id}
-                              request={request}
-                              onUpdateStatus={updateStatus}
-                           />
-                        ))}
-                     </div>
-                  )}
-               </TabsContent>
+                     <TabsContent value="accepted">
+                        <RequestGrid
+                           requests={acceptedRequests}
+                           emptyMsg="No accepted requests"
+                           onUpdate={updateStatus}
+                        />
+                     </TabsContent>
 
-               {/* Rejected Content */}
-               <TabsContent value="rejected" className="mt-6">
-                  {rejectedRequests.length === 0 ? (
-                     <EmptyState message="No declined requests" />
-                  ) : (
-                     <div className="space-y-4">
-                        {rejectedRequests.map(request => (
-                           <RequestCard
-                              key={request.id}
-                              request={request}
-                              onUpdateStatus={updateStatus}
-                           />
-                        ))}
-                     </div>
-                  )}
-               </TabsContent>
-            </Tabs>
-         </div>
+                     <TabsContent value="rejected">
+                        <RequestGrid
+                           requests={rejectedRequests}
+                           emptyMsg="No declined requests"
+                           onUpdate={updateStatus}
+                        />
+                     </TabsContent>
+                  </Tabs>
+               </div>
+            </div>
+         )
+   }
+}
+
+const RequestGrid = ({
+   requests,
+   emptyMsg,
+   onUpdate,
+}: {
+   requests: ContactRequest[]
+   emptyMsg: string
+   onUpdate: any
+}) => {
+   if (requests.length === 0) return <EmptyState message={emptyMsg} />
+
+   return (
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+         {requests.map(request => (
+            <RequestCard key={request.id} request={request} onUpdateStatus={onUpdate} />
+         ))}
       </div>
    )
 }
 
+const TabItem = ({ value, count, label }: { value: string; count: number; label: string }) => (
+   <TabsTrigger
+      value={value}
+      className="rounded-md px-4 py-2 text-xs font-medium text-zinc-400 transition-all data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-100"
+   >
+      {label}
+      {count > 0 && value === "pending" && (
+         <span className="ml-2 rounded-full bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-bold text-blue-400">
+            {count}
+         </span>
+      )}
+   </TabsTrigger>
+)
+
 const EmptyState = ({ message }: { message: string }) => (
-   <Card className="relative rounded-lg border-dashed border-zinc-800 bg-zinc-800/20 p-8 text-center">
-      <div className="flex w-full items-center justify-center text-zinc-500">
-         <IconMailForward />
+   <Card className="flex h-48 flex-col items-center justify-center gap-3 border-dashed border-zinc-800 bg-zinc-900/20 text-center">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/50">
+         <IconMailForward className="h-5 w-5 text-zinc-500" />
       </div>
-      <p className="text-zinc-500">{message}</p>
+      <p className="text-sm text-zinc-500">{message}</p>
    </Card>
 )
+
+const LoadingState = () => (
+   <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+         {[1, 2, 3].map(i => (
+            <div key={i} className="h-40 animate-pulse rounded-lg bg-zinc-900/50" />
+         ))}
+      </div>
+   </div>
+)
+
+const ErrorState = () => {
+   return (
+      <div className="flex h-[50vh] w-full items-center justify-center text-zinc-500">
+         Error loading requests.
+      </div>
+   )
+}

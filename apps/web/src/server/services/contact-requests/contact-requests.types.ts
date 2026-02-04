@@ -1,6 +1,6 @@
 import type { Context } from "elysia"
 import type { UserWithRole } from "@/actions/session.actions"
-import type { ContactStatus } from "@/db/schema"
+import type { ContactStatus } from "@/db/schema/enums"
 
 interface RequestContext {
    user: UserWithRole
@@ -9,6 +9,13 @@ interface RequestContext {
 
 export interface GetContactReqCtx extends RequestContext {
    query: ContactRequestQuery
+}
+
+export interface CreateContactReqCtx extends RequestContext {
+   body: {
+      candidateId: string
+      message: string
+   }
 }
 
 export interface UpdateContactReqCtx extends RequestContext {

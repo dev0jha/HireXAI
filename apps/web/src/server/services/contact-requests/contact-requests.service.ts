@@ -3,7 +3,11 @@ import { db } from "@/db/drizzle"
 import { contactRequests, recruitersProfiles, user } from "@/db/schema"
 import { attempt } from "@/utils/attempt"
 
-import type { GetContactReqCtx, UpdateContactReqCtx } from "./contact-requests.types"
+import type {
+   GetContactReqCtx,
+   UpdateContactReqCtx,
+   CreateContactReqCtx,
+} from "./contact-requests.types"
 
 export class ContactRequestService {
    /*
@@ -77,8 +81,95 @@ export class ContactRequestService {
    }
 
    /*
+    * Create a new contact request from recruiter to candidate
+    * */
+   static async createContactRequest({ body, user }: CreateContactReqCtx) {
+      const recruiterId = user.id
+      const { candidateId, message } = body
+      // Check if request already exists
+      const existingRequestRes = await attempt(() =>
+         db
+            .select()
+            .from(contactRequests)
+            .where(
+               and(
+                  eq(contactRequests.recruiterId, recruiterId),
+                  eq(contactRequests.candidateId, candidateId),
+                  eq(contactRequests.status, "pending")
+               )
+            )
+            .limit(1)
+      )
+
+      if (!existingRequestRes.ok) {
+         console.error("Failed to check existing request:", existingRequestRes.error)
+         throw new Error("Failed to check existing contact requests")
+      }
+
+      if (existingRequestRes.data.length > 0) {
+         throw new Error("You already have a pending contact request with this developer")
+      }
+
+      // Create new contact request
+      const createRes = await db
+         .insert(contactRequests)
+         .values({
+            id: crypto.randomUUID(),
+            recruiterId,
+            candidateId,
+            message,
+            status: "pending",
+         })
+         .returning()
+
+      if (!createRes) {
+         console.error("Failed to create contact request:", createRes)
+         throw new Error("Failed to create contact request")
+      }
+
+      return {
+         success: true,
+         data: createRes[0],
+      }
+
+      // Get the created request with recruiter info
+      const createdWithInfoRes = await attempt(() =>
+         db
+            .select({
+               id: contactRequests.id,
+               recruiterId: contactRequests.recruiterId,
+               candidateId: contactRequests.candidateId,
+               message: contactRequests.message,
+               status: contactRequests.status,
+               createdAt: contactRequests.createdAt,
+               recruiterName: user.name,
+               recruiterCompany: recruitersProfiles.companyName,
+               recruiterEmail: user.email,
+            })
+            .from(contactRequests)
+            .leftJoin(user, eq(contactRequests.recruiterId, user.id))
+            .leftJoin(
+               recruitersProfiles,
+               eq(contactRequests.recruiterId, recruitersProfiles.userId)
+            )
+            .where(eq(contactRequests.id, createRes.data[0].id))
+            .limit(1)
+      )
+
+      if (!createdWithInfoRes.ok) {
+         console.error("Failed to fetch created request:", createdWithInfoRes.error)
+         throw new Error("Failed to fetch created contact request")
+      }
+
+      return {
+         success: true,
+         data: createdWithInfoRes.data[0],
+      }
+   }
+
+   /*
     * Update the status of a contact request (accept/reject)
-    * **/
+    * */
    static async updateContactRequestStatus({
       set,
       user: authContextUser,

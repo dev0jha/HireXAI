@@ -77,3 +77,22 @@ export const updateContactRequestMutationOptions = {
       return response.data.data as ContactRequest
    },
 }
+
+export const createContactRequestMutationOptions = {
+   mutationFn: async ({ candidateId, message }: { candidateId: string; message: string }) => {
+      const response = await apiClient["contact-requests"].post({
+         candidateId,
+         message,
+      })
+
+      if (response.error) {
+         throw new Error("Failed to send contact request")
+      }
+
+      if (!response.data?.success) {
+         throw new Error(response.data?.message || "Failed to send contact request")
+      }
+
+      return response.data as ContactRequest
+   },
+}

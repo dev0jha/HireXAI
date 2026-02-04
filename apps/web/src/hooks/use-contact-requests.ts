@@ -8,7 +8,8 @@ import {
    contactRequestQueryOptions,
    updateContactRequestMutationOptions,
 } from "@/lib/queries/queryOptions"
-import { ContactRequest, ContactRequestQuery } from "@/lib/queries/queryOptions"
+
+import type { ContactRequestQuery } from "@/lib/queries/queryOptions"
 
 export function useContactRequests(query: ContactRequestQuery = {}) {
    const queryClient = useQueryClient()
@@ -23,7 +24,6 @@ export function useContactRequests(query: ContactRequestQuery = {}) {
    const updateStatusMutation = useMutation({
       ...updateContactRequestMutationOptions,
       onSuccess: updatedRequest => {
-         // Invalidate and refetch all contact request queries
          queryClient.invalidateQueries({ queryKey: ["contact-requests"] })
 
          toast.success(
@@ -37,14 +37,12 @@ export function useContactRequests(query: ContactRequestQuery = {}) {
       },
    })
 
-   const updateStatus = (requestId: string, status: "accepted" | "rejected") => {
+   const updateStatus = (requestId: string, status: "accepted" | "rejected") =>
       updateStatusMutation.mutate({ requestId, status })
-   }
 
-   // Helper functions to get filtered data
-   const pendingRequests = response?.data.filter(r => r.status === "pending") || []
-   const acceptedRequests = response?.data.filter(r => r.status === "accepted") || []
-   const rejectedRequests = response?.data.filter(r => r.status === "rejected") || []
+   const pendingRequests = response?.data.filter(r => r.status === "pending") ?? []
+   const acceptedRequests = response?.data.filter(r => r.status === "accepted") ?? []
+   const rejectedRequests = response?.data.filter(r => r.status === "rejected") ?? []
 
    return {
       data: response?.data || [],
@@ -99,7 +97,7 @@ export function useContactRequestsPagination() {
 
    const filterByStatus = (newStatus: "pending" | "accepted" | "rejected" | undefined) => {
       setStatus(newStatus)
-      setCurrentPage(1) // Reset to first page when filter changes
+      setCurrentPage(1)
    }
 
    return {

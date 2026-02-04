@@ -2,20 +2,29 @@
 
 import type React from "react"
 
-import { RecruiterHeader } from "@/components/layout/recuriter-header"
-import { RecruiterSidebar } from "@/components/layout/recuriter-sidebar"
+import { DashboardHeader } from "@/components/layout/dashboard-header"
+import { RecruiterDashboardSidebar } from "@/components/layout/recruiter-dashboard-sidebar"
 import { RecruiterSettingStore } from "@/hooks/scopedstores/recruiter-settings.store"
+import { SidebarContent, SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { Sidebar } from "@/components/ui/sidebar"
 
 export default function RecruiterLayout({ children }: { children: React.ReactNode }) {
    return (
       <RecruiterSettingStore.Provider defaults={{ isSaving: false }}>
-         <div className="dark min-h-screen bg-black text-white">
-            <RecruiterSidebar />
-            <RecruiterHeader />
-            <main className="pt-16 md:ml-64">
-               <div className="p-4 md:p-8">{children}</div>
-            </main>
-         </div>
+         <SidebarProvider className="flex bg-[#121212]">
+            <div className="relative flex min-h-screen bg-[#121212]">
+               <Sidebar>
+                  <SidebarContent className="bg-[#121212]">
+                     <RecruiterDashboardSidebar />
+                  </SidebarContent>
+               </Sidebar>
+            </div>
+
+            <SidebarInset className="w-full gap-4 bg-[#121212] p-2 pt-20 sm:p-6 md:pt-6">
+               <DashboardHeader />
+               <div className="p-2 sm:p-4">{children}</div>
+            </SidebarInset>
+         </SidebarProvider>
       </RecruiterSettingStore.Provider>
    )
 }

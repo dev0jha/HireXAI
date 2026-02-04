@@ -3,10 +3,6 @@
 import type React from "react"
 import { useState } from "react"
 
-import { Loader2, Send } from "lucide-react"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import {
    Dialog,
    DialogContent,
@@ -15,34 +11,40 @@ import {
    DialogHeader,
    DialogTitle,
 } from "@/components/ui/dialog"
+import { useCreateContactRequest } from "@/hooks/use-create-contact-request"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Loader2, Send } from "lucide-react"
+
 import type { Developer } from "@/types"
 
 interface ContactModalProps {
    developer: Developer | null
    open: boolean
    onOpenChange: (open: boolean) => void
-   onSend: (message: string) => void
 }
 
-export function ContactModal({ developer, open, onOpenChange, onSend }: ContactModalProps) {
+export function ContactModal({ developer, open, onOpenChange }: ContactModalProps) {
    const [message, setMessage] = useState("")
-   const [isSending, setIsSending] = useState(false)
+   const { createContactRequest, isLoading, error } = useCreateContactRequest()
 
    async function handleSend(e: React.FormEvent) {
       e.preventDefault()
-      if (!message.trim()) return
+      if (!message.trim() || !developer) return
 
-      setIsSending(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      onSend(message)
+      createContactRequest({ candidateId: developer.id, message: message.trim() })
+
       setMessage("")
-      setIsSending(false)
       onOpenChange(false)
    }
 
    if (!developer) return null
+
+   if (error) {
+      return <ErrorFallback error={error} />
+   }
 
    return (
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -86,7 +88,7 @@ export function ContactModal({ developer, open, onOpenChange, onSend }: ContactM
                      onChange={e => setMessage(e.target.value)}
                      rows={4}
                      required
-                     className="min-h-[100px] resize-none text-sm sm:min-h-[120px] sm:text-base"
+                     className="min-h-25 resize-none text-sm sm:min-h-30 sm:text-base"
                   />
                   <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
                      This message will be sent to the developer for review. They will decide whether
@@ -99,16 +101,16 @@ export function ContactModal({ developer, open, onOpenChange, onSend }: ContactM
                      type="button"
                      variant="outline"
                      onClick={() => onOpenChange(false)}
-                     className="w-full bg-transparent sm:w-auto sm:min-w-[100px]"
+                     className="w-full bg-transparent sm:w-auto sm:min-w-25"
                   >
                      Cancel
                   </Button>
                   <Button
                      type="submit"
-                     disabled={isSending || !message.trim()}
-                     className="w-full gap-2 sm:w-auto sm:min-w-[140px]"
+                     disabled={isLoading || !message.trim()}
+                     className="w-full gap-2 sm:w-auto sm:min-w-35"
                   >
-                     {isSending ? (
+                     {isLoading ? (
                         <>
                            <Loader2 className="h-4 w-4 animate-spin" />
                            Sending...
@@ -124,5 +126,13 @@ export function ContactModal({ developer, open, onOpenChange, onSend }: ContactM
             </form>
          </DialogContent>
       </Dialog>
+   )
+}
+
+const ErrorFallback = ({ error }: { error: Error }) => {
+   return (
+      <div className="p-4 bg-red-100 text-red-800 rounded-md">
+         {error.message || "An unexpected error occurred."}
+      </div>
    )
 }

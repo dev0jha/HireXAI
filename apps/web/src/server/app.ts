@@ -8,6 +8,7 @@ import { ContactRequestService } from "@/server/services/contact-requests/contac
 import { repoAnalysisRequestBodySchema } from "./services/analysis/analysis.validation"
 import {
    contactRequestQuerySchema,
+   createContactRequestSchema,
    updateContactRequestSchema,
 } from "./services/contact-requests/contact-requests.validation"
 
@@ -27,6 +28,11 @@ export const app = new Elysia({ prefix: "/api" })
 
    .get("/contact-requests", ContactRequestService.getContactRequests, {
       query: contactRequestQuerySchema,
+      auth: true,
+   })
+
+   .post("/contact-requests", ContactRequestService.createContactRequest, {
+      body: createContactRequestSchema,
       auth: true,
    })
 

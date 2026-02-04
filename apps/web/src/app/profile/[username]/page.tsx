@@ -1,21 +1,13 @@
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { ArrowLeft, ChevronRight } from "lucide-react"
 
-import {
-   ExternalLink,
-} from "lucide-react"
-
-import ScorePieChart from "@/components/developer/score-pie-chart"
-import Footer from "@/components/layout/footer"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { mockAnalysisResult, mockDevelopers } from "@/data/mock-data"
-import { getScoreLabel } from "@/types"
-import { IconBrandGithub, IconBrandLinkedin, IconGlobe, IconMapPin } from "@tabler/icons-react"
-import { PlusIcon } from "@/components/ui/plus-icon"
-
+import { Button } from "@/components/ui/button"
+import { ProfileHeader } from "@/components/recruiter/profile-header"
+import { AnalysisSection } from "@/components/recruiter/analysis-section"
+import { FeaturedProject } from "@/components/recruiter/featured-projects"
+import { HiringCallToAction } from "@/components/recruiter/hiring-cta"
 
 interface ProfilePageProps {
    params: Promise<{ username: string }>
@@ -29,209 +21,60 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       notFound()
    }
 
-   const scoreLabel = getScoreLabel(developer.score)
-
    return (
-      <div className="min-h-screen bg-black">
-         <main className="pt-20 pb-20">
+      <div className="min-h-3 text-zinc-100 font-sans selection:bg-zinc-800">
+         <main className="pt-10 pb-20">
             <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-               <div className="relative rounded-none border border-dashed bg-transparent p-6 before:rounded-none">
-                  <PlusIcon
-                     className="absolute -top-[12.5px] -left-[12.5px] h-6 w-6 text-zinc-600"
-                  />
-                  <PlusIcon
-                     className="absolute -top-[12.5px] -right-[12.5px] h-6 w-6 text-zinc-600"
-                  />
-                  <PlusIcon
-                     className="absolute -bottom-[12.5px] -left-[12.5px] h-6 w-6 text-zinc-600"
-                  />
-                  <PlusIcon
-                     className="absolute -right-[12.5px] -bottom-[12.5px] h-6 w-6 text-zinc-600"
-                  />
-                  <div className="flex flex-col gap-8 md:flex-row">
-                     <div className="flex flex-col items-center md:items-start">
-                        <div className="border-primary/20 relative h-32 w-32 overflow-hidden rounded-full border-4">
-                           <Image
-                              src={
-                                 developer.avatar ||
-                                 "/placeholder.svg?height=128&width=128&query=developer portrait"
-                              }
-                              alt={developer.name}
-                              fill
-                              className="object-cover"
-                           />
-                        </div>
-                        {developer.isOpenToRecruiters && developer.score >= 80 && (
-                           <Badge className="bg-primary/20 text-primary mt-4">
-                              Open to opportunities
-                           </Badge>
-                        )}
-                     </div>
+               {/* --- Navigation Header --- */}
+               <nav className="flex items-center justify-between mb-8 px-3">
+                  <Button
+                     variant="ghost"
+                     size="sm"
+                     className="group h-9 px-3 -ml-3 text-zinc-500 hover:text-zinc-100 hover:bg-zinc-900/50 rounded-sm transition-all border-amber-50/10 border-dashed"
+                  >
+                     <Link href="/" className="flex items-center gap-1">
+                        <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                        <span className="font-medium">Back</span>
+                     </Link>
+                  </Button>
 
-                     <div className="flex-1 text-center md:text-left">
-                        <h1 className="font-poppins text-3xl font-bold">{developer.name}</h1>
-                        <p className="text-muted-foreground">@{developer.username}</p>
-
-                        {developer.location && (
-                           <div className="text-muted-foreground flex items-center justify-center md:justify-start">
-                              <IconMapPin className="h-4 w-4" />
-                              {developer.location}
-                           </div>
-                        )}
-
-                        {developer.bio && (
-                           <p className="text-muted-foreground mt-4 max-w-xl">{developer.bio}</p>
-                        )}
-
-                        <div className="mt-4 flex flex-wrap justify-center gap-3 md:justify-start">
-                           {developer.website && (
-                              <a
-                                 href={`https://${developer.website}`}
-                                 target="_blank"
-                                 rel="noopener noreferrer"
-                                 className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm"
-                              >
-                                 <IconGlobe className="h-4 w-4" />
-                                 {developer.website}
-                              </a>
-                           )}
-                           {developer.linkedIn && (
-                              <a
-                                 href={`https://${developer.linkedIn}`}
-                                 target="_blank"
-                                 rel="noopener noreferrer"
-                                 className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm"
-                              >
-                                 <IconBrandLinkedin className="h-4 w-4" />
-                                 LinkedIn
-                              </a>
-                           )}
-                           <a
-                              href="#"
-                              className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm"
-                           >
-                              <IconBrandGithub className="h-4 w-4" />
-                              GitHub
-                           </a>
-                        </div>
-                     </div>
-
-                     <div className="flex flex-col items-center">
-                        <div className="rounded-xl border border-dashed bg-transparent p-6 text-center">
-                           <p className="text-muted-foreground text-sm">Developer Score</p>
-                           <div className="mt-1 flex items-baseline justify-center gap-1">
-                              <span className="text-primary text-4xl font-bold">
-                                 {developer.score}
-                              </span>
-                              <span className="text-muted-foreground">/100</span>
-                           </div>
-                           <Badge variant="secondary" className="bg-primary/20 text-primary mt-2">
-                              {scoreLabel}
-                           </Badge>
-                        </div>
-                     </div>
+                  <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-zinc-600">
+                     <span className="hover:text-zinc-400 transition-colors cursor-default">
+                        Developers
+                     </span>
+                     <ChevronRight className="h-3 w-3 text-zinc-700" />
+                     <span className="text-zinc-400">Profile</span>
                   </div>
+               </nav>
 
-                  <div className="mt-8">
-                     <h2 className="mb-4 text-lg font-semibold">Tech Stack</h2>
-                     <div className="flex flex-wrap gap-2">
-                        {developer.techStack.map(tech => (
-                           <Badge key={tech} variant="outline" className="text-sm">
-                              {tech}
-                           </Badge>
-                        ))}
-                     </div>
-                  </div>
-               </div>
+               <div className="space-y-6">
+                  {/* Top Section */}
+                  <ProfileHeader developer={developer} />
 
-               <div className="mt-8 grid gap-6 md:grid-cols-2">
-                  <Card className="relative rounded-none border border-dashed bg-transparent p-6 before:rounded-none">
-                     <PlusIcon
-                        className="absolute -top-[12.5px] -left-[12.5px] h-6 w-6 text-zinc-600"
-                     />
-                     <PlusIcon
-                        className="absolute -top-[12.5px] -right-[12.5px] h-6 w-6 text-zinc-600"
-                     />
-                     <PlusIcon
-                        className="absolute -bottom-[12.5px] -left-[12.5px] h-6 w-6 text-zinc-600"
-                     />
-                     <PlusIcon
-                        className="absolute -right-[12.5px] -bottom-[12.5px] h-6 w-6 text-zinc-600"
-                     />
-                     <h2 className="mb-4 text-lg font-semibold text-white">Score Breakdown</h2>
-                     <div className="flex items-center justify-center py-4">
-                        <ScorePieChart
-                           scores={{
-                              codeQuality: mockAnalysisResult.scores.codeQuality,
-                              architecture: mockAnalysisResult.scores.architecture,
-                              security: mockAnalysisResult.scores.security,
-                              gitPractices: mockAnalysisResult.scores.gitPractices,
-                              documentation: mockAnalysisResult.scores.documentation,
-                           }}
+                  {/* Grid Layout: Stats & Projects */}
+                  <div className="grid gap-6 md:grid-cols-12">
+                     {/* Left Column: Analysis (4/12) */}
+                     <div className="md:col-span-5 lg:col-span-4 h-full">
+                        <AnalysisSection
+                           scores={mockAnalysisResult.scores}
                            totalScore={developer.score}
                         />
                      </div>
-                  </Card>
 
-                  <Card className="relative rounded-none border border-dashed bg-transparent p-6 before:rounded-none">
-                     <PlusIcon
-                        className="absolute -top-[12.5px] -left-[12.5px] h-6 w-6"
-                     />
-                     <PlusIcon
-                        className="absolute -top-[12.5px] -right-[12.5px] h-6 w-6"
-                     />
-                     <PlusIcon
-                        className="absolute -bottom-[12.5px] -left-[12.5px] h-6 w-6"
-                     />
-                     <PlusIcon
-                        className="absolute -right-[12.5px] -bottom-[12.5px] h-6 w-6"
-                     />
-                     <h2 className="mb-4 text-lg font-semibold text-white">Featured Project</h2>
-                     <div className="border-border rounded-lg border p-4">
-                        <div className="flex items-start justify-between">
-                           <div>
-                              <h3 className="font-medium">{mockAnalysisResult.name}</h3>
-                              <p className="text-muted-foreground mt-1 text-sm">
-                                 {mockAnalysisResult.description}
-                              </p>
-                           </div>
-                           <Badge variant="secondary">{mockAnalysisResult.totalScore}</Badge>
-                        </div>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                           <Badge variant="outline">{mockAnalysisResult.language}</Badge>
-                           <Badge variant="outline">{mockAnalysisResult.stars} stars</Badge>
-                        </div>
-                        <a
-                           href={mockAnalysisResult.url}
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="text-primary mt-4 flex items-center gap-1 text-sm hover:underline"
-                        >
-                           View on GitHub
-                           <ExternalLink className="h-3 w-3" />
-                        </a>
+                     {/* Right Column: Project & CTA (8/12) */}
+                     <div className="md:col-span-7 lg:col-span-8 flex flex-col gap-6">
+                        <FeaturedProject project={mockAnalysisResult} />
+
+                        <HiringCallToAction
+                           isOpen={developer.isOpenToRecruiters}
+                           score={developer.score}
+                           firstName={developer.name.split(" ")[0]}
+                        />
                      </div>
-
-                     {developer.isOpenToRecruiters && developer.score >= 80 && (
-                        <div className="bg-primary/10 border-primary/20 mt-6 rounded-lg border p-4">
-                           <p className="text-primary text-sm font-medium">
-                              Interested in hiring {developer.name.split(" ")[0]}?
-                           </p>
-                           <p className="text-muted-foreground mt-1 text-sm">
-                              Sign in as a recruiter to send a contact request.
-                           </p>
-                           <Link href="/login">
-                              <Button className="mt-3" size="sm">
-                                 Contact Developer
-                              </Button>
-                           </Link>
-                        </div>
-                     )}
-                  </Card>
+                  </div>
                </div>
             </div>
          </main>
-         <Footer />
       </div>
    )
 }
