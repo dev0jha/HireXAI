@@ -34,10 +34,13 @@ export const SearchInputGroup = ({
    return (
       <InputGroup
          ref={ref}
-         className={cn("relative w-full sm:w-48 h-9 border-2 rounded-md py-2", className)}
+         className={cn(
+            "relative w-full sm:w-48 h-10 border-2 border-zinc-300/30 rounded-md py-2",
+            className
+         )}
       >
          <Input
-            placeholder={placeholder}
+            placeholder={placeholder ?? "Search..."}
             value={value}
             onChange={e => onChange?.(e.target.value)}
             onKeyDown={handleKeyDown}
