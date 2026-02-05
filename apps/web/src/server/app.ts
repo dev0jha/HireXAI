@@ -2,7 +2,7 @@ import { openapi } from "@elysiajs/openapi"
 import { Elysia, t } from "elysia"
 
 import { betterAuthmiddleware } from "@/server/middlewares/auth.middleware"
-import { AnalysisService, HealthService } from "@/server/services"
+import { AnalysisService, HealthService, DevelopersService } from "@/server/services"
 import { ContactRequestService } from "@/server/services/contact-requests/contact-requests.service"
 
 import { repoAnalysisRequestBodySchema } from "./services/analysis/analysis.validation"
@@ -11,6 +11,7 @@ import {
    createContactRequestSchema,
    updateContactRequestSchema,
 } from "./services/contact-requests/contact-requests.validation"
+import { developersQuerySchema } from "./services/developers/developers.validation"
 
 export const app = new Elysia({ prefix: "/api" })
    .use(openapi())
@@ -41,5 +42,11 @@ export const app = new Elysia({ prefix: "/api" })
       body: updateContactRequestSchema,
       auth: true,
    })
+
+   .get("/developers", DevelopersService.getDevelopers, {
+      query: developersQuerySchema,
+   })
+
+   .get("/developers/tech-stacks", DevelopersService.getTechStacks, {})
 
 export type API = typeof app

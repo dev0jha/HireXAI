@@ -8,6 +8,13 @@
       "when": 1770196771869,
       "tag": "0000_created_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770303591260,
+      "tag": "0001_rename_recruiter_table_to_recruiter_profiles",
+      "breakpoints": true
     }
   ]
 }

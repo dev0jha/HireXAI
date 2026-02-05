@@ -5,6 +5,7 @@ import { openAPI } from "better-auth/plugins"
 
 import { db } from "@/db/drizzle"
 import { userRoles } from "@/db/schema/enums"
+import { ProfileCreationService } from "@/server/services/profile-creation.service"
 
 export const auth = betterAuth({
    database: drizzleAdapter(db, {
@@ -18,7 +19,25 @@ export const auth = betterAuth({
          role: {
             type: userRoles.enumValues,
             required: true,
-            defaultValue: "user",
+            defaultValue: "recruiter",
+         },
+      },
+   },
+   databaseHooks: {
+      user: {
+         create: {
+            after: async user => {
+               const result = await ProfileCreationService.createUserProfile({
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  role: user.role as "recruiter" | "candidate",
+               })
+
+               if (!result.success) {
+                  console.error("Failed to create user profile:", result.error)
+               }
+            },
          },
       },
    },

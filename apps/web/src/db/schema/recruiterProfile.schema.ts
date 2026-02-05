@@ -2,7 +2,7 @@ import { boolean, pgTable, text } from "drizzle-orm/pg-core"
 
 import { user } from "@/db/schema/auth.schema"
 
-export const recruitersProfiles = pgTable("recruiters", {
+export const recruitersProfiles = pgTable("recruiter_profiles", {
    userId: text("user_id")
       .primaryKey()
       .references(() => user.id, { onDelete: "cascade" }),

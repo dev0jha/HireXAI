@@ -83,10 +83,10 @@ export class ContactRequestService {
    /*
     * Create a new contact request from recruiter to candidate
     * */
-   static async createContactRequest({ body, user }: CreateContactReqCtx) {
+   static async createContactRequest({ body, user, set }: CreateContactReqCtx) {
       const recruiterId = user.id
       const { candidateId, message } = body
-      // Check if request already exists
+
       const existingRequestRes = await attempt(() =>
          db
             .select()
@@ -103,67 +103,48 @@ export class ContactRequestService {
 
       if (!existingRequestRes.ok) {
          console.error("Failed to check existing request:", existingRequestRes.error)
-         throw new Error("Failed to check existing contact requests")
+         set.status = 500
+         return {
+            success: false,
+            error: "Failed to check existing contact requests",
+         }
       }
 
       if (existingRequestRes.data.length > 0) {
-         throw new Error("You already have a pending contact request with this developer")
+         set.status = 400
+         return {
+            success: false,
+            errror: "A pending contact request already exists for this candidate",
+         }
       }
 
-      // Create new contact request
-      const createRes = await db
-         .insert(contactRequests)
-         .values({
-            id: crypto.randomUUID(),
-            recruiterId,
-            candidateId,
-            message,
-            status: "pending",
-         })
-         .returning()
-
-      if (!createRes) {
-         console.error("Failed to create contact request:", createRes)
-         throw new Error("Failed to create contact request")
-      }
-
-      return {
-         success: true,
-         data: createRes[0],
-      }
-
-      // Get the created request with recruiter info
-      const createdWithInfoRes = await attempt(() =>
+      const createRes = await attempt(() =>
          db
-            .select({
-               id: contactRequests.id,
-               recruiterId: contactRequests.recruiterId,
-               candidateId: contactRequests.candidateId,
-               message: contactRequests.message,
-               status: contactRequests.status,
-               createdAt: contactRequests.createdAt,
-               recruiterName: user.name,
-               recruiterCompany: recruitersProfiles.companyName,
-               recruiterEmail: user.email,
+            .insert(contactRequests)
+            .values({
+               id: crypto.randomUUID(),
+               recruiterId,
+               candidateId,
+               message,
+               status: "pending",
             })
-            .from(contactRequests)
-            .leftJoin(user, eq(contactRequests.recruiterId, user.id))
-            .leftJoin(
-               recruitersProfiles,
-               eq(contactRequests.recruiterId, recruitersProfiles.userId)
-            )
-            .where(eq(contactRequests.id, createRes.data[0].id))
-            .limit(1)
+            .returning()
       )
 
-      if (!createdWithInfoRes.ok) {
-         console.error("Failed to fetch created request:", createdWithInfoRes.error)
-         throw new Error("Failed to fetch created contact request")
+      if (!createRes.ok) {
+         console.error("Failed to create contact request:", createRes.error)
+         set.status = 500
+         return {
+            scuccess: false,
+            errror: "Failed to create contact request",
+         }
       }
+
+      const createdRequest = createRes.data[0]
 
       return {
          success: true,
-         data: createdWithInfoRes.data[0],
+         data: createdRequest,
       }
    }
 

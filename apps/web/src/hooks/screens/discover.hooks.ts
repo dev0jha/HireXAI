@@ -1,8 +1,7 @@
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import type { Developer } from "@/types"
-import { mockDevelopers } from "@/data/mock-data"
-
-const techOptions = ["All", "React", "TypeScript", "Node.js", "Python", "Go", "AWS", "Docker"]
+import { useDevelopers, useTechStacks } from "@/hooks/use-developers"
+import { useDebounce } from "@/hooks/use-debounce"
 
 const sortOptions = [
    { value: "score-desc", label: "Score (High to Low)" },
@@ -17,38 +16,43 @@ export function useDiscoverPage() {
    const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null)
    const [modalOpen, setModalOpen] = useState(false)
 
-   // Filter logic
-   const visibleDevelopers = useMemo(
-      () => mockDevelopers.filter(dev => dev.isOpenToRecruiters && dev.score >= 80),
-      []
-   )
+   // Use debounced search for API calls
+   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
-   const filteredDevelopers = useMemo(() => {
-      return visibleDevelopers.filter(dev => {
-         const matchesSearch =
-            dev.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            dev.techStack.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()))
-         const matchesTech = techFilter === "All" || dev.techStack.some(tech => tech === techFilter)
-         return matchesSearch && matchesTech
-      })
-   }, [visibleDevelopers, searchQuery, techFilter])
+   // Fetch developers with filters
+   const {
+      data: developers,
+      meta,
+      isLoading,
+      errorMessage: developersError,
+   } = useDevelopers({
+      search: debouncedSearchQuery || undefined,
+      tech: techFilter === "All" ? undefined : techFilter,
+      sort: sortBy as "score-desc" | "score-asc" | "name-asc",
+      page: 1,
+      limit: 100, // Get more for better UX
+   })
 
-   const sortedDevelopers = useMemo(() => {
-      const sorted = [...filteredDevelopers]
-      switch (sortBy) {
-         case "score-desc":
-            return sorted.sort((a, b) => b.score - a.score)
-         case "score-asc":
-            return sorted.sort((a, b) => a.score - b.score)
-         case "name-asc":
-            return sorted.sort((a, b) => a.name.localeCompare(b.name))
-         default:
-            return sorted.sort((a, b) => b.score - a.score)
-      }
-   }, [filteredDevelopers, sortBy])
+   // Fetch tech stacks for filter options
+   const { data: techStacks, isLoading: techStacksLoading } = useTechStacks()
 
-   const topDevelopers = useMemo(() => sortedDevelopers.slice(0, 3), [sortedDevelopers])
-   const listDevelopers = useMemo(() => sortedDevelopers.slice(3), [sortedDevelopers])
+   // Build tech options with "All" as first option
+   const techOptions = ["All", ...techStacks]
+
+   // Transform data to match expected format (convert candidate to developer type)
+   const transformedDevelopers: Developer[] = developers.map(dev => ({
+      ...dev,
+      role: "developer" as const, // Add the required role field
+      bio: dev.bio || undefined, // Convert null to undefined
+      location: dev.location || undefined, // Convert null to undefined
+      linkedIn: dev.linkedIn || undefined, // Convert null to undefined
+      website: dev.website || undefined, // Convert null to undefined
+      isOpenToRecruiters: dev.isVisible, // Map isVisible to isOpenToRecruiters
+      analyzedRepos: [], // Empty for now, could be fetched later
+   }))
+
+   const topDevelopers = transformedDevelopers.slice(0, 3)
+   const listDevelopers = transformedDevelopers.slice(3)
 
    const handleContact = (developer: Developer) => {
       setSelectedDeveloper(developer)
@@ -75,13 +79,16 @@ export function useDiscoverPage() {
       sortBy,
       selectedDeveloper,
       modalOpen,
+      isLoading,
+      developersError,
+      techStacksLoading,
 
       // Computed values
       techOptions,
       sortOptions,
       topDevelopers,
       listDevelopers,
-      filteredCount: filteredDevelopers.length,
+      filteredCount: meta?.total || 0,
 
       // Actions
       setSearchQuery,

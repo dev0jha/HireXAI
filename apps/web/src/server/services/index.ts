@@ -11,3 +11,5 @@ export abstract class HealthService {
 }
 
 export { AnalysisService } from "./analysis/analysis.service"
+export { DevelopersService } from "./developers/developers.service"
+export { ProfileCreationService } from "./profile-creation.service"

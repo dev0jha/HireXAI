@@ -2,14 +2,11 @@ import Link from "next/link"
 
 import { UserX } from "lucide-react"
 
-import { Navbar } from "@/components/core/Navbar"
-import Footer from "@/components/layout/footer"
 import { Button } from "@/components/ui/button"
 
 export default function NotFound() {
    return (
       <div className="flex min-h-screen flex-col">
-         <Navbar />
          <main className="flex flex-1 items-center justify-center">
             <div className="px-4 text-center">
                <div className="bg-muted mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full">
@@ -32,7 +29,6 @@ export default function NotFound() {
                </div>
             </div>
          </main>
-         <Footer />
       </div>
    )
 }
