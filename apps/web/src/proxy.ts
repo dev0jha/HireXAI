@@ -28,10 +28,11 @@ function createRequestRedirector(request: NextRequest) {
  *
  *match route utility
  * **/
-
 const matchRoute = (pathname: string, routes: string[]) => {
-   return routes.some(route => pathname === route || pathname.startsWith(route + "/"))
+   return routes.some(route => pathname.startsWith(route) || pathname.startsWith(route + "/"))
 }
+
+const matchExactRoute = (pathname: string, routes: string[]) => routes.includes(pathname)
 
 export async function proxy(request: NextRequest) {
    const redirectTo = createRequestRedirector(request)
@@ -47,7 +48,7 @@ export async function proxy(request: NextRequest) {
    if (!sessionRes.ok) {
       console.error("Error fetching session:", sessionRes.error)
 
-      if (matchRoute(pathName, publicRoutes) || matchRoute(pathName, hybridRoutes)) {
+      if (matchExactRoute(pathName, publicRoutes) || matchExactRoute(pathName, hybridRoutes)) {
          return NextResponse.next()
       }
 
@@ -64,7 +65,7 @@ export async function proxy(request: NextRequest) {
    /*
     * authenticated user cannot access public routes
     * **/
-   if (role && matchRoute(pathName, publicRoutes)) {
+   if (role && matchExactRoute(pathName, publicRoutes)) {
       return redirectTo(allowedRoutesByRole[role][0])
    }
 
@@ -77,6 +78,10 @@ export async function proxy(request: NextRequest) {
       !matchRoute(pathName, hybridRoutes)
    ) {
       return redirectTo("/signin")
+   }
+
+   if (role && matchRoute(pathName, allowedRoutesByRole[role])) {
+      return NextResponse.next()
    }
 
    /*
