@@ -1,18 +1,37 @@
 "use client"
 
 import { useState } from "react"
-
 import Link from "next/link"
-
-import { ExternalLink, Mail, Search, Trash2 } from "lucide-react"
+import { MoreHorizontal, ExternalLink, Mail, Search, Trash2, Filter } from "lucide-react"
 
 import Container from "@/components/core/Container"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
+import {
+   Table,
+   TableBody,
+   TableCell,
+   TableHead,
+   TableHeader,
+   TableRow,
+} from "@/components/ui/table"
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuLabel,
+   DropdownMenuSeparator,
+   DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+   Select,
+   SelectContent,
+   SelectItem,
+   SelectTrigger,
+   SelectValue,
+} from "@/components/ui/select"
 
 interface Candidate {
    id: string
@@ -44,10 +63,21 @@ const mockCandidates: Candidate[] = [
       username: "mchen",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
       score: 89,
-      techStack: ["Python", "Django", "PostgreSQL"],
+      techStack: ["Python", "Django", "PostgreSQL", "Docker", "AWS"],
       location: "New York, NY",
       contactedDate: "2025-01-03",
       status: "pending",
+   },
+   {
+      id: "3",
+      name: "Emily Davis",
+      username: "edavis",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+      score: 72,
+      techStack: ["Java", "Spring Boot"],
+      location: "Austin, TX",
+      contactedDate: "2024-12-28",
+      status: "not-interested",
    },
 ]
 
@@ -70,140 +100,208 @@ export default function CandidatesPage() {
       setCandidates(candidates.filter(c => c.id !== id))
    }
 
+   const getStatusBadge = (status: string) => {
+      switch (status) {
+         case "interested":
+            return (
+               <Badge className="bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/25 border-emerald-200">
+                  Interested
+               </Badge>
+            )
+         case "pending":
+            return (
+               <Badge variant="secondary" className="text-muted-foreground">
+                  Pending
+               </Badge>
+            )
+         case "not-interested":
+            return (
+               <Badge variant="outline" className="text-muted-foreground">
+                  Passed
+               </Badge>
+            )
+         default:
+            return <Badge variant="outline">{status}</Badge>
+      }
+   }
+
    return (
-      <Container className="py-8">
-         <div className="space-y-8">
+      <Container className="py-8 max-w-7xl">
+         {/* Page Header */}
+         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
             <div>
-               <h1 className="text-3xl font-bold">My Candidates</h1>
-               <p className="text-muted-foreground mt-1">Manage developers you've contacted</p>
+               <h1 className="text-2xl font-bold tracking-tight">My Candidates</h1>
+               <p className="text-muted-foreground text-sm">
+                  Manage and track {candidates.length} developers you've contacted.
+               </p>
             </div>
-
-            <div className="flex flex-col gap-4 sm:flex-row">
-               <div className="relative flex-1">
-                  <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                  <Input
-                     placeholder="Search candidates..."
-                     value={searchQuery}
-                     onChange={e => setSearchQuery(e.target.value)}
-                     className="pl-10"
-                  />
-               </div>
-               <Select
-                  value={statusFilter}
-                  onValueChange={value => value && setStatusFilter(value)}
-               >
-                  <SelectTrigger className="w-full sm:w-48">
-                     <span className="truncate">
-                        {statusFilter === "all"
-                           ? "All Status"
-                           : statusFilter === "pending"
-                             ? "Pending"
-                             : statusFilter === "interested"
-                               ? "Interested"
-                               : "Not Interested"}
-                     </span>
-                  </SelectTrigger>
-                  <SelectContent>
-                     <SelectItem value="all">All Status</SelectItem>
-                     <SelectItem value="pending">Pending</SelectItem>
-                     <SelectItem value="interested">Interested</SelectItem>
-                     <SelectItem value="not-interested">Not Interested</SelectItem>
-                  </SelectContent>
-               </Select>
+            <div className="flex items-center gap-2">
+               <Button variant="outline">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Export CSV
+               </Button>
+               <Button>
+                  <Search className="mr-2 h-4 w-4" />
+                  Find Talent
+               </Button>
             </div>
+         </div>
 
-            <div className="space-y-4">
-               {filteredCandidates.map(candidate => (
-                  <Card key={candidate.id} className="p-6">
-                     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                        <div className="flex flex-1 items-start gap-4">
-                           <Avatar className="h-12 w-12 shrink-0">
-                              <AvatarImage src={candidate.avatar} alt={candidate.name} />
-                              <AvatarFallback>
-                                 {candidate.name.substring(0, 2).toUpperCase()}
-                              </AvatarFallback>
-                           </Avatar>
-                           <div className="min-w-0 flex-1">
-                              <div className="flex flex-wrap items-center gap-2">
-                                 <h3 className="font-semibold">{candidate.name}</h3>
-                                 <Badge
-                                    variant="secondary"
-                                    className={
-                                       candidate.score >= 90
-                                          ? "bg-primary/20 text-primary border-primary/30 border"
-                                          : "bg-success/20 text-success border-success/30 border"
-                                    }
-                                 >
-                                    {candidate.score}
-                                 </Badge>
-                                 <Badge
-                                    variant={
-                                       candidate.status === "interested"
-                                          ? "default"
-                                          : candidate.status === "pending"
-                                            ? "secondary"
-                                            : "outline"
-                                    }
-                                    className="capitalize"
-                                 >
-                                    {candidate.status === "not-interested"
-                                       ? "Not Interested"
-                                       : candidate.status}
-                                 </Badge>
+         {/* Filters Toolbar */}
+         <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+               <Input
+                  placeholder="Search by name or tech stack..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="pl-9 w-full sm:max-w-sm"
+               />
+            </div>
+            <Select value={statusFilter} onValueChange={value => value && setStatusFilter(value)}>
+               <SelectTrigger className="w-full sm:w-45">
+                  <Filter className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <SelectValue />
+               </SelectTrigger>
+               <SelectContent>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="interested">Interested</SelectItem>
+                  <SelectItem value="not-interested">Not Interested</SelectItem>
+               </SelectContent>
+            </Select>
+         </div>
+
+         {/* Data Table */}
+         <div className="border rounded-md shadow-sm bg-card">
+            <Table>
+               <TableHeader>
+                  <TableRow>
+                     <TableHead className="w-75">Candidate</TableHead>
+                     <TableHead>Score</TableHead>
+                     <TableHead>Status</TableHead>
+                     <TableHead className="hidden md:table-cell">Tech Stack</TableHead>
+                     <TableHead className="hidden md:table-cell">Location</TableHead>
+                     <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+               </TableHeader>
+               <TableBody>
+                  {filteredCandidates.length > 0 ? (
+                     filteredCandidates.map(candidate => (
+                        <TableRow key={candidate.id}>
+                           {/* Candidate Name & Avatar */}
+                           <TableCell>
+                              <div className="flex items-center gap-3">
+                                 <Avatar className="h-9 w-9 border">
+                                    <AvatarImage src={candidate.avatar} alt={candidate.name} />
+                                    <AvatarFallback>
+                                       {candidate.name.substring(0, 2).toUpperCase()}
+                                    </AvatarFallback>
+                                 </Avatar>
+                                 <div className="flex flex-col">
+                                    <span className="font-medium text-sm text-foreground">
+                                       {candidate.name}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                       @{candidate.username}
+                                    </span>
+                                 </div>
                               </div>
-                              <p className="text-muted-foreground text-sm">@{candidate.username}</p>
-                              <p className="text-muted-foreground text-sm">{candidate.location}</p>
-                              <div className="mt-2 flex flex-wrap gap-2">
-                                 {candidate.techStack.map(tech => (
-                                    <Badge key={tech} variant="outline" className="text-xs">
+                           </TableCell>
+
+                           {/* Score */}
+                           <TableCell>
+                              <div
+                                 className={`font-semibold text-sm ${
+                                    candidate.score >= 90
+                                       ? "text-emerald-600"
+                                       : candidate.score >= 80
+                                         ? "text-amber-600"
+                                         : "text-muted-foreground"
+                                 }`}
+                              >
+                                 {candidate.score}
+                              </div>
+                           </TableCell>
+
+                           {/* Status */}
+                           <TableCell>{getStatusBadge(candidate.status)}</TableCell>
+
+                           {/* Tech Stack (Truncated) */}
+                           <TableCell className="hidden md:table-cell max-w-50">
+                              <div className="flex flex-wrap gap-1">
+                                 {candidate.techStack.slice(0, 2).map(tech => (
+                                    <Badge
+                                       key={tech}
+                                       variant="secondary"
+                                       className="px-1.5 py-0 text-[10px] font-normal"
+                                    >
                                        {tech}
                                     </Badge>
                                  ))}
+                                 {candidate.techStack.length > 2 && (
+                                    <span className="text-xs text-muted-foreground pl-1">
+                                       +{candidate.techStack.length - 2}
+                                    </span>
+                                 )}
                               </div>
-                              <p className="text-muted-foreground mt-2 text-xs">
-                                 Contacted on{" "}
-                                 {new Date(candidate.contactedDate).toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                 })}
-                              </p>
-                           </div>
-                        </div>
-                        <div className="flex gap-2 sm:flex-col">
-                           <Link
-                              href={`/profile/${candidate.username}`}
-                              className="flex-1 sm:flex-none"
-                           >
-                              <Button variant="outline" size="sm" className="w-full">
-                                 <ExternalLink className="mr-2 h-4 w-4" />
-                                 View Profile
-                              </Button>
-                           </Link>
-                           <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
-                              <Mail className="mr-2 h-4 w-4" />
-                              Message
-                           </Button>
-                           <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-destructive hover:text-destructive flex-1 sm:flex-none"
-                              onClick={() => handleRemove(candidate.id)}
-                           >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Remove
-                           </Button>
-                        </div>
-                     </div>
-                  </Card>
-               ))}
-            </div>
+                           </TableCell>
 
-            {filteredCandidates.length === 0 && (
-               <div className="py-12 text-center">
-                  <p className="text-muted-foreground">No candidates found.</p>
-               </div>
-            )}
+                           {/* Location & Date */}
+                           <TableCell className="hidden md:table-cell">
+                              <div className="flex flex-col">
+                                 <span className="text-sm text-foreground">
+                                    {candidate.location}
+                                 </span>
+                                 <span className="text-xs text-muted-foreground">
+                                    {new Date(candidate.contactedDate).toLocaleDateString()}
+                                 </span>
+                              </div>
+                           </TableCell>
+
+                           {/* Actions Dropdown */}
+                           <TableCell className="text-right">
+                              <DropdownMenu>
+                                 <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                       <span className="sr-only">Open menu</span>
+                                       <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                 </DropdownMenuTrigger>
+                                 <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <Link href={`/profile/${candidate.username}`}>
+                                       <DropdownMenuItem>
+                                          <ExternalLink className="mr-2 h-4 w-4" />
+                                          View Profile
+                                       </DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuItem>
+                                       <Mail className="mr-2 h-4 w-4" />
+                                       Message
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                       onClick={() => handleRemove(candidate.id)}
+                                       className="text-destructive focus:text-destructive"
+                                    >
+                                       <Trash2 className="mr-2 h-4 w-4" />
+                                       Remove Candidate
+                                    </DropdownMenuItem>
+                                 </DropdownMenuContent>
+                              </DropdownMenu>
+                           </TableCell>
+                        </TableRow>
+                     ))
+                  ) : (
+                     <TableRow>
+                        <TableCell colSpan={6} className="h-24 text-center">
+                           No results found.
+                        </TableCell>
+                     </TableRow>
+                  )}
+               </TableBody>
+            </Table>
          </div>
       </Container>
    )
