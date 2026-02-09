@@ -22,10 +22,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
    }
 
    return (
-      <div className="min-h-3 text-zinc-100 font-sans selection:bg-zinc-800">
+      <div className="min-h-3 text-zinc-100 font-sans selection:bg-netural-800">
          <main className="pt-10 pb-20">
             <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-               {/* --- Navigation Header --- */}
                <nav className="flex items-center justify-between mb-8 px-3">
                   <Button
                      variant="ghost"
@@ -38,7 +37,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                      </Link>
                   </Button>
 
-                  <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-zinc-600">
+                  <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-zinc-600">
                      <span className="hover:text-zinc-400 transition-colors cursor-default">
                         Developers
                      </span>
@@ -53,7 +52,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
                   {/* Grid Layout: Stats & Projects */}
                   <div className="grid gap-6 md:grid-cols-12">
-                     {/* Left Column: Analysis (4/12) */}
                      <div className="md:col-span-5 lg:col-span-4 h-full">
                         <AnalysisSection
                            scores={mockAnalysisResult.scores}

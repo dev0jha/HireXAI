@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -6,7 +5,7 @@ import { IconCode, IconExternalLink, IconStar } from "@tabler/icons-react"
 
 export function FeaturedProject({ project }: { project: any }) {
    return (
-      <div className="group flex flex-col justify-between gap-4 rounded-xl border border-zinc-800 bg-zinc-900/40 p-5 transition-all hover:border-zinc-700 hover:bg-zinc-900/60 shadow-none">
+      <div className="group flex flex-col justify-between gap-4 rounded-xl border border-zinc-800 bg-neutral-900/40 p-5 transition-all hover:border-zinc-700 hover:bg-zinc-900/60 shadow-none">
          {/* Header */}
          <div className="flex items-start justify-between">
             <div className="space-y-1">

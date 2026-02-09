@@ -175,7 +175,6 @@ export default function AnalysisCanvas({ analysisResult }: AnalysisCanvasProps) 
             className="rounded-3xl border-2 border-dashed text-black"
          >
             <Controls />
-            <MiniMap />
             <Background />
          </ReactFlow>
       </div>

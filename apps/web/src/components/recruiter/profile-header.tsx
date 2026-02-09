@@ -10,7 +10,7 @@ export function ProfileHeader({ developer }: { developer: Developer }) {
    const scoreLabel = getScoreLabel(developer.score)
 
    return (
-      <div className="relative overflow-hidden rounded-lg border-2 border-zinc-800/50 bg-zinc-900/40 p-6 shadow-none">
+      <div className="relative overflow-hidden rounded-lg border-2 border-zinc-800/50 bg-neutral-900/40 p-6 shadow-none">
          <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
             {/* Avatar Column */}
             <div className="flex shrink-0 flex-col items-center md:items-start">
@@ -25,7 +25,7 @@ export function ProfileHeader({ developer }: { developer: Developer }) {
 
                {/* "Open to Work" - Redesigned to be subtle & clean */}
                {developer.isOpenToRecruiters && developer.score >= 80 && (
-                  <div className="mt-3 flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950/50 px-3 py-1.5">
+                  <div className="mt-3 flex items-center gap-2 rounded-full border border-zinc-800 bg-neutral-950/50 px-3 py-1.5">
                      <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -57,7 +57,7 @@ export function ProfileHeader({ developer }: { developer: Developer }) {
                         variant="outline"
                         size="sm"
                         className={cn(
-                           "border-zinc-800 bg-zinc-900 px-2 py-1 items-center justify-center",
+                           "border-zinc-800 bg-neutral-900 px-2 py-1 items-center justify-center",
                            getScoreTextColor(developer.score)
                         )}
                      >
@@ -81,7 +81,7 @@ export function ProfileHeader({ developer }: { developer: Developer }) {
                      </div>
                   )}
 
-                  <div className="h-3 w-px bg-zinc-800 hidden md:block" />
+                  <div className="h-3 w-px bg-neutral-800 hidden md:block" />
 
                   <div className="flex items-center gap-3">
                      {developer.website && (
@@ -105,7 +105,7 @@ export function ProfileHeader({ developer }: { developer: Developer }) {
          </div>
 
          {/* Mobile Score Display */}
-         <div className="mt-6 flex md:hidden items-center justify-between rounded-lg bg-zinc-950/50 p-4 border border-zinc-800/50">
+         <div className="mt-6 flex md:hidden items-center justify-between rounded-lg bg-neutral-950/50 p-4 border border-zinc-800/50">
             <span className="text-sm text-zinc-400">Developer Score</span>
             <div className="flex items-center gap-3">
                <Badge
@@ -129,7 +129,7 @@ export function ProfileHeader({ developer }: { developer: Developer }) {
                   key={tech}
                   variant="secondary"
                   size="sm"
-                  className="bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 border-zinc-800/50 px-2 py-1 items-center justify-center"
+                  className="bg-neutral-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 border-zinc-800/50 px-2 py-1 items-center justify-center"
                >
                   {tech}
                </Badge>

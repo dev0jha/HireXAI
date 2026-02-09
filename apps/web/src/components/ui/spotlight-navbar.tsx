@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from "@/components/ui/plus-icon"
 import { cn } from "@/lib/utils"
+import Logo from "@/components/Logo"
 
 export interface NavItem {
    label: string
@@ -40,9 +41,7 @@ export function Navbar({
                <PlusIcon className="absolute -bottom-1.5 -left-1.5 text-white/30" />
                <PlusIcon className="absolute -right-1.5 -bottom-1.5 text-white/30" />
                <div className="flex items-center gap-2">
-                  <Link href="/" className="group flex items-center gap-2">
-                     <span className="text-lg font-bold tracking-tight text-white">HireXAI</span>
-                  </Link>
+                  <Logo />
                </div>
 
                <nav className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:block">

@@ -12,6 +12,7 @@ import { CornerDecorations } from "@/components/ui/corner-decorations"
 import { Form } from "@/components/ui/form"
 import { useSignUp } from "@/hooks/screens/signUp.hooks"
 import { cn } from "@/lib/utils"
+import Logo from "@/components/Logo"
 
 export default function SignUpPage() {
    const { form, submitFormAction } = useSignUp()
@@ -36,6 +37,9 @@ export default function SignUpPage() {
                      "border-2 border-zinc-800/30 bg-neutral-900/10 p-8 shadow-2xl backdrop-blur-3xl"
                   )}
                >
+                  <div className="mb-4 flex items-center gap-2 relative">
+                     <Logo />
+                  </div>
                   <div className="pointer-events-none absolute inset-0 z-0 opacity-4">
                      <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(315deg,background_0,background_1px,transparent_0,transparent_50%)] bg-size-[8px_8px] select-none" />
                   </div>

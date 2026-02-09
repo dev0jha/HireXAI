@@ -10,6 +10,7 @@ import { CornerDecorations } from "@/components/ui/corner-decorations"
 import { Form } from "@/components/ui/form"
 import { useSignIn } from "@/hooks/screens/signIn.hooks"
 import { cn } from "@/lib/utils"
+import Logo from "@/components/Logo"
 
 export default function SignInPage() {
    const { form, onSubmitFormAction } = useSignIn()
@@ -38,6 +39,10 @@ export default function SignInPage() {
                   </div>
 
                   <div className="relative z-10">
+                     <div className="mb-4 flex items-center gap-2 relative">
+                        <Logo />
+                     </div>
+
                      <form onSubmit={onSubmitFormAction} className="z-1000 flex flex-col gap-6">
                         <div className="space-y-2 text-center sm:text-left">
                            <h1 className="text-3xl font-bold tracking-tight text-white">

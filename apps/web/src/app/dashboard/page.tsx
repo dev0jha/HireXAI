@@ -1,15 +1,6 @@
 "use client"
 
-import {
-   GitBranch,
-   Inbox,
-   Eye,
-   Search,
-   ArrowUpRight,
-   CheckCircle2,
-   Code2,
-   Terminal,
-} from "lucide-react"
+import { GitBranch, Inbox, Eye, Search, ArrowUpRight, CheckCircle2, Code2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -18,17 +9,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { mockContactRequests, mockDevelopers } from "@/data/mock-data"
 import { DeveloperRadarChart } from "@/components/discover/radar-chart"
-import { IconAnalyze, IconEye, IconView360 } from "@tabler/icons-react"
+import { IconAnalyze, IconEye } from "@tabler/icons-react"
+import { Developer } from "@/types"
+import Link from "next/link"
 
-export default function DashboardPage() {
-   const developer = mockDevelopers[0]
-   const pendingRequests = mockContactRequests.filter(r => r.status === "pending")
-
-   const stats = [
+function getDeveloperStats(developer: Developer) {
+   return [
       { label: "Profile Views", value: "1,204", trend: "+12%", icon: Eye },
       { label: "Search Appearances", value: "342", trend: "+5%", icon: Search },
       { label: "Code Score", value: developer.score, trend: "+2", icon: Code2 },
    ]
+}
+
+export default function DashboardPage() {
+   const developer = mockDevelopers[0]
+   const pendingRequests = mockContactRequests.filter(r => r.status === "pending")
+   const stats = getDeveloperStats(developer)
 
    return (
       <div className="container mx-auto p-6 max-w-7xl space-y-8">
@@ -43,14 +39,19 @@ export default function DashboardPage() {
                </p>
             </div>
             <div className="flex items-center gap-2">
-               <Button variant="outline" size="sm" className="p-4 rounded-lg">
-                  <IconAnalyze className="mr-2 h-4 w-4" />
-                  New Analysis
-               </Button>
-               <Button size="sm" className="p-4 rounded-md" variant="outline">
-                  <IconEye className="mr-2 h-4 w-4" />
-                  View Public Profile
-               </Button>
+               <Link href="/dashboard/analysis">
+                  <Button variant="outline" size="sm" className="p-4 rounded-lg">
+                     <IconAnalyze className="mr-2 h-4 w-4" />
+                     New Analysis
+                  </Button>
+               </Link>
+
+               <Link href={`/profile/${developer.username}`}>
+                  <Button size="sm" className="p-4 rounded-md" variant="outline">
+                     <IconEye className="mr-2 h-4 w-4" />
+                     View Public Profile
+                  </Button>
+               </Link>
             </div>
          </div>
 
@@ -112,7 +113,7 @@ export default function DashboardPage() {
                      {[1, 2, 3].map((_, i) => (
                         <div
                            key={i}
-                           className="flex items-center justify-between p-3 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors group"
+                           className="flex items-center justify-between p-3 rounded-lg border border-white/5 bg-white/2 hover:bg-white/4 transition-colors group"
                         >
                            <div className="flex items-center gap-4">
                               <div className="h-10 w-10 rounded bg-blue-500/10 flex items-center justify-center text-blue-500">
@@ -210,7 +211,7 @@ export default function DashboardPage() {
                                        <p className="text-sm font-medium text-zinc-200">
                                           {req.recruiterName}
                                        </p>
-                                       <p className="text-[10px] text-zinc-500">{req.company}</p>
+                                       {/*<p className="text-[10px] text-zinc-500">{req.company}</p>*/}
                                     </div>
                                  </div>
                                  <span className="text-[10px] text-zinc-600">2h ago</span>

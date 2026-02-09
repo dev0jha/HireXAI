@@ -3,29 +3,29 @@
 import { ErrorMessage } from "@/components/analysis/analysis-error"
 import { AnalysisInputTrigger } from "@/components/analysis/analysis-input"
 import { Results } from "@/components/analysis/analysis-results"
-import DashTitleShell from "@/components/dash-screentitle-text"
 import { AnalysisStore } from "@/hooks/scopedstores/analysis.store"
 
 export default function AnalyzePage() {
    return (
       <AnalysisStore.Provider>
-         <div className="mx-auto mt-4 flex-1 py-2 sm:mt-6 sm:py-8 lg:py-10">
-            <div className="w-full space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-               <div className="gap-1">
-                  <DashTitleShell
-                     title="Analyze Repository"
-                     description="Get AI-powered feedback on your GitHub project"
-                  />
+         <div className="flex h-full w-full flex-col p-4 sm:p-6">
+            <div className="mx-auto w-full max-w-4xl xl:max-w-6xl space-y-6 sm:space-y-8">
+               <div className="flex flex-col gap-1">
+                  <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-100">
+                     Analyze Repository
+                  </h1>
+                  <p className="text-sm text-zinc-400">
+                     Enter a GitHub URL to generate a comprehensive quality report.
+                  </p>
                </div>
 
-               {/* input  */}
-               <AnalysisInputTrigger />
+               <div className="w-full px-0 sm:px-8 lg:px-16 xl:px-44">
+                  <AnalysisInputTrigger />
+               </div>
 
-               {/* Error */}
-               <ErrorMessage />
-
-               {/* Results */}
-               <Results />
+               <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <Results />
+               </div>
             </div>
          </div>
       </AnalysisStore.Provider>
