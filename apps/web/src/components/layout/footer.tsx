@@ -10,6 +10,14 @@ import {
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from "@/components/ui/plus-icon"
 import { cn } from "@/lib/utils"
+import Logo from "@/components/Logo"
+import {
+   IconBrandFacebook,
+   IconBrandGithub,
+   IconBrandInstagram,
+   IconBrandX,
+   IconBrandYoutube,
+} from "@tabler/icons-react"
 
 export default function Footer() {
    const company = [
@@ -60,27 +68,23 @@ export default function Footer() {
 
    const socialLinks = [
       {
-         icon: FacebookIcon,
+         icon: IconBrandFacebook,
          link: "#",
       },
       {
-         icon: GithubIcon,
+         icon: IconBrandGithub,
          link: "#",
       },
       {
-         icon: InstagramIcon,
+         icon: IconBrandInstagram,
          link: "#",
       },
       {
-         icon: LinkedinIcon,
+         icon: IconBrandX,
          link: "#",
       },
       {
-         icon: TwitterIcon,
-         link: "#",
-      },
-      {
-         icon: YoutubeIcon,
+         icon: IconBrandYoutube,
          link: "#",
       },
    ]
@@ -97,7 +101,7 @@ export default function Footer() {
             <div className="border-border absolute inset-x-0 border-t border-dotted" />
             <div className="relative grid max-w-5xl grid-cols-6 gap-6 p-4">
                <div className="col-span-6 flex flex-col gap-4 pt-5 md:col-span-4">
-                  <h3 className="text-xl font-bold">HireXAI</h3>
+                  <Logo />
                   <p className="text-muted-foreground max-w-sm text-sm text-balance">
                      Designed for builders who value depth, clarity, and real results.
                   </p>

@@ -45,7 +45,7 @@ export function Navbar({
                </div>
 
                <nav className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:block">
-                  <ul className="flex items-center gap-1 rounded-lg border-[1.5] border-dashed border-white/10 px-2 py-1">
+                  <ul className="flex items-center gap-1 rounded-xl border-2 bg-black/30 border-dashed border-neutral-50/10 px-2 py-1">
                      {items.map((item, idx) => {
                         const isActive =
                            pathname === item.href ||
