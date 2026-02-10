@@ -172,3 +172,80 @@ export const mockAnalysisResult: AnalyzedRepo = {
       "Documentation could be improved with API endpoint descriptions",
    ],
 }
+{
+   /* add mock data 4 entries add  */
+}
+export const mockAnalysisHistory: AnalyzedRepo[] = [
+   {
+      id: "ar1",
+      name: "next-ecommerce",
+      url: "https://github.com/alexchen/next-ecommerce",
+      description: "A full-stack e-commerce platform built with Next.js and Stripe",
+      language: "TypeScript",
+      stars: 234,
+      analyzedAt: new Date("2026-02-10T14:30:00"),
+      scores: {
+         codeQuality: 92,
+         architecture: 88,
+         security: 85,
+         gitPractices: 90,
+         documentation: 78,
+      },
+      totalScore: 87,
+      feedback: [
+         "Excellent use of TypeScript with proper type definitions throughout the codebase",
+         "Well-structured component architecture following React best practices",
+         "Consider adding more comprehensive error handling in API routes",
+         "Security practices are solid, but consider implementing rate limiting",
+         "Documentation could be improved with API endpoint descriptions",
+      ],
+   },
+   {
+      id: "ar2",
+      name: "react-dashboard",
+      url: "https://github.com/alexchen/react-dashboard",
+      description: "Modern admin dashboard with charts, tables, and real-time data",
+      language: "TypeScript",
+      stars: 156,
+      analyzedAt: new Date("2026-02-09T10:15:00"),
+      scores: {
+         codeQuality: 85,
+         architecture: 82,
+         security: 78,
+         gitPractices: 88,
+         documentation: 70,
+      },
+      totalScore: 81,
+      feedback: [
+         "Good component organization with reusable patterns",
+         "State management could be improved with better separation of concerns",
+         "Consider implementing more security headers",
+         "Consistent commit message format",
+         "README lacks setup instructions for new developers",
+      ],
+   },
+   {
+      id: "ar3",
+      name: "api-gateway",
+      url: "https://github.com/alexchen/api-gateway",
+      description: "Microservices API gateway with rate limiting and authentication",
+      language: "Go",
+      stars: 89,
+      analyzedAt: new Date("2026-02-08T16:45:00"),
+      scores: {
+         codeQuality: 94,
+         architecture: 91,
+         security: 95,
+         gitPractices: 92,
+         documentation: 85,
+      },
+      totalScore: 91,
+      feedback: [
+         "Exceptional code quality with thorough error handling",
+         "Well-designed microservices architecture",
+         "Excellent security implementation with proper authentication flows",
+         "Clean git history with atomic commits",
+         "Comprehensive API documentation with examples",
+      ],
+   },
+]
