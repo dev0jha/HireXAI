@@ -6,6 +6,8 @@ import { queryKeys } from "./queryKeys"
 import type {
    ContactRequestQuery,
    ContactRequestResponse,
+   CandidatesQuery,
+   CandidatesResponse,
    DevelopersQuery,
    DevelopersResponse,
    TechStackResponse,
@@ -41,6 +43,49 @@ export const contactRequestQueries = {
 }
 
 /* ---------------------------------- */
+/* Candidate Queries */
+/* ---------------------------------- */
+
+export const candidateQueries = {
+   list: (query: CandidatesQuery = {}) =>
+      queryOptions<CandidatesResponse>({
+         queryKey: queryKeys.candidates.list(query),
+         queryFn: async () => {
+            const response = await apiClient.developers.get({
+               query: {
+                  search: query.search,
+                  tech: query.status && query.status !== "all" ? query.status : undefined,
+                  sort: query.sort,
+                  page: query.page,
+                  limit: query.limit,
+               },
+            })
+
+            if (response.error) {
+               throw new Error("Failed to fetch candidates")
+            }
+
+            const respRes = response.data
+            if (!respRes.success) {
+               throw new Error(respRes.error ?? "Failed to fetch candidates")
+            }
+
+            const candidates = respRes.data.developers.map((dev: any) => ({
+               ...dev,
+               contactedDate: dev.contactedDate || null,
+               status: dev.status || "pending",
+            }))
+
+            return {
+               candidates,
+               meta: respRes.data.meta,
+            }
+         },
+         staleTime: 1000 * 60 * 2,
+      }),
+}
+
+/* ---------------------------------- */
 /* Developer Queries */
 /* ---------------------------------- */
 
@@ -63,6 +108,26 @@ export const developerQueries = {
             return respRes.data
          },
          staleTime: 1000 * 60 * 2,
+      }),
+
+   byUsername: (username: string) =>
+      queryOptions<{ developer: any }>({
+         queryKey: queryKeys.developers.detail(username),
+         queryFn: async () => {
+            const response = await apiClient.developers[username].get()
+
+            if (response.error) {
+               throw new Error("Failed to fetch developer")
+            }
+
+            const respRes = response.data
+            if (!respRes.success) {
+               throw new Error(respRes.error ?? "Failed to fetch developer")
+            }
+
+            return respRes.data
+         },
+         staleTime: 1000 * 60 * 5,
       }),
 
    techStacks: () =>

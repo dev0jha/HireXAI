@@ -1,4 +1,4 @@
-import { desc, asc, eq, like, or, count } from "drizzle-orm"
+import { desc, asc, eq, like, or, count, and } from "drizzle-orm"
 
 import { db } from "@/db/drizzle"
 import { user, candidateProfiles } from "@/db/schema"
@@ -7,8 +7,8 @@ import type { ActionRes } from "@/types/actions"
 
 import type {
    DevelopersQuery,
-   Developer,
    DevelopersResponse,
+   DeveloperByUsernameResponse,
    TechStackResponse,
 } from "./developers.types"
 
@@ -103,11 +103,14 @@ export abstract class DevelopersService {
          }
       }
 
-      const developers: Developer[] = developersResult.data.map(dev => ({
+      const developers: any[] = developersResult.data.map(dev => ({
          ...dev,
-         linkedIn: null,
-         website: null,
+         linkedIn: undefined,
+         website: undefined,
          techStack: Array.isArray(dev.techStack) ? dev.techStack : [],
+         role: "developer" as const,
+         isOpenToRecruiters: true,
+         analyzedRepos: [],
       }))
 
       const totalPages = Math.ceil(total / limit)
@@ -158,6 +161,71 @@ export abstract class DevelopersService {
       return {
          success: true,
          data: response,
+      }
+   }
+
+   static async getDeveloperByUsername({
+      params,
+   }: {
+      params: { username: string }
+   }): Promise<ActionRes<DeveloperByUsernameResponse>> {
+      const developerResult = await attempt(() =>
+         db
+            .select({
+               id: user.id,
+               name: user.name,
+               email: user.email,
+               avatar: user.image,
+               role: user.role,
+               username: candidateProfiles.githubUsername,
+               bio: candidateProfiles.bio,
+               location: candidateProfiles.location,
+               techStack: candidateProfiles.techStack,
+               score: candidateProfiles.score,
+               isVisible: candidateProfiles.isVisible,
+               createdAt: user.createdAt,
+            })
+            .from(user)
+            .innerJoin(candidateProfiles, eq(user.id, candidateProfiles.userId))
+            .where(
+               and(
+                  eq(user.role, "candidate"),
+                  eq(candidateProfiles.githubUsername, params.username),
+                  eq(candidateProfiles.isVisible, true)
+               )
+            )
+            .limit(1)
+      )
+
+      if (!developerResult.ok) {
+         return {
+            success: false,
+            error: `Failed to fetch developer: ${developerResult.error.message}`,
+         }
+      }
+
+      const developer = developerResult.data[0]
+      if (!developer) {
+         return {
+            success: true,
+            data: { developer: null },
+         }
+      }
+
+      const developerData: any = {
+         ...developer,
+         bio: developer.bio || undefined,
+         location: developer.location || undefined,
+         techStack: Array.isArray(developer.techStack) ? developer.techStack : [],
+         linkedIn: undefined,
+         website: undefined,
+         isOpenToRecruiters: true,
+         analyzedRepos: [],
+      }
+
+      return {
+         success: true,
+         data: { developer: developerData },
       }
    }
 }

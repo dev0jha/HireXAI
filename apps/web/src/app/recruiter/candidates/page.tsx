@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { MoreHorizontal, ExternalLink, Mail, Search, Trash2, Filter } from "lucide-react"
 
@@ -8,7 +7,6 @@ import Container from "@/components/core/Container"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
    Table,
    TableBody,
@@ -32,78 +30,50 @@ import {
    SelectTrigger,
    SelectValue,
 } from "@/components/ui/select"
-
-type CandidateStatus = "interested" | "pending" | "not-interested"
-
-type CadidateStatusFilter = CandidateStatus | "all"
-
-interface Candidate {
-   id: string
-   name: string
-   username: string
-   avatar: string
-   score: number
-   techStack: string[]
-   location: string
-   contactedDate: string
-   status: CandidateStatus
-}
-
-const mockCandidates: Candidate[] = [
-   {
-      id: "1",
-      name: "Sarah Johnson",
-      username: "sarahj",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-      score: 94,
-      techStack: ["React", "TypeScript", "Node.js"],
-      location: "San Francisco, CA",
-      contactedDate: "2025-01-05",
-      status: "interested",
-   },
-   {
-      id: "2",
-      name: "Michael Chen",
-      username: "mchen",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
-      score: 89,
-      techStack: ["Python", "Django", "PostgreSQL", "Docker", "AWS"],
-      location: "New York, NY",
-      contactedDate: "2025-01-03",
-      status: "pending",
-   },
-   {
-      id: "3",
-      name: "Emily Davis",
-      username: "edavis",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-      score: 72,
-      techStack: ["Java", "Spring Boot"],
-      location: "Austin, TX",
-      contactedDate: "2024-12-28",
-      status: "not-interested",
-   },
-]
+import { SearchInputGroup } from "@/components/search/search-input-group"
+import {
+   CadidateStatusFilter,
+   Candidate,
+   useCandidatesPage,
+} from "@/hooks/screens/candidates.hooks"
 
 export default function CandidatesPage() {
-   const [candidates, setCandidates] = useState<Candidate[]>(mockCandidates)
-   const [searchQuery, setSearchQuery] = useState<string>("")
-   const [statusFilter, setStatusFilter] = useState<CadidateStatusFilter>("all")
+   const {
+      candidates,
+      filteredCandidates,
+      searchQuery,
+      setSearchQuery,
+      statusFilter,
+      setStatusFilter,
+      handleRemove,
+   } = useCandidatesPage()
 
-   const filteredCandidates = candidates.filter(candidate => {
-      const matchesSearch =
-         candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-         candidate.techStack.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()))
+   return (
+      <Container className="py-8 max-w-7xl">
+         {/* Page Header */}
+         <PageHeader candidates={candidates} filteredCandidates={filteredCandidates} />
 
-      const matchesStatus = statusFilter === "all" || candidate.status === statusFilter
+         {/* Filters Toolbar */}
+         <FiltersToolbar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            setStatusFilter={setStatusFilter}
+            statusFilter={statusFilter}
+         />
 
-      return matchesSearch && matchesStatus
-   })
+         {/* Data Table */}
+         <DataTable filteredCandidates={filteredCandidates} onRemove={handleRemove} />
+      </Container>
+   )
+}
 
-   function handleRemove(id: string) {
-      setCandidates(candidates.filter(c => c.id !== id))
-   }
-
+function PageHeader({
+   candidates,
+   filteredCandidates,
+}: {
+   candidates: Candidate[]
+   filteredCandidates: Candidate[]
+}) {
    function handleExportCSV() {
       const headers = [
          "Name",
@@ -141,188 +111,203 @@ export default function CandidatesPage() {
    }
 
    return (
-      <Container className="py-8 max-w-7xl">
-         {/* Page Header */}
-         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
-            <div>
-               <h1 className="text-2xl font-bold tracking-tight">My Candidates</h1>
-               <p className="text-muted-foreground text-sm">
-                  Manage and track {candidates.length} developers you've contacted.
-               </p>
-            </div>
-            <div className="flex items-center gap-2">
-               <Button variant="outline" onClick={handleExportCSV}>
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Export CSV
-               </Button>
-               <Button>
-                  <Search className="mr-2 h-4 w-4" />
-                  Find Talent
-               </Button>
-            </div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
+         <div>
+            <h1 className="text-2xl font-bold tracking-tight">My Candidates</h1>
+            <p className="text-muted-foreground text-sm">
+               Manage and track {candidates.length} developers you've contacted.
+            </p>
          </div>
-
-         {/* Filters Toolbar */}
-         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-               <Input
-                  placeholder="Search by name or tech stack..."
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className="pl-9 w-full sm:max-w-sm"
-               />
-            </div>
-            <Select value={statusFilter} onValueChange={value => value && setStatusFilter(value)}>
-               <SelectTrigger className="w-full sm:w-45">
-                  <Filter className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <SelectValue />
-               </SelectTrigger>
-               <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="interested">Interested</SelectItem>
-                  <SelectItem value="not-interested">Not Interested</SelectItem>
-               </SelectContent>
-            </Select>
+         <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={handleExportCSV}>
+               <ExternalLink className="mr-2 h-4 w-4" />
+               Export CSV
+            </Button>
+            <Button render={<Link href="/recruiter/discover" />}>
+               <Search className="mr-2 h-4 w-4" />
+               Find Talent
+            </Button>
          </div>
+      </div>
+   )
+}
 
-         {/* Data Table */}
-         <div className="border rounded-md shadow-sm bg-neutral-900/80">
-            <Table>
-               <TableHeader>
-                  <TableRow className="bg-neutral-900/50 text-xs">
-                     <TableHead className="w-75 uppercase font-bold">Candidate</TableHead>
-                     <TableHead className="uppercase font-bold">Score</TableHead>
-                     <TableHead className="uppercase font-bold">Status</TableHead>
-                     <TableHead className="hidden md:table-cell uppercase font-bold">
-                        Tech Stack
-                     </TableHead>
-                     <TableHead className="hidden md:table-cell uppercase font-bold">
-                        Location
-                     </TableHead>
-                     <TableHead className="text-right uppercase font-bold">Actions</TableHead>
-                  </TableRow>
-               </TableHeader>
-               <TableBody>
-                  {filteredCandidates.length > 0 ? (
-                     filteredCandidates.map(candidate => (
-                        <TableRow key={candidate.id}>
-                           {/* Candidate Name & Avatar */}
-                           <TableCell>
-                              <div className="flex items-center gap-3">
-                                 <Avatar className="h-9 w-9 border">
-                                    <AvatarImage src={candidate.avatar} alt={candidate.name} />
-                                    <AvatarFallback>
-                                       {candidate.name.substring(0, 2).toUpperCase()}
-                                    </AvatarFallback>
-                                 </Avatar>
-                                 <div className="flex flex-col">
-                                    <span className="font-medium text-sm text-foreground">
-                                       {candidate.name}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                       @{candidate.username}
-                                    </span>
-                                 </div>
-                              </div>
-                           </TableCell>
+function FiltersToolbar({
+   searchQuery,
+   setSearchQuery,
+   statusFilter,
+   setStatusFilter,
+}: {
+   searchQuery: string
+   setSearchQuery: (value: string) => void
+   statusFilter: CadidateStatusFilter
+   setStatusFilter: (value: CadidateStatusFilter) => void
+}) {
+   return (
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 justify-between">
+         <SearchInputGroup
+            placeholder="Search candidates..."
+            value={searchQuery}
+            onChange={setSearchQuery}
+            className="py-5 rounded-lg px-3 w-full sm:max-w-4xl"
+         />
+         <Select value={statusFilter} onValueChange={value => value && setStatusFilter(value)}>
+            <SelectTrigger className="w-full sm:w-45">
+               <Filter className="mr-2 h-4 w-4 text-muted-foreground" />
+               <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+               <SelectItem value="all">All Statuses</SelectItem>
+               <SelectItem value="pending">Pending</SelectItem>
+               <SelectItem value="interested">Interested</SelectItem>
+               <SelectItem value="not-interested">Not Interested</SelectItem>
+            </SelectContent>
+         </Select>
+      </div>
+   )
+}
 
-                           {/* Score */}
-                           <TableCell>
-                              <div
-                                 className={`font-semibold text-sm ${
-                                    candidate.score >= 90
-                                       ? "text-emerald-600"
-                                       : candidate.score >= 80
-                                         ? "text-amber-600"
-                                         : "text-muted-foreground"
-                                 }`}
-                              >
-                                 {candidate.score}
-                              </div>
-                           </TableCell>
+function DataTable({
+   filteredCandidates,
+   onRemove,
+}: {
+   filteredCandidates: Candidate[]
+   onRemove: (id: string) => void
+}) {
+   return (
+      <div className="border rounded-md shadow-sm bg-neutral-900/80">
+         <Table>
+            <TableHeader>
+               <TableRow className="bg-neutral-900/50 text-xs">
+                  <TableHead className="w-75 uppercase font-bold">Candidate</TableHead>
+                  <TableHead className="uppercase font-bold">Score</TableHead>
+                  <TableHead className="uppercase font-bold">Status</TableHead>
+                  <TableHead className="hidden md:table-cell uppercase font-bold">
+                     Tech Stack
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell uppercase font-bold">
+                     Location
+                  </TableHead>
+                  <TableHead className="text-right uppercase font-bold">Actions</TableHead>
+               </TableRow>
+            </TableHeader>
 
-                           {/* Status */}
-                           <TableCell>{getStatusBadge(candidate.status)}</TableCell>
-
-                           {/* Tech Stack (Truncated) */}
-                           <TableCell className="hidden md:table-cell max-w-50">
-                              <div className="flex flex-wrap gap-1">
-                                 {candidate.techStack.slice(0, 2).map(tech => (
-                                    <Badge
-                                       key={tech}
-                                       variant="secondary"
-                                       className="px-1.5 py-0 text-[10px] font-normal"
-                                    >
-                                       {tech}
-                                    </Badge>
-                                 ))}
-                                 {candidate.techStack.length > 2 && (
-                                    <span className="text-xs text-muted-foreground pl-1">
-                                       +{candidate.techStack.length - 2}
-                                    </span>
-                                 )}
-                              </div>
-                           </TableCell>
-
-                           {/* Location & Date */}
-                           <TableCell className="hidden md:table-cell">
+            <TableBody>
+               {filteredCandidates.length > 0 ? (
+                  filteredCandidates.map(candidate => (
+                     <TableRow key={candidate.id}>
+                        {/* Candidate Name & Avatar */}
+                        <TableCell>
+                           <div className="flex items-center gap-3">
+                              <Avatar className="h-9 w-9 border">
+                                 <AvatarImage src={candidate.avatar} alt={candidate.name} />
+                                 <AvatarFallback>
+                                    {candidate.name.substring(0, 2).toUpperCase()}
+                                 </AvatarFallback>
+                              </Avatar>
                               <div className="flex flex-col">
-                                 <span className="text-sm text-foreground">
-                                    {candidate.location}
+                                 <span className="font-medium text-sm text-foreground">
+                                    {candidate.name}
                                  </span>
                                  <span className="text-xs text-muted-foreground">
-                                    {new Date(candidate.contactedDate).toLocaleDateString()}
+                                    @{candidate.username}
                                  </span>
                               </div>
-                           </TableCell>
+                           </div>
+                        </TableCell>
 
-                           {/* Actions Dropdown */}
-                           <TableCell className="text-right">
-                              <DropdownMenu>
-                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                       <span className="sr-only">Open menu</span>
-                                       <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                 </DropdownMenuTrigger>
-                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <Link href={`/profile/${candidate.username}`}>
-                                       <DropdownMenuItem>
-                                          <ExternalLink className="mr-2 h-4 w-4" />
-                                          View Profile
-                                       </DropdownMenuItem>
-                                    </Link>
+                        {/* Score */}
+                        <TableCell>
+                           <div
+                              className={`font-semibold text-sm ${
+                                 candidate.score >= 90
+                                    ? "text-emerald-600"
+                                    : candidate.score >= 80
+                                      ? "text-amber-600"
+                                      : "text-muted-foreground"
+                              }`}
+                           >
+                              {candidate.score}
+                           </div>
+                        </TableCell>
+
+                        {/* Status */}
+                        <TableCell>{getStatusBadge(candidate.status)}</TableCell>
+
+                        {/* Tech Stack (Truncated) */}
+                        <TableCell className="hidden md:table-cell max-w-50">
+                           <div className="flex flex-wrap gap-1">
+                              {candidate.techStack.slice(0, 2).map(tech => (
+                                 <Badge
+                                    key={tech}
+                                    variant="secondary"
+                                    className="px-1.5 py-0 text-[10px] font-normal"
+                                 >
+                                    {tech}
+                                 </Badge>
+                              ))}
+                              {candidate.techStack.length > 2 && (
+                                 <span className="text-xs text-muted-foreground pl-1">
+                                    +{candidate.techStack.length - 2}
+                                 </span>
+                              )}
+                           </div>
+                        </TableCell>
+
+                        {/* Location & Date */}
+                        <TableCell className="hidden md:table-cell">
+                           <div className="flex flex-col">
+                              <span className="text-sm text-foreground">{candidate.location}</span>
+                              <span className="text-xs text-muted-foreground">
+                                 {new Date(candidate.contactedDate).toLocaleDateString()}
+                              </span>
+                           </div>
+                        </TableCell>
+
+                        {/* Actions Dropdown */}
+                        <TableCell className="text-right">
+                           <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                 <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <span className="sr-only">Open menu</span>
+                                    <MoreHorizontal className="h-4 w-4" />
+                                 </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                 <Link href={`/profile/${candidate.username}`}>
                                     <DropdownMenuItem>
-                                       <Mail className="mr-2 h-4 w-4" />
-                                       Message
+                                       <ExternalLink className="mr-2 h-4 w-4" />
+                                       View Profile
                                     </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem
-                                       onClick={() => handleRemove(candidate.id)}
-                                       className="text-destructive focus:text-destructive"
-                                    >
-                                       <Trash2 className="mr-2 h-4 w-4" />
-                                       Remove Candidate
-                                    </DropdownMenuItem>
-                                 </DropdownMenuContent>
-                              </DropdownMenu>
-                           </TableCell>
-                        </TableRow>
-                     ))
-                  ) : (
-                     <TableRow>
-                        <TableCell colSpan={6} className="h-24 text-center">
-                           No results found.
+                                 </Link>
+                                 <DropdownMenuItem>
+                                    <Mail className="mr-2 h-4 w-4" />
+                                    Message
+                                 </DropdownMenuItem>
+                                 <DropdownMenuSeparator />
+                                 <DropdownMenuItem
+                                    onClick={() => onRemove(candidate.id)}
+                                    className="text-destructive focus:text-destructive"
+                                 >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Remove Candidate
+                                 </DropdownMenuItem>
+                              </DropdownMenuContent>
+                           </DropdownMenu>
                         </TableCell>
                      </TableRow>
-                  )}
-               </TableBody>
-            </Table>
-         </div>
-      </Container>
+                  ))
+               ) : (
+                  <TableRow>
+                     <TableCell colSpan={6} className="h-24 text-center">
+                        No results found.
+                     </TableCell>
+                  </TableRow>
+               )}
+            </TableBody>
+         </Table>
+      </div>
    )
 }
 

@@ -47,6 +47,8 @@ export const app = new Elysia({ prefix: "/api" })
       query: developersQuerySchema,
    })
 
+   .get("/developers/:username", DevelopersService.getDeveloperByUsername, {})
+
    .get("/developers/tech-stacks", DevelopersService.getTechStacks, {})
 
 export type API = typeof app

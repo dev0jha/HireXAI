@@ -2,7 +2,33 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ChevronRight } from "lucide-react"
 
-import { mockAnalysisResult, mockDevelopers } from "@/data/mock-data"
+import type { AnalyzedRepo, Developer } from "@/types"
+
+const mockAnalysisResult: AnalyzedRepo = {
+   id: "ar1",
+   name: "next-ecommerce",
+   url: "https://github.com/example/next-ecommerce",
+   description: "A full-stack e-commerce platform built with Next.js and Stripe",
+   language: "TypeScript",
+   stars: 234,
+   analyzedAt: new Date(),
+   scores: {
+      codeQuality: 92,
+      architecture: 88,
+      security: 85,
+      gitPractices: 90,
+      documentation: 78,
+   },
+   totalScore: 87,
+   feedback: [
+      "Excellent use of TypeScript with proper type definitions throughout the codebase",
+      "Well-structured component architecture following React best practices",
+      "Consider adding more comprehensive error handling in API routes",
+      "Security practices are solid, but consider implementing rate limiting",
+      "Documentation could be improved with API endpoint descriptions",
+   ],
+}
+import { DevelopersService } from "@/server/services/developers/developers.service"
 import { Button } from "@/components/ui/button"
 import { ProfileHeader } from "@/components/recruiter/profile-header"
 import { AnalysisSection } from "@/components/recruiter/analysis-section"
@@ -15,11 +41,13 @@ interface ProfilePageProps {
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
    const { username } = await params
-   const developer = mockDevelopers.find(d => d.username === username)
+   const result = await DevelopersService.getDeveloperByUsername({ params: { username } })
 
-   if (!developer) {
+   if (!result.success || !result.data.developer) {
       notFound()
    }
+
+   const developer = result.data.developer
 
    return (
       <div className="min-h-3 text-zinc-100 font-sans selection:bg-netural-800">

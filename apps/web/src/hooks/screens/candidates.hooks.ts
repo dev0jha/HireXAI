@@ -2,52 +2,39 @@
 
 import { useState } from "react"
 import { useDebounce } from "@/hooks/use-debounce"
+import { useCandidates } from "@/hooks/use-candidates"
+import type { Candidate } from "@/lib/queries/query.types"
 
-interface Candidate {
-   id: string
-   name: string
-   username: string
-   avatar: string
-   score: number
-   techStack: string[]
-   location: string
-   contactedDate: string
-   status: "pending" | "interested" | "not-interested"
-}
+export type CandidateStatus = "interested" | "pending" | "not-interested"
+export type CadidateStatusFilter = CandidateStatus | "all"
 
-export function useCandidatesPage(initialCandidates: Candidate[] = []) {
-   const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates)
+export function useCandidatesPage() {
    const [searchQuery, setSearchQuery] = useState("")
-   const [statusFilter, setStatusFilter] = useState("all")
-   const [isLoading, setIsLoading] = useState(false)
+   const [statusFilter, setStatusFilter] = useState<CadidateStatusFilter>("all")
 
-   // Use debounced search for filtering
    const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
-   // Filter logic
-   const filteredCandidates = candidates.filter(candidate => {
-      const matchesSearch =
-         candidate.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
-         candidate.techStack.some(tech =>
-            tech.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
-         )
+   const {
+      data: candidates,
+      isLoading,
+      error,
+      refetch,
+   } = useCandidates({
+      search: debouncedSearchQuery,
+      status: statusFilter,
+      sort: "score-desc",
+   })
 
+   const filteredCandidates = candidates.filter((candidate: Candidate) => {
       const matchesStatus = statusFilter === "all" || candidate.status === statusFilter
-
-      return matchesSearch && matchesStatus
+      return matchesStatus
    })
 
    const handleRemove = (id: string) => {
-      setCandidates(candidates.filter(c => c.id !== id))
-   }
-
-   const handleSetCandidates = (newCandidates: Candidate[]) => {
-      setCandidates(newCandidates)
-      setIsLoading(false)
+      console.log("Remove candidate:", id)
    }
 
    return {
-      // State
       candidates,
       filteredCandidates,
       searchQuery,
@@ -55,12 +42,11 @@ export function useCandidatesPage(initialCandidates: Candidate[] = []) {
       statusFilter,
       setStatusFilter,
       isLoading,
+      error,
 
-      // Computed
       filteredCount: filteredCandidates.length,
 
-      // Actions
       handleRemove,
-      handleSetCandidates,
+      refetch,
    }
 }

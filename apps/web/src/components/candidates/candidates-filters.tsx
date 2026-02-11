@@ -32,11 +32,10 @@ export function CandidatesFilters({
                className="pl-9 w-full sm:max-w-sm"
             />
          </div>
+
          <Select
             value={statusFilter}
-            onValueChange={(value: string | undefined) =>
-               value ? onStatusChange(value) : onStatusChange("")
-            }
+            onValueChange={value => (value ? onStatusChange(value) : onStatusChange(""))}
          >
             <SelectTrigger className="w-full sm:w-45">
                <SelectValue />

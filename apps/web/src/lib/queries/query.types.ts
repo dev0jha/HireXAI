@@ -66,3 +66,38 @@ export interface ContactRequestResponse {
       hasPrev: boolean
    }
 }
+
+export interface CandidatesQuery {
+   search?: string
+   status?: "pending" | "interested" | "not-interested" | "all"
+   sort?: "score-desc" | "score-asc" | "name-asc"
+   page?: number
+   limit?: number
+}
+
+export interface Candidate {
+   id: string
+   name: string
+   email: string
+   username: string
+   bio?: string | null
+   location?: string | null
+   techStack: string[]
+   score: number
+   isVisible: boolean
+   createdAt: Date
+   contactedDate?: string | null
+   status: "pending" | "interested" | "not-interested"
+}
+
+export interface CandidatesResponse {
+   candidates: Candidate[]
+   meta: {
+      page: number
+      limit: number
+      total: number
+      totalPages: number
+      hasNext: boolean
+      hasPrev: boolean
+   }
+}

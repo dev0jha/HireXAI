@@ -10,6 +10,8 @@ export interface Developer {
    id: string
    name: string
    email: string
+   role: "developer"
+   avatar?: string | null
    username: string
    bio?: string | null
    location?: string | null
@@ -17,6 +19,8 @@ export interface Developer {
    website?: string | null
    techStack: string[]
    score: number
+   isOpenToRecruiters: boolean
+   analyzedRepos: any[]
    isVisible: boolean
    createdAt: Date
 }
@@ -37,5 +41,10 @@ export interface TechStackResponse {
    techStacks: string[]
 }
 
+export interface DeveloperByUsernameResponse {
+   developer: Developer | null
+}
+
 export type GetDevelopersResponse = DevelopersResponse
 export type GetTechStacksResponse = TechStackResponse
+export type GetDeveloperByUsernameResponse = DeveloperByUsernameResponse
