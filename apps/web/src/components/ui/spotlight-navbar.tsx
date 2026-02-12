@@ -80,7 +80,7 @@ export function Navbar({
                         variant="outline"
                         className={cn(
                            "relative hidden items-center justify-center px-4 py-1.5 sm:flex",
-                           "text-shadow-xl rounded-sm text-sm font-medium tracking-wide shadow-lg transition-all duration-300 text-shadow-black/70",
+                           "text-shadow-xl rounded-sm text-shadow-md font-medium tracking-wide shadow-lg transition-all duration-300 text-shadow-black/70",
                            "bg-white text-white hover:bg-zinc-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.4)] uppercase bold"
                         )}
                      >

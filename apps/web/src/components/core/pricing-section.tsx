@@ -2,6 +2,7 @@
 
 import * as PricingCard from "@/components/pricing-card"
 import { Button } from "@/components/ui/button"
+import { SectionHeader } from "@/components/ui/section-header"
 import { cn } from "@/lib/utils"
 import { Briefcase, Building, CheckCircle2, Users } from "lucide-react"
 
@@ -69,23 +70,25 @@ export function PricingSection() {
    ]
 
    return (
-      <section className="relative w-full border-t border-zinc-900 bg-[#121212] py-24 lg:py-32">
-         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-            <h2 className="font-poppins mb-5 text-4xl font-semibold tracking-tight text-white md:text-5xl">
-               Transparent Pricing
-               <br />
-               <span className="text-zinc-600">Built for every scale</span>
-            </h2>
+      <section className="relative w-full bg-[#121212] py-24 lg:py-32">
+         <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-8">
+            <SectionHeader title="Transparent Pricing" subtitle="Built for every scale" />
          </div>
 
          {/* Pricing Cards Grid */}
-         <div className="mx-auto grid w-full max-w-5xl gap-6 px-4 pt-10 md:grid-cols-3">
+         <div className="mx-auto grid w-full max-w-5xl gap-6 px-6 sm:px-0 pt-10 md:grid-cols-3">
             {plans.map((plan, index) => (
                <PricingCard.Card
                   className={cn("w-full max-w-full", index === 1 && "md:scale-105")}
                   key={plan.name}
                >
-                  <PricingCard.Header>
+                  <PricingCard.Header
+                     className={cn(
+                        "relative z-10",
+                        "bg-zinc-900/95 backdrop-blur supports-backdrop-filter:bg-neutral-800/90",
+                        "border border-zinc-200/20"
+                     )}
+                  >
                      <PricingCard.Plan>
                         <PricingCard.PlanName>
                            {plan.icon}
@@ -110,19 +113,26 @@ export function PricingSection() {
                      </Button>
                   </PricingCard.Header>
 
-                  <PricingCard.Body>
-                     <PricingCard.Description>{plan.description}</PricingCard.Description>
-                     <PricingCard.List>
-                        {plan.features.map(item => (
-                           <PricingCard.ListItem className="text-xs" key={item}>
-                              <CheckCircle2
-                                 aria-hidden="true"
-                                 className="h-4 w-4 text-foreground"
-                              />
-                              <span>{item}</span>
-                           </PricingCard.ListItem>
-                        ))}
-                     </PricingCard.List>
+                  <div
+                     className={cn(
+                        "pointer-events-none absolute inset-0 rounded-[inherit]",
+                        "bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.04)_0px,rgba(255,255,255,0.02)_2px,transparent_2px,transparent_6px)]"
+                     )}
+                  />
+
+                  <PricingCard.Body className={cn("relative overflow-hidden")}>
+                     <div className="relative">
+                        <PricingCard.Description>{plan.description}</PricingCard.Description>
+
+                        <PricingCard.List>
+                           {plan.features.map(item => (
+                              <PricingCard.ListItem className="text-xs" key={item}>
+                                 <CheckCircle2 className="h-4 w-4 text-foreground" />
+                                 <span>{item}</span>
+                              </PricingCard.ListItem>
+                           ))}
+                        </PricingCard.List>
+                     </div>
                   </PricingCard.Body>
                </PricingCard.Card>
             ))}

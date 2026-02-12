@@ -5,6 +5,7 @@ import React from "react"
 import { BarChart3, GitBranch, Inbox, Search, ShieldCheck, UserCheck } from "lucide-react"
 
 import { PlusIcon } from "@/components/ui/plus-icon"
+import { SectionHeader } from "@/components/ui/section-header"
 import { cn } from "@/lib/utils"
 
 interface TechCardProps {
@@ -97,13 +98,9 @@ const recruiterFeatures = [
 
 export function FeaturesSection() {
    return (
-      <section className="relative w-full border-t border-zinc-900 bg-[#121212] py-24 lg:py-32">
+      <section className="relative w-full bg-[#121212] py-24 lg:py-32">
          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {/* Section Header */}
-            <h2 className="mb-16 text-4xl font-semibold tracking-tight text-white md:text-5xl">
-               Features <br />
-               <span className="text-zinc-600">Showcase your real skills</span>
-            </h2>
+            <SectionHeader title="Features" subtitle="Showcase your real skills" />
 
             <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
                <div>

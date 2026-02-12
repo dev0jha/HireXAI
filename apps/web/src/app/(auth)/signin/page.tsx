@@ -3,7 +3,6 @@
 import Link from "next/link"
 
 import { AuthBackgroundsPatterns } from "@/components/auth-bg-patterns"
-import { IconArrowLeft } from "@tabler/icons-react"
 import EmailField from "@/components/auth/primitives/email-field"
 import PassField from "@/components/auth/primitives/pass-fields"
 import { Button } from "@/components/ui/button"

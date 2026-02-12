@@ -36,23 +36,44 @@ export default function page() {
                      "translate-x-14",
                      "h-full w-10 sm:w-14",
                      "border-l border-[rgba(255,255,255,0.1)]",
-                     "bg-[repeating-linear-gradient(315deg,rgba(255,255,255,0.1)_0px,rgba(255,255,255,0.1)_1px,transparent_1px,transparent_10px)]"
+                     "bg-[repeating-linear-gradient(230deg,rgba(255,255,255,0.1)_0px,rgba(255,255,255,0.1)_1px,transparent_1px,transparent_10px)]"
                   )}
                />
                <Navbar />
                <HeroSection />
-               <Divider />
                <HowItWorks />
 
-               <Divider />
+               <SectionDivider />
+
                <FeaturesSection />
 
+               <SectionDivider />
+
                <ClientFeedback />
-               <Divider />
+
+               <SectionDivider />
+
                <PricingSection />
                <Footer />
             </Container>
          </main>
+      </>
+   )
+}
+
+function SectionDivider() {
+   return (
+      <>
+         <Divider className="py-0" />
+         <div className="relative h-24">
+            <div
+               className={cn(
+                  "pointer-events-none absolute inset-0 rounded-[inherit]",
+                  "bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.04)_0px,rgba(255,255,255,0.02)_2px,transparent_2px,transparent_6px)]"
+               )}
+            />
+         </div>
+         <Divider className="py-0" />
       </>
    )
 }

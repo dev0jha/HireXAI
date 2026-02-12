@@ -30,16 +30,16 @@ export default function RootLayout({
                <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
                   {children}
                   <Toaster
-                     theme="system"
+                     theme="dark"
                      className="toaster group"
                      toastOptions={{
                         classNames: {
-                           toast: "group toast group-[.toaster]:bg-popover group-[.toaster]:text-popover-foreground group-[.toaster]:border group-[.toaster]:shadow-lg",
-                           description: "group-[.toaster]:text-muted-foreground",
+                           toast: "group toast group-[.toaster]:bg-[#121212] group-[.toaster]:text-zinc-200 group-[.toaster]:border-zinc-800 group-[.toaster]:shadow-lg",
+                           description: "group-[.toaster]:text-zinc-400",
                            actionButton:
-                              "group-[.toaster]:bg-primary group-[.toaster]:text-primary-foreground",
+                              "group-[.toaster]:bg-blue-600 group-[.toaster]:text-white hover:bg-blue-700",
                            cancelButton:
-                              "group-[.toaster]:bg-muted group-[.toaster]:text-muted-foreground",
+                              "group-[.toaster]:bg-zinc-800 group-[.toaster]:text-zinc-200 hover:bg-zinc-700",
                         },
                      }}
                   />

@@ -3,6 +3,7 @@
 import { Cpu, FileCode, Network, Shield, Terminal } from "lucide-react"
 
 import { GitHubAnalysisFlow } from "@/components/core/GitHubAnalysisFlow"
+import { SectionHeader } from "@/components/ui/section-header"
 import { BentoCard, BentoCardProps, BentoGrid } from "@/components/ui/bento-grid"
 import {
    DevIdCardSkeleton,
@@ -10,6 +11,8 @@ import {
    SecurityHash,
    SystemLogs,
 } from "@/components/ui/bento-seletons"
+import { Divider } from "@/components/divider"
+import { cn } from "@/lib/utils"
 
 const features: BentoCardProps[] = [
    {
@@ -65,19 +68,9 @@ const features: BentoCardProps[] = [
 
 export function HowItWorks() {
    return (
-      <section className="relative w-full border-t border-zinc-900 bg-[#121212] py-24 lg:py-32">
+      <section className="relative w-full bg-[#121212] py-24 lg:py-32">
          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-16">
-               <h2 className="mb-6 text-4xl font-semibold tracking-tight text-white md:text-5xl">
-                  Built for precision. <br />
-                  <span className="text-zinc-600">Designed for privacy.</span>
-               </h2>
-               <p className="max-w-2xl text-lg leading-relaxed text-zinc-400">
-                  HireXAI operates on a zero-knowledge architecture. We analyze code patterns
-                  without storing proprietary logic, converting your skills into verifiable hashes.
-               </p>
-            </div>
-
+            <SectionHeader title="Built for precision." subtitle="Designed for privacy." />
             <BentoGrid>
                {features.map((feature, idx) => (
                   <BentoCard key={idx} {...feature} />

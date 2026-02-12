@@ -6,34 +6,35 @@ import { IconChevronRight, IconCode } from "@tabler/icons-react"
 import { motion } from "motion/react"
 
 import { SchematicBackground } from "@/components/semantic-background"
+import { AnimatedTooltip } from "@/components/ui/animated-tooltip"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Divider } from "@/components/divider"
 
-import { AnimatedTooltip } from "../ui/animated-tooltip"
+const people = [
+   {
+      id: 1,
+      name: "Arpit Yadav",
+      designation: "Software Engineer",
+      image: "https://avatars.githubusercontent.com/u/118053362?v=4",
+   },
+   {
+      id: 2,
+      name: "Dev Hari Ojha",
+      designation: "Full Stack Developer",
+      image: "https://avatars.githubusercontent.com/u/155317634?v=4",
+   },
+   {
+      id: 3,
+      name: "Pallav Rai",
+      designation: "Backend Developer",
+      image: "https://avatars.githubusercontent.com/u/33592027?v=4",
+   },
+]
 
 export default function HeroSection() {
-   const people = [
-      {
-         id: 1,
-         name: "Arpit Yadav",
-         designation: "Software Engineer",
-         image: "https://avatars.githubusercontent.com/u/118053362?v=4",
-      },
-      {
-         id: 2,
-         name: "Dev Hari Ojha",
-         designation: "Full Stack Developer",
-         image: "https://avatars.githubusercontent.com/u/155317634?v=4",
-      },
-      {
-         id: 3,
-         name: "Pallav Rai",
-         designation: "Backend Developer",
-         image: "https://avatars.githubusercontent.com/u/33592027?v=4",
-      },
-   ]
-
    return (
-      <section className="relative min-h-[90vh] w-full overflow-hidden bg-transparent">
+      <section className="relative min-h-[90vh] w-full overflow-hidden bg-transparent border-none">
          <SchematicBackground />
 
          <div className="relative z-10 container mx-auto flex min-h-[90vh] flex-col items-center justify-center px-4 py-20 sm:px-6">
@@ -77,14 +78,44 @@ export default function HeroSection() {
                className="flex flex-col place-content-center gap-4 py-8 md:flex-row"
             >
                <Link href="#DiscoverProfile">
-                  <Button className="w-full p-4">
+                  <Button
+                     variant="ghost"
+                     className={cn(
+                        "group relative w-full p-4",
+                        "rounded-lg",
+                        "bg-zinc-400/30 text-white",
+                        "backdrop-blur-md",
+                        "border-2 border-neutral-500/20",
+                        "shadow-[0_4px_14px_rgba(0,0,0,0.35)]",
+                        "transition-all duration-200 ease-out",
+                        "hover:bg-zinc-800",
+                        "hover:border-zinc-700",
+                        "hover:-translate-y-0.5",
+                        "hover:shadow-[0_10px_24px_rgba(0,0,0,0.55)]"
+                     )}
+                  >
                      <IconCode className="h-4 w-4" />
                      <span>Analyze Repository</span>
                   </Button>
                </Link>
 
                <Link href="#DiscoverProfile">
-                  <Button className="w-full p-4">
+                  <Button
+                     variant="ghost"
+                     className={cn(
+                        "group relative w-full p-4",
+                        "rounded-lg",
+                        "bg-zinc-900/60",
+                        "backdrop-blur-md",
+                        "border border-zinc-800",
+                        "shadow-[0_4px_14px_rgba(0,0,0,0.35)]",
+                        "transition-all duration-200 ease-out",
+                        "hover:bg-zinc-800",
+                        "hover:border-zinc-700",
+                        "hover:-translate-y-0.5",
+                        "hover:shadow-[0_10px_24px_rgba(0,0,0,0.55)]"
+                     )}
+                  >
                      <span>View Leaderboard</span>
                      <IconChevronRight className="h-4 w-4 text-zinc-500 transition-colors group-hover:text-white" />
                   </Button>
@@ -105,6 +136,17 @@ export default function HeroSection() {
                </p>
             </motion.div>
          </div>
+
+         <Divider className="py-0" />
+         <div className="relative h-24">
+            <div
+               className={cn(
+                  "pointer-events-none absolute inset-0 rounded-[inherit]",
+                  "bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.04)_0px,rgba(255,255,255,0.02)_2px,transparent_2px,transparent_6px)]"
+               )}
+            />
+         </div>
+         <Divider className="py-0" />
       </section>
    )
 }

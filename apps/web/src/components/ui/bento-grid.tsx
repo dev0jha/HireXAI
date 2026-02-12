@@ -48,7 +48,7 @@ export const BentoCard = ({
       key={name}
       className={cn(
          "group relative flex flex-col justify-between overflow-visible border-dashed",
-         "border border-zinc-800 bg-[#121212]",
+         "border border-zinc-800 bg-neutral-800/40",
          className
       )}
       {...props}
@@ -63,7 +63,7 @@ export const BentoCard = ({
                <div className="rounded border border-zinc-800 bg-zinc-900 p-1">
                   <Icon className="h-3 w-3 text-zinc-400" />
                </div>
-               <span className="font-mono text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
+               <span className="font-sans text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
                   SYSTEM_METRIC
                </span>
             </div>

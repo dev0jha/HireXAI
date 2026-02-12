@@ -10,7 +10,7 @@ import {
    IconStar,
    IconCircle,
 } from "@tabler/icons-react"
-import { motion, Variants } from "framer-motion"
+import { motion, Variants } from "motion/react"
 
 import AnalysisCanvas from "@/components/analysis/analysis-canvas"
 import { useAnalysisState } from "@/hooks/screens/analysis.hooks"
