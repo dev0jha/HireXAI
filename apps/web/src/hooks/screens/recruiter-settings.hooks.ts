@@ -1,5 +1,3 @@
-import type React from "react"
-
 import { toast } from "sonner"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
@@ -32,7 +30,7 @@ export function useRecruiterSaveSettingsAction() {
       onMutate: () => {
          setIsSaving(true)
       },
-      onSuccess: data => {
+      onSuccess: () => {
          toast.success("Profile updated successfully!")
          queryClient.invalidateQueries({ queryKey: queryKeys.user() })
       },
