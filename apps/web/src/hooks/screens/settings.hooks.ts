@@ -49,11 +49,13 @@ export function useSaveSettingsAction() {
       const name = formData.get("name") as string
       const location = formData.get("location") as string
       const bio = formData.get("bio") as string
+      const website = formData.get("website") as string
 
       mutation.mutate({
          name,
          location,
          bio,
+         website,
          isOpenToRecruiters,
       })
    }

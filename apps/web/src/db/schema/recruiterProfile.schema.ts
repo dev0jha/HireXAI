@@ -8,7 +8,9 @@ export const recruitersProfiles = pgTable("recruiter_profiles", {
       .references(() => user.id, { onDelete: "cascade" }),
    companyName: text("company_name").notNull(),
    companyWebsite: text("company_website"),
+   position: text("position"),
    isVerified: boolean("is_verified").default(false).notNull(),
+   isPublicProfile: boolean("is_public_profile").default(true).notNull(),
 })
 
 export type RecruiterProfile = typeof recruitersProfiles.$inferSelect

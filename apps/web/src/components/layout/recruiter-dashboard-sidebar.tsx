@@ -29,7 +29,7 @@ export function RecruiterDashboardSidebar() {
             <SidebarHeaderContent />
          </SidebarHeader>
          <SidebarContent className="bg-[#191919] flex items-center justify-start px-4">
-            <SidebarMenu className="w-full mt-3">
+            <SidebarMenu className="w-full mt-3 gap-[1.8]">
                {navItems.map((item, idx) => {
                   const pathname = usePathname()
                   const isActive =

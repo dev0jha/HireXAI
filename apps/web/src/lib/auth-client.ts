@@ -1,26 +1,30 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { createAuthClient } from "better-auth/react"
+import { useEffect, useRef } from "react"
 
 export const authClient = createAuthClient({
    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
 })
 
 function useReactiveSession() {
-   return useQuery({
-      queryKey: ["session"],
-      queryFn: async () => {
-         const { data, error } = await authClient.getSession()
-         if (error) {
-            throw error
-         }
-         return data
-      },
-      staleTime: 1000 * 60 * 5,
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
-      retry: 0,
-      placeholderData: keepPreviousData,
-   })
+   const { data: session, error, refetch, isPending, isRefetching } = authClient.useSession()
+   const initialRetried = useRef<boolean>(false)
+
+   const isSessionLoading = isPending || isRefetching
+
+   useEffect(() => {
+      if (!session && !initialRetried.current) {
+         refetch()
+
+         initialRetried.current = true
+      }
+   }, [session])
+
+   return {
+      session,
+      error,
+      isSessionLoading,
+   }
 }
 
 function useUpdateUser() {
@@ -35,7 +39,6 @@ function useUpdateUser() {
          return result
       },
       onSuccess: () => {
-         // Invalidate session to refresh user data everywhere
          queryClient.invalidateQueries({ queryKey: ["session"] })
       },
    })

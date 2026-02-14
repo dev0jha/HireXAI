@@ -19,6 +19,7 @@ export function ProfileHeader({ developer }: { developer: Developer }) {
                      src={developer.avatar || "/placeholder.svg"}
                      alt={developer.name}
                      fill
+                     unoptimized
                      className="object-cover"
                   />
                </div>

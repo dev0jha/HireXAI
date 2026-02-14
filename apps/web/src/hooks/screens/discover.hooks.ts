@@ -16,10 +16,8 @@ export function useDiscoverPage() {
    const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null)
    const [modalOpen, setModalOpen] = useState(false)
 
-   // Use debounced search for API calls
    const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
-   // Fetch developers with filters
    const {
       data: developers,
       meta,
@@ -30,16 +28,15 @@ export function useDiscoverPage() {
       tech: techFilter === "All" ? undefined : techFilter,
       sort: sortBy as "score-desc" | "score-asc" | "name-asc",
       page: 1,
-      limit: 100, // Get more for better UX
+      limit: 100,
    })
 
-   // Fetch tech stacks for filter options
    const { data: techStacks, isLoading: techStacksLoading } = useTechStacks()
 
-   // Build tech options with "All" as first option
    const techOptions = ["All", ...techStacks]
 
-   // Transform data to match expected format (convert candidate to developer type)
+   console.log("Fetched developers:", developers)
+
    const transformedDevelopers: Developer[] = developers.map(dev => ({
       ...dev,
       role: "developer" as const, // Add the required role field

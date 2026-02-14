@@ -12,5 +12,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: hirexai-rustfs
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - rustfs_data:/data
+      - rustfs_logs:/logs
+
 volumes:
   postgres_data:
+  rustfs_data:
+  rustfs_logs:

@@ -50,6 +50,7 @@ export function DeveloperCard({ developer, onContact, rank }: DeveloperCardProps
                   }
                   alt={developer.name}
                   fill
+                  unoptimized
                   className="object-cover"
                />
             </div>

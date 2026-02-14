@@ -2,15 +2,15 @@
 
 import { useQuery } from "@tanstack/react-query"
 
-import type { CandidatesQuery } from "@/lib/queries/query.types"
+import type { CandidatesQuery, CandidatesResponse, Candidate } from "@/lib/queries/query.types"
 import { candidateQueries } from "@/lib/queries/queryOptions"
 
 export function useCandidates(query: CandidatesQuery = {}) {
    const { data: response, isLoading, error, refetch } = useQuery(candidateQueries.list(query))
 
-   const candidates = (response as any)?.candidates ? (response as any).candidates : []
-   const meta = (response as any)?.meta ? (response as any).meta : undefined
-   const errorMessage = (response as any)?.error ? (response as any).error : null
+   const candidates: Candidate[] = response?.candidates ?? []
+   const meta = response?.meta
+   const errorMessage = error?.message ?? null
 
    return {
       data: candidates,

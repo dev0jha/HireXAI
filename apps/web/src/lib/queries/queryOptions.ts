@@ -11,7 +11,9 @@ import type {
    DevelopersQuery,
    DevelopersResponse,
    TechStackResponse,
+   Developer,
 } from "@/lib/queries/query.types"
+import { UpdateUserBody } from "@/server/services/user/user.types"
 
 export const contactRequestQueries = {
    list: (query: ContactRequestQuery = {}) =>
@@ -111,11 +113,10 @@ export const developerQueries = {
       }),
 
    byUsername: (username: string) =>
-      queryOptions<{ developer: any }>({
+      queryOptions<{ developer: Developer | null }>({
          queryKey: queryKeys.developers.detail(username),
          queryFn: async () => {
-            const response = await apiClient.developers[username].get()
-
+            const response = await apiClient.developers({ username }).get()
             if (response.error) {
                throw new Error("Failed to fetch developer")
             }
@@ -206,21 +207,51 @@ export const createUserQueryOptions = () =>
       placeholderData: keepPreviousData,
    })
 
-export const updateUserMutation = {
-   mutationFn: async (payload: {
-      name?: string
-      company?: string
-      position?: string
-      bio?: string
-      location?: string
-      isOpenToRecruiters?: boolean
-   }) => {
-      const { data, error } = await apiClient.user.patch(payload)
+export const createUserSettingsQueryOptions = () =>
+   queryOptions({
+      queryKey: [...queryKeys.user(), "settings"],
+      queryFn: async () => {
+         const { data, error } = await apiClient.user.settings.get()
+         if (error) {
+            throw error
+         }
 
-      if (error || (data && !data.success)) {
-         throw new Error((data as any)?.message ?? "Failed to update user")
+         return data
+      },
+      staleTime: 1000 * 60 * 5,
+      placeholderData: keepPreviousData,
+   })
+
+export const updateUserMutation = {
+   mutationFn: async (payload: UpdateUserBody) => {
+      const { data, error } = await apiClient.user.patch(payload)
+      if (error) {
+         throw error
+      }
+      return data
+   },
+}
+
+export const uploadProfileImageMutation = {
+   mutationFn: async (file: File) => {
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const response = await fetch("/api/user/image", {
+         method: "POST",
+         body: file,
+         headers: {
+            "content-type": file.type,
+            "x-file-name": file.name,
+         },
+         credentials: "include",
+      })
+
+      if (!response.ok) {
+         const errorData = await response.json()
+         throw new Error(errorData.message ?? "Failed to upload image")
       }
 
-      return data
+      return response.json()
    },
 }

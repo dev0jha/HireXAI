@@ -2,7 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ChevronRight } from "lucide-react"
 
-import type { AnalyzedRepo, Developer } from "@/types"
+import type { AnalyzedRepo } from "@/types"
 
 const mockAnalysisResult: AnalyzedRepo = {
    id: "ar1",

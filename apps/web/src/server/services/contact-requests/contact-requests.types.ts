@@ -1,11 +1,5 @@
-import type { Context } from "elysia"
-import type { UserWithRole } from "@/actions/session.actions"
 import type { ContactStatus } from "@/db/schema/enums"
-
-interface RequestContext {
-   user: UserWithRole
-   set: Context["set"]
-}
+import type { RequestContext } from "@/server/services/types/context.types"
 
 export interface GetContactReqCtx extends RequestContext {
    query: ContactRequestQuery

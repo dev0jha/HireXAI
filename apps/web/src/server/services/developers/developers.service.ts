@@ -3,14 +3,10 @@ import { desc, asc, eq, like, or, count, and } from "drizzle-orm"
 import { db } from "@/db/drizzle"
 import { user, candidateProfiles } from "@/db/schema"
 import { attempt } from "@/utils/attempt"
-import type { ActionRes } from "@/types/actions"
+import type { ActionRes, ActionResAsync } from "@/types/actions"
 
-import type {
-   DevelopersQuery,
-   DevelopersResponse,
-   DeveloperByUsernameResponse,
-   TechStackResponse,
-} from "./developers.types"
+import type { DevelopersQuery, DevelopersResponse, Developer } from "@/lib/queries/query.types"
+import type { DeveloperByUsernameResponse, TechStackResponse } from "./developers.types"
 
 export abstract class DevelopersService {
    static async getDevelopers({
@@ -48,7 +44,7 @@ export abstract class DevelopersService {
             .select({ count: count() })
             .from(user)
             .innerJoin(candidateProfiles, eq(user.id, candidateProfiles.userId))
-            .where(whereConditions.length ? whereConditions[0] : undefined)
+            .where(whereConditions.length ? and(...whereConditions) : undefined)
       )
 
       if (!countResult.ok) {
@@ -80,6 +76,7 @@ export abstract class DevelopersService {
                id: user.id,
                name: user.name,
                email: user.email,
+               avatar: user.image,
                username: candidateProfiles.githubUsername,
                bio: candidateProfiles.bio,
                location: candidateProfiles.location,
@@ -90,7 +87,7 @@ export abstract class DevelopersService {
             })
             .from(user)
             .innerJoin(candidateProfiles, eq(user.id, candidateProfiles.userId))
-            .where(whereConditions.length ? whereConditions[0] : undefined)
+            .where(whereConditions.length ? and(...whereConditions) : undefined)
             .orderBy(sortCondition)
             .limit(limit)
             .offset(offset)
@@ -103,13 +100,22 @@ export abstract class DevelopersService {
          }
       }
 
-      const developers: any[] = developersResult.data.map(dev => ({
-         ...dev,
+      const developers: Developer[] = developersResult.data.map(dev => ({
+         id: dev.id,
+         name: dev.name,
+         email: dev.email,
+         avatar: dev.avatar ?? undefined,
+         username: dev.username,
+         bio: dev.bio ?? undefined,
+         location: dev.location ?? undefined,
          linkedIn: undefined,
          website: undefined,
          techStack: Array.isArray(dev.techStack) ? dev.techStack : [],
+         score: dev.score,
+         isVisible: dev.isVisible,
+         createdAt: dev.createdAt,
          role: "developer" as const,
-         isOpenToRecruiters: true,
+         isOpenToRecruiters: dev.isVisible,
          analyzedRepos: [],
       }))
 
@@ -133,7 +139,7 @@ export abstract class DevelopersService {
       }
    }
 
-   static async getTechStacks(): Promise<ActionRes<TechStackResponse>> {
+   static async getTechStacks(): ActionResAsync<TechStackResponse> {
       const techStacksResult = await attempt(() =>
          db
             .select({ techStack: candidateProfiles.techStack })
@@ -168,7 +174,7 @@ export abstract class DevelopersService {
       params,
    }: {
       params: { username: string }
-   }): Promise<ActionRes<DeveloperByUsernameResponse>> {
+   }): ActionResAsync<DeveloperByUsernameResponse> {
       const developerResult = await attempt(() =>
          db
             .select({
@@ -225,7 +231,9 @@ export abstract class DevelopersService {
 
       return {
          success: true,
-         data: { developer: developerData },
+         data: {
+            developer: developerData,
+         },
       }
    }
 }

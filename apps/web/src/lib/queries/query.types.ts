@@ -11,14 +11,18 @@ export interface Developer {
    name: string
    email: string
    username: string
-   bio?: string | null
-   location?: string | null
-   linkedIn?: string | null
-   website?: string | null
+   avatar?: string
+   bio?: string
+   location?: string
+   linkedIn?: string
+   website?: string
    techStack: string[]
    score: number
    isVisible: boolean
+   isOpenToRecruiters?: boolean
    createdAt: Date
+   role?: "developer"
+   analyzedRepos?: unknown[]
 }
 
 export interface DevelopersResponse {
@@ -80,6 +84,7 @@ export interface Candidate {
    name: string
    email: string
    username: string
+   avatar?: string | null
    bio?: string | null
    location?: string | null
    techStack: string[]

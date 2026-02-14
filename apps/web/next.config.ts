@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
             hostname: "m.media-amazon.com",
          },
          {
+            protocol: "http",
+            hostname: "localhost",
+            port: "9000",
+         },
+         {
             protocol: "https",
             hostname: "pro-section.ui-layouts.com",
          },

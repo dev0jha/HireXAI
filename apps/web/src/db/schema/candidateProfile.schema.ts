@@ -11,6 +11,7 @@ export const candidateProfiles = pgTable("candidate_profiles", {
    techStack: json("tech_stack").default([]).notNull(),
    bio: text("bio"),
    location: text("location"),
+   website: text("website"),
    isVisible: boolean("is_visible").default(false).notNull(),
 })
 

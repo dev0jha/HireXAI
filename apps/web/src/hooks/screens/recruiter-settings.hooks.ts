@@ -23,6 +23,7 @@ export function useRecruiterPublicProfileSetting() {
 
 export function useRecruiterSaveSettingsAction() {
    const { setIsSaving } = useRecruiterSaveSettingsStatus()
+   const { isPublicProfile } = useRecruiterPublicProfileSetting()
    const queryClient = useQueryClient()
 
    const mutation = useMutation({
@@ -43,7 +44,13 @@ export function useRecruiterSaveSettingsAction() {
    })
 
    function handleSave(payload: { name?: string; company?: string; position?: string }) {
-      mutation.mutate(payload)
+      console.log("Saving isPublicProfile:", isPublicProfile)
+      mutation.mutate({
+         name: payload.name,
+         company: payload.company,
+         position: payload.position,
+         isPublicProfile,
+      })
    }
 
    return {

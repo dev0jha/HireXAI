@@ -2,13 +2,13 @@ export interface User {
    id: string
    email: string
    name: string
-   role: "developer" | "recruiter"
+   role?: "developer" | "recruiter"
    avatar?: string
    createdAt: Date
 }
 
 export interface Developer extends User {
-   role: "developer"
+   role?: "developer"
    username: string
    bio?: string
    location?: string
@@ -16,8 +16,8 @@ export interface Developer extends User {
    website?: string
    techStack: string[]
    score: number
-   isOpenToRecruiters: boolean
-   analyzedRepos: AnalyzedRepo[]
+   isOpenToRecruiters?: boolean
+   analyzedRepos?: AnalyzedRepo[]
 }
 
 export interface Recruiter extends User {

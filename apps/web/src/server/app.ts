@@ -12,57 +12,62 @@ import {
    updateContactRequestSchema,
 } from "./services/contact-requests/contact-requests.validation"
 import { developersQuerySchema } from "./services/developers/developers.validation"
-import type { UpdateUserBody } from "./services/user/user.types"
-
-const updateUserBodySchema = t.Object({
-   name: t.Optional(t.String()),
-   company: t.Optional(t.String()),
-   position: t.Optional(t.String()),
-   bio: t.Optional(t.String()),
-   location: t.Optional(t.String()),
-   isOpenToRecruiters: t.Optional(t.Boolean()),
-})
+import { updateUserBodySchema } from "@/server/services/user/user.validation"
 
 export const app = new Elysia({ prefix: "/api" })
    .use(openapi())
    .use(betterAuthmiddleware)
-   .get("/user", ({ user }) => user, { auth: true })
+   .get("/user", UserService.getUser, { auth: true })
+   .get("/user/settings", UserService.getUserSettings, { auth: true })
    .patch("/user", UserService.updateUser, {
       body: updateUserBodySchema,
       auth: true,
    })
+   .post(
+      "/user/image",
+      async ({ user, set, request }) => {
+         const contentType = request.headers.get("content-type") || "image/jpeg"
+         const fileName = request.headers.get("x-file-name") || "image.jpg"
+
+         const arrayBuffer = await request.arrayBuffer()
+
+         return UserService.uploadProfileImage({
+            user,
+            set,
+            body: {
+               imageBuffer: arrayBuffer,
+               contentType,
+               fileName,
+            },
+         })
+      },
+      {
+         auth: true,
+      }
+   )
    .get("/health", HealthService.getStatus)
 
    .post("/analyze", AnalysisService.analyzeRepository, {
       body: repoAnalysisRequestBodySchema,
-      /*
-       *this will be an authenticated route
-       * **/
       auth: true,
    })
-
    .get("/contact-requests", ContactRequestService.getContactRequests, {
       query: contactRequestQuerySchema,
       auth: true,
    })
-
    .post("/contact-requests", ContactRequestService.createContactRequest, {
       body: createContactRequestSchema,
       auth: true,
    })
-
    .patch("/contact-requests/:requestId", ContactRequestService.updateContactRequestStatus, {
       params: t.Object({ requestId: t.String() }),
       body: updateContactRequestSchema,
       auth: true,
    })
-
    .get("/developers", DevelopersService.getDevelopers, {
       query: developersQuerySchema,
    })
-
    .get("/developers/:username", DevelopersService.getDeveloperByUsername, {})
-
    .get("/developers/tech-stacks", DevelopersService.getTechStacks, {})
 
 export type API = typeof app
