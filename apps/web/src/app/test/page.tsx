@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/eden"
+import { apiClient } from "@/lib/eden.server"
 
 export default async function Page() {
    /*
