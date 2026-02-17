@@ -13,9 +13,9 @@ const poppins = Poppins({
    variable: "--font-poppins",
 })
 export const metadata: Metadata = {
-   title: "HireXAI - AI-Powered Code Assessment for Efficient Hiring",
+   title: "HexcAI - AI-Powered Code Assessment for Efficient Hiring",
    description:
-      "HireXAI leverages AI to streamline your hiring process by analyzing code submissions, enabling you to identify top talent quickly and accurately.",
+      "HexcAI leverages AI to streamline your hiring process by analyzing code submissions, enabling you to identify top talent quickly and accurately.",
 }
 
 export default function RootLayout({
