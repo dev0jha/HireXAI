@@ -1,7 +1,6 @@
 "use client"
 
 import { Cpu, FileCode, Network, Shield, Terminal } from "lucide-react"
-
 import { GitHubAnalysisFlow } from "@/components/core/GitHubAnalysisFlow"
 import { SectionHeader } from "@/components/ui/section-header"
 import { BentoCard, BentoCardProps, BentoGrid } from "@/components/ui/bento-grid"
@@ -11,8 +10,21 @@ import {
    SecurityHash,
    SystemLogs,
 } from "@/components/ui/bento-seletons"
-import { Divider } from "@/components/divider"
-import { cn } from "@/lib/utils"
+
+export function HowItWorks() {
+   return (
+      <section id="how-it-works" className="relative w-full bg-[#121212] py-24 lg:py-32">
+         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <SectionHeader title="Built for precision." subtitle="Designed for privacy." />
+            <BentoGrid>
+               {features.map((feature, idx) => (
+                  <BentoCard key={idx} {...feature} />
+               ))}
+            </BentoGrid>
+         </div>
+      </section>
+   )
+}
 
 const features: BentoCardProps[] = [
    {
@@ -65,18 +77,3 @@ const features: BentoCardProps[] = [
       background: <SecurityHash />,
    },
 ]
-
-export function HowItWorks() {
-   return (
-      <section id="how-it-works" className="relative w-full bg-[#121212] py-24 lg:py-32">
-         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionHeader title="Built for precision." subtitle="Designed for privacy." />
-            <BentoGrid>
-               {features.map((feature, idx) => (
-                  <BentoCard key={idx} {...feature} />
-               ))}
-            </BentoGrid>
-         </div>
-      </section>
-   )
-}

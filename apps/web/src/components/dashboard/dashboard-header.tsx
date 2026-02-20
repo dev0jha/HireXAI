@@ -19,17 +19,18 @@ export function DashboardHeader({ userName, publicProfileUrl }: DashboardHeaderP
             </p>
          </div>
          <div className="flex items-center gap-3">
-            <Link href={publicProfileUrl}>
+            <Link href={publicProfileUrl} passHref>
                <Button
                   variant="outline"
-                  className="border-zinc-800 text-shadow-background text-shadow-lg shadow-lg bg-zinc-900/50 text-zinc-300 hover:bg-zinc-800 hover:text-white border-2"
+                  className="border-zinc-800 bg-zinc-900/50 text-zinc-300 hover:bg-zinc-800 hover:text-white border-2 h-11"
                >
                   <IconUser className="mr-2 h-4 w-4" />
                   Public Profile
                </Button>
             </Link>
-            <Link href="/dashboard/analysis">
-               <Button className="bg-neutral-300 text-shadow-md py-3 px-2 shadow-lg text-zinc-900 hover:bg-zinc-200">
+
+            <Link href="/dashboard/analysis" passHref>
+               <Button className="bg-neutral-800/80 text-zinc-200 hover:bg-zinc-700 shadow-lg border-2 border-zinc-800 h-11">
                   <IconAnalyze className="mr-2 h-4 w-4" />
                   New Analysis
                </Button>

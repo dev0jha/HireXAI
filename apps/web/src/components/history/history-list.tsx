@@ -41,9 +41,7 @@ function getScoreColor(score: number): string {
 }
 
 export function HistoryList({ analyses }: HistoryListProps) {
-   if (analyses.length === 0) {
-      return <EmptyState />
-   }
+   if (analyses.length === 0) return <EmptyState />
 
    return (
       <div className="overflow-hidden rounded-xl border border-zinc-800 bg-neutral-800/20 backdrop-blur-sm">
@@ -144,7 +142,7 @@ function EmptyState() {
          <Link href="/dashboard/analysis">
             <Button
                variant="outline"
-               className="mt-8 inline-flex h-10 items-center justify-center rounded-md bg-zinc-50 px-6 text-sm font-medium text-zinc-50 shadow transition-colors hover:bg-zinc-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50"
+               className="mt-8 inline-flex h-10 items-center justify-center rounded-md bg-zinc-50/10 border border-zinc-300/20 px-6 text-sm font-medium text-zinc-50 shadow transition-colors hover:bg-zinc-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50"
             >
                <IconAnalyze />
                Analyze Repository
