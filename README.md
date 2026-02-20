@@ -24,12 +24,14 @@
 ### 🎯 Key Benefits
 
 **For Developers:**
+
 - 📊 Get AI-evaluated Developer Score based on real code quality
 - 🎓 Understand strengths and areas for improvement
 - 🔒 Control visibility and recruiter access (opt-in only)
 - 💼 Get discovered by recruiters without spam
 
 **For Recruiters:**
+
 - ⚡ Find top-tier developers faster
 - 🔍 See real code quality before contacting
 - 🎯 Filter by tech stack and skill levels
@@ -40,6 +42,7 @@
 ## ✨ Features
 
 ### 🧠 AI-Powered Code Analysis
+
 - **Code Quality** (30%): Clean code practices, maintainability, complexity
 - **Architecture** (20%): Design patterns, structure, scalability
 - **Security** (20%): Vulnerability detection, best practices
@@ -47,6 +50,7 @@
 - **Documentation** (15%): README quality, inline comments, API docs
 
 ### 👨‍💻 Developer Dashboard
+
 - Analyze GitHub repositories with one-click
 - View detailed score breakdowns with explanations
 - Control recruiter visibility with "Open to Recruiters" toggle
@@ -54,6 +58,7 @@
 - Privacy-first: Contact info shared only after approval
 
 ### 🧑‍💼 Recruiter Discovery
+
 - Browse high-scoring developers (≥80 score)
 - Filter by technologies, frameworks, and score ranges
 - View public developer profiles with code insights
@@ -62,18 +67,19 @@
 
 ### 🏆 Developer Score System
 
-| Score Range | Label | Description |
-|------------|-------|-------------|
-| 90-100 | 🌟 Excellent | Outstanding code quality and practices |
-| 80-89 | 💪 Strong | Solid developer with great fundamentals |
-| 60-79 | ⚡ Average | Good foundation, room for growth |
-| <60 | 📚 Needs Improvement | Focus on core skills development |
+| Score Range | Label                | Description                             |
+| ----------- | -------------------- | --------------------------------------- |
+| 90-100      | 🌟 Excellent         | Outstanding code quality and practices  |
+| 80-89       | 💪 Strong            | Solid developer with great fundamentals |
+| 60-79       | ⚡ Average           | Good foundation, room for growth        |
+| <60         | 📚 Needs Improvement | Focus on core skills development        |
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **Framework**: [Next.js 16.1](https://nextjs.org/) (App Router)
 - **Language**: [TypeScript 5.9](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/)
@@ -85,18 +91,21 @@
 - **Icons**: [Lucide React](https://lucide.dev/), [Tabler Icons](https://tabler.io/icons)
 
 ### Backend & Database
+
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
 - **Database**: [Neon Serverless Postgres](https://neon.tech/)
 - **Authentication**: [Better Auth](https://www.better-auth.com/)
 - **API**: [Elysia](https://elysiajs.com/)
 
 ### AI & Analytics
+
 - **AI SDK**: [Vercel AI SDK](https://sdk.vercel.ai/)
 - **LLM Provider**: [Groq](https://groq.com/)
 - **Charts**: [Recharts](https://recharts.org/)
 - **Flow Diagrams**: [XYFlow](https://reactflow.dev/)
 
 ### Development Tools
+
 - **Build System**: [Turborepo](https://turbo.build/)
 - **Package Manager**: [Bun](https://bun.sh/)
 - **Linting**: [ESLint 9](https://eslint.org/)
@@ -116,47 +125,53 @@
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/dev0jha/HireXAI.git
    cd HireXAI
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp apps/web/.env.example apps/web/.env.local
    ```
-   
+
    Configure the following variables:
+
    ```env
    # Database
    DATABASE_URL="your-neon-database-url"
-   
+
    # Authentication
    BETTER_AUTH_SECRET="your-secret-key"
    BETTER_AUTH_URL="http://localhost:3000"
-   
+
    # AI
    GROQ_API_KEY="your-groq-api-key"
-   
+
    ```
 
 4. **Run database migrations**
+
    ```bash
    bun run db:migrate
    ```
 
 5. **Start the development server**
+
    ```bash
    bun dev
    ```
 
 6. **Open your browser**
-   
+
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ### Available Scripts
@@ -180,7 +195,32 @@ bun check-types      # Type-check all packages
 bun run db:generate  # Generate Drizzle migrations
 bun run db:migrate   # Run database migrations
 bun run db:studio    # Open Drizzle Studio
+bun run db:seed      # Seed database with mock data
 ```
+
+### Seeding the Database
+
+To populate the database with mock data for development:
+
+```bash
+bun run db:seed
+```
+
+This creates test users with password `password123`:
+
+**Candidates:**
+
+- john.doe@example.com
+- jane.smith@example.com
+- alex.j@example.com
+- sarah.w@example.com
+- michael.b@example.com
+
+**Recruiters:**
+
+- hr@techcorp.com
+- hiring@startupxyz.io
+- recruit@enterprisesol.com
 
 ---
 
@@ -252,6 +292,5 @@ We welcome contributions! Here's how you can help:
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
 
 </div>
