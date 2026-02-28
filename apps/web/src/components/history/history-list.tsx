@@ -133,7 +133,7 @@ export function HistoryList({ analyses }: HistoryListProps) {
 
 function EmptyState() {
    return (
-      <div className="flex min-h-100 flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 bg-neutral-800/30 p-8 text-center animate-in fade-in zoom-in-95 duration-500">
+      <div className="flex min-h-100 flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 bg-neutral-800/30 p-8 text-center shadow-lg">
          <IconHistory className="h-8 w-8 text-zinc-500" />
          <h3 className="mt-6 text-lg font-semibold text-zinc-200">No analysis history</h3>
          <p className="mt-2 text-sm text-zinc-500 max-w-sm mx-auto">

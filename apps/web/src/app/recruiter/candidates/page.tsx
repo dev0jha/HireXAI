@@ -172,20 +172,24 @@ function DataTable({
    onRemove: (id: string) => void
 }) {
    return (
-      <div className="border rounded-md shadow-sm bg-neutral-900/80">
+      <div className="border rounded-md shadow-sm bg-neutral-900/80 shadow-neutral-900/20 border-neutral-500/10">
          <Table>
             <TableHeader>
-               <TableRow className="bg-neutral-900/50 text-xs">
-                  <TableHead className="w-75 uppercase font-bold">Candidate</TableHead>
-                  <TableHead className="uppercase font-bold">Score</TableHead>
-                  <TableHead className="uppercase font-bold">Status</TableHead>
-                  <TableHead className="hidden md:table-cell uppercase font-bold">
+               <TableRow className="bg-neutral-900/50 text-xs border-b border-neutral-500/20">
+                  <TableHead className="w-75 uppercase font-bold text-foreground">
+                     Candidate
+                  </TableHead>
+                  <TableHead className="uppercase font-bold text-foreground">Score</TableHead>
+                  <TableHead className="uppercase font-bold text-foreground">Status</TableHead>
+                  <TableHead className="hidden md:table-cell uppercase font-bold text-foreground">
                      Tech Stack
                   </TableHead>
-                  <TableHead className="hidden md:table-cell uppercase font-bold">
+                  <TableHead className="hidden md:table-cell uppercase font-bold text-foreground">
                      Location
                   </TableHead>
-                  <TableHead className="text-right uppercase font-bold">Actions</TableHead>
+                  <TableHead className="text-right uppercase font-bold text-foreground">
+                     Actions
+                  </TableHead>
                </TableRow>
             </TableHeader>
 
@@ -194,11 +198,11 @@ function DataTable({
                   filteredCandidates.map(candidate => (
                      <TableRow key={candidate.id}>
                         {/* Candidate Name & Avatar */}
-                        <TableCell>
+                        <TableCell className="text-foreground">
                            <div className="flex items-center gap-3">
                               <Avatar className="h-9 w-9 border">
                                  <AvatarImage src={candidate.avatar!} alt={candidate.name} />
-                                 <AvatarFallback>
+                                 <AvatarFallback className="bg-neutral-700 text-neutral-300 border-neutral-800/10 rounded-sm">
                                     {candidate.name.substring(0, 2).toUpperCase()}
                                  </AvatarFallback>
                               </Avatar>
@@ -214,7 +218,7 @@ function DataTable({
                         </TableCell>
 
                         {/* Score */}
-                        <TableCell>
+                        <TableCell className="text-foreground">
                            <div
                               className={`font-semibold text-sm ${
                                  candidate.score >= 90
@@ -229,10 +233,12 @@ function DataTable({
                         </TableCell>
 
                         {/* Status */}
-                        <TableCell>{getStatusBadge(candidate.status)}</TableCell>
+                        <TableCell className="text-foreground">
+                           {getStatusBadge(candidate.status)}
+                        </TableCell>
 
                         {/* Tech Stack (Truncated) */}
-                        <TableCell className="hidden md:table-cell max-w-50">
+                        <TableCell className="hidden md:table-cell max-w-50 text-foreground">
                            <div className="flex flex-wrap gap-1">
                               {candidate.techStack.slice(0, 2).map(tech => (
                                  <Badge
@@ -252,7 +258,7 @@ function DataTable({
                         </TableCell>
 
                         {/* Location & Date */}
-                        <TableCell className="hidden md:table-cell">
+                        <TableCell className="hidden md:table-cell text-foreground">
                            <div className="flex flex-col">
                               <span className="text-sm text-foreground">{candidate.location}</span>
                               <span className="text-xs text-muted-foreground">
@@ -262,7 +268,7 @@ function DataTable({
                         </TableCell>
 
                         {/* Actions Dropdown */}
-                        <TableCell className="text-right">
+                        <TableCell className="text-right text-foreground">
                            <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                  <Button variant="ghost" className="h-8 w-8 p-0">
@@ -297,7 +303,7 @@ function DataTable({
                   ))
                ) : (
                   <TableRow>
-                     <TableCell colSpan={6} className="h-24 text-center">
+                     <TableCell colSpan={6} className="h-24 text-center text-foreground">
                         No results found.
                      </TableCell>
                   </TableRow>

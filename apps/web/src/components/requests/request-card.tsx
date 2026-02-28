@@ -3,10 +3,10 @@ import { Building2, Clock, Mail, X } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import type { ContactRequest } from "@/lib/queries/queryOptions"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
+import type { ContactRequest } from "@/types"
 
 export function RequestCard({
    request,
@@ -18,7 +18,7 @@ export function RequestCard({
    const isPending = request.status === "pending"
 
    return (
-      <Card className="group relative flex flex-col justify-between gap-3 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/40 p-4 transition-all hover:border-zinc-700 hover:bg-zinc-900/80 hover:shadow-md">
+      <div className="group relative flex flex-col justify-between gap-3 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/40 p-4 transition-all hover:border-zinc-700 hover:bg-zinc-900/80 hover:shadow-md">
          {/* Top Row: User Info & Date */}
          <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -77,7 +77,6 @@ export function RequestCard({
             </TooltipProvider>
          </div>
 
-         {/* Bottom: Contact Info (if accepted) OR Actions (if pending) */}
          <div className="mt-1 flex items-center justify-between pt-2 border-t border-zinc-800/50">
             {/* Status Badge */}
             {!isPending && (
@@ -113,12 +112,12 @@ export function RequestCard({
                   <div className="flex gap-2">
                      <Button
                         size="sm"
-                        variant="ghost"
+                        variant="outline"
                         onClick={() => onUpdateStatus(request.id, "rejected")}
-                        className="h-7 w-7 rounded-full p-0 text-zinc-500 hover:bg-red-500/10 hover:text-red-400"
+                        className="rounded-full p-3 text-zinc-500 hover:bg-red-500/10 hover:text-red-400"
                      >
                         <X className="h-4 w-4" />
-                        <span className="sr-only">Decline</span>
+                        Decline
                      </Button>
                      <Button
                         size="sm"
@@ -131,7 +130,7 @@ export function RequestCard({
                </div>
             )}
          </div>
-      </Card>
+      </div>
    )
 }
 

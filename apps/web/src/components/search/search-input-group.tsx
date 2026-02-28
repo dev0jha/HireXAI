@@ -35,7 +35,7 @@ export const SearchInputGroup = ({
       <InputGroup
          ref={ref}
          className={cn(
-            "relative w-full sm:w-48 h-10 border-2 border-zinc-300/30 rounded-md py-2",
+            "relative w-full sm:w-48 h-10 border-2 border-zinc-300/30 rounded-md py-2 bg-neutral-800/50 focus-within:ring-2 focus-within:ring-zinc-300/50 focus-within:border-transparent transition-colors duration-200",
             className
          )}
       >
