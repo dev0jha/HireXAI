@@ -14,7 +14,7 @@ import {
 import { motion, Variants } from "motion/react"
 
 import AnalysisCanvas from "@/components/analysis/analysis-canvas"
-import { useAnalysisInput, useAnalysisState } from "@/hooks/screens/analysis.hooks"
+import { useAnalysisState } from "@/hooks/screens/analysis.hooks"
 import { cn } from "@/lib/utils"
 
 const scoreCategories = [
@@ -37,11 +37,11 @@ const containerVariants: Variants = {
 }
 
 const itemVariants: Variants = {
-   hidden: { opacity: 0, y: 10 },
+   hidden: { opacity: 0, y: 15 },
    visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.4, ease: "easeOut" },
+      transition: { duration: 0.5, ease: "easeOut" },
    },
 }
 
@@ -64,78 +64,80 @@ export function Results() {
          variants={containerVariants}
          initial="hidden"
          animate="visible"
-         className="mx-auto max-w-6xl xl:max-w-full pb-2 sm:pb-1 px-0 sm:px-8 lg:px-16 xl:px-44"
+         className="w-full pb-8"
       >
-         <div className="relative mb-8 px-4">
-            <div className="w-full flex items-center justify-end gap-4">
-               <button
-                  onClick={() => {
-                     setState({ status: "idle" })
-                  }}
-                  className="flex h-8 w-8 items-center justify-center border-2 rounded-lg text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors bg-neutral-500/10"
-                  aria-label="Close results"
-               >
-                  <IconX className="h-4 w-4" />
-               </button>
-            </div>
-
+         {/* 1. Header Section */}
+         <div className="relative mb-8 sm:mb-10 w-full">
             <motion.div
                variants={itemVariants}
-               className="flex flex-col items-start justify-between gap-6 pb-6 lg:flex-row lg:items-end lg:gap-0"
+               className="flex flex-col items-start justify-between gap-6 pb-6 lg:flex-row lg:items-end lg:gap-8"
             >
-               <div className="space-y-2">
+               {/* Left: Repo Details */}
+               <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                     <h2 className="text-3xl font-bold tracking-tight text-white">
+                     <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
                         {state.result.name}
                      </h2>
-                     <span className="rounded-full border border-zinc-800 bg-zinc-900/50 px-2.5 py-1 text-xs font-medium text-zinc-400">
+                     <span className="rounded-full border border-zinc-700/50 bg-zinc-800/30 px-2.5 py-0.5 text-xs font-medium text-zinc-300">
                         Public
                      </span>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-zinc-500">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-zinc-400">
                      <a
                         href={state.result.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-1.5 hover:text-zinc-300 transition-colors truncate max-w-full"
+                        className="group flex items-center gap-1.5 hover:text-zinc-200 transition-colors truncate max-w-[200px] sm:max-w-sm"
                      >
-                        <IconBrandGithub className="h-4 w-4 shrink-0" />
+                        <IconBrandGithub className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
                         <span className="truncate">
                            {state.result.url.replace("https://github.com/", "")}
                         </span>
                      </a>
-                     <span className="h-1 w-1 rounded-full bg-zinc-800 shrink-0" />
-                     <span className="flex items-center gap-1.5 text-zinc-400 text-xs">
-                        <IconCircle className="h-2 w-2 fill-current text-indigo-500" />
+                     <span className="h-1 w-1 rounded-full bg-zinc-700 shrink-0" />
+                     <span className="flex items-center gap-1.5 text-zinc-300 font-medium">
+                        <IconCircle className="h-2 w-2 fill-indigo-500 text-indigo-500" />
                         {state.result.language}
                      </span>
-                     <span className="h-1 w-1 rounded-full bg-zinc-800 shrink-0" />
-                     <span className="flex items-center gap-1.5 text-zinc-400">
-                        <IconStar className="h-3.5 w-3.5" />
+                     <span className="h-1 w-1 rounded-full bg-zinc-700 shrink-0" />
+                     <span className="flex items-center gap-1.5">
+                        <IconStar className="h-3.5 w-3.5 text-amber-500/80" />
                         {state.result.stars}
                      </span>
                   </div>
                </div>
 
-               {/* Score Counter */}
-               <div className="flex items-end gap-3">
-                  <div className="text-right">
-                     <p className="mb-1 text-[10px] uppercase tracking-widest text-zinc-500 font-semibold">
+               {/* Right: Score & Close button perfectly integrated */}
+               <div className="flex w-full lg:w-auto items-center justify-between lg:justify-end gap-6 sm:gap-8 border-t border-zinc-800/50 pt-6 lg:border-none lg:pt-0">
+                  <div className="text-left lg:text-right flex-1 lg:flex-none">
+                     <p className="mb-1.5 text-[11px] uppercase tracking-widest text-zinc-500 font-semibold">
                         Overall Score
                      </p>
-                     <div className="flex items-baseline justify-end gap-1">
+                     <div className="flex items-baseline justify-start lg:justify-end gap-1">
                         <AnimatedCounter value={state.result.totalScore} />
-                        <span className="text-xs sm:text-sm text-zinc-600 font-medium">/100</span>
+                        <span className="text-sm font-medium text-zinc-600">/100</span>
                      </div>
                   </div>
+
+                  {/* Vertical Divider for desktop */}
+                  <div className="hidden lg:block h-12 w-px bg-zinc-800/50" />
+
+                  <button
+                     onClick={() => setState({ status: "idle" })}
+                     className="group flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-zinc-700/50 bg-zinc-800/30 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-100 transition-all hover:scale-105 active:scale-95 shrink-0 shadow-sm"
+                     aria-label="Close results"
+                     title="Close results"
+                  >
+                     <IconX className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:rotate-90" />
+                  </button>
                </div>
             </motion.div>
 
             {/* Header Separator Line */}
             <motion.div
                variants={lineVariants}
-               className="h-px w-full bg-zinc-800/50 origin-left"
+               className="h-px w-full bg-zinc-800/60 origin-left"
             />
          </div>
 
@@ -143,14 +145,16 @@ export function Results() {
          <div className="grid grid-cols-1 gap-8 lg:gap-12 lg:grid-cols-12">
             <motion.div
                variants={itemVariants}
-               className="relative lg:col-span-8 overflow-hidden rounded-lg"
+               className="relative lg:col-span-8 overflow-hidden rounded-xl border border-zinc-800/50 bg-zinc-900/20 shadow-2xl"
             >
+               <CornerMarkers />
                <AnalysisCanvas analysisResult={state.result} />
             </motion.div>
 
             <div className="flex flex-col gap-8 lg:gap-10 lg:col-span-4 lg:py-2">
+               {/* Performance Breakdown */}
                <motion.div variants={itemVariants} className="space-y-4 sm:space-y-6">
-                  <h3 className="font-mono text-xs font-semibold uppercase tracking-widest text-zinc-500">
+                  <h3 className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
                      Performance Breakdown
                   </h3>
                   <div className="space-y-4 sm:space-y-5">
@@ -158,15 +162,16 @@ export function Results() {
                         <div key={category.name} className="group">
                            <div className="mb-2 flex items-center justify-between">
                               <span className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400 group-hover:text-zinc-200 transition-colors">
-                                 <category.icon className="h-4 w-4 text-zinc-600 group-hover:text-zinc-400 transition-colors shrink-0" />
+                                 <category.icon className="h-4 w-4 text-zinc-500 group-hover:text-zinc-300 transition-colors shrink-0" />
                                  <span className="truncate">{category.name}</span>
                               </span>
                               <span className="font-mono text-xs sm:text-sm font-medium text-zinc-300">
                                  {scoreValues[index]}
                               </span>
                            </div>
-                           {/* Slim Progress Bar */}
-                           <div className="h-2 w-full overflow-hidden rounded-md bg-zinc-800/50">
+
+                           {/* Slim, Rounded Progress Bar */}
+                           <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800/50 relative">
                               <motion.div
                                  initial={{ width: 0 }}
                                  animate={{ width: `${scoreValues[index]}%` }}
@@ -176,12 +181,12 @@ export function Results() {
                                     ease: "circOut",
                                  }}
                                  className={cn(
-                                    "h-full rounded-md",
+                                    "absolute top-0 bottom-0 left-0 rounded-full shadow-sm",
                                     scoreValues[index] >= 80
-                                       ? "bg-emerald-500/80"
+                                       ? "bg-emerald-500/90"
                                        : scoreValues[index] >= 50
-                                         ? "bg-amber-500/80"
-                                         : "bg-rose-500/80"
+                                         ? "bg-amber-500/90"
+                                         : "bg-rose-500/90"
                                  )}
                               />
                            </div>
@@ -198,7 +203,7 @@ export function Results() {
 
                {/* Insights Section */}
                <motion.div variants={itemVariants} className="space-y-4 sm:space-y-6">
-                  <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
+                  <h3 className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
                      Key Insights
                   </h3>
                   <div className="space-y-3 sm:space-y-4">
@@ -208,17 +213,19 @@ export function Results() {
                            initial={{ opacity: 0, x: -10 }}
                            animate={{ opacity: 1, x: 0 }}
                            transition={{ delay: 0.8 + index * 0.1 }}
-                           className="flex gap-3 sm:gap-4"
+                           className="flex gap-3 sm:gap-4 group"
                         >
-                           <div className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+                           <div className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 transition-colors group-hover:border-zinc-700">
                               <div
                                  className={cn(
                                     "h-1.5 w-1.5 rounded-full",
-                                    index === 0 ? "bg-indigo-500" : "bg-zinc-500"
+                                    index === 0
+                                       ? "bg-indigo-500"
+                                       : "bg-zinc-500 group-hover:bg-zinc-400"
                                  )}
                               />
                            </div>
-                           <p className="text-xs sm:text-sm leading-relaxed text-zinc-400">
+                           <p className="text-xs sm:text-sm leading-relaxed text-zinc-400 group-hover:text-zinc-300 transition-colors">
                               {item}
                            </p>
                         </motion.div>
@@ -236,13 +243,10 @@ function CornerMarkers() {
       <div className="pointer-events-none absolute inset-0 z-20 opacity-50">
          <div className="absolute left-0 top-0 h-4 w-px bg-zinc-700" />
          <div className="absolute left-0 top-0 h-px w-4 bg-zinc-700" />
-
          <div className="absolute right-0 top-0 h-4 w-px bg-zinc-700" />
          <div className="absolute right-0 top-0 h-px w-4 bg-zinc-700" />
-
          <div className="absolute bottom-0 left-0 h-4 w-px bg-zinc-700" />
          <div className="absolute bottom-0 left-0 h-px w-4 bg-zinc-700" />
-
          <div className="absolute bottom-0 right-0 h-4 w-px bg-zinc-700" />
          <div className="absolute bottom-0 right-0 h-px w-4 bg-zinc-700" />
       </div>
@@ -255,7 +259,7 @@ function AnimatedCounter({ value }: { value: number }) {
          initial={{ opacity: 0, y: 10 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.5 }}
-         className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter text-white"
+         className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter text-white"
       >
          {value}
       </motion.span>

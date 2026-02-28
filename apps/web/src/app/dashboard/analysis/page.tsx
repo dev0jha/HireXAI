@@ -29,7 +29,7 @@ function AnalyzePageContent() {
                <AnalysisInputTrigger />
             </div>
 
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-6xl">
                <Results />
             </div>
          </div>
