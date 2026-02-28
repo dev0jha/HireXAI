@@ -1,10 +1,16 @@
 <div align="center">
 
-# HireXAI
+# HexcAI
 
 ### Hire Smarter. Hire by Code.
 
 **AI-powered developer evaluation & hiring platform that assesses real GitHub code, not resumes.**
+
+<br />
+
+![HexcAI Preview](apps/web/public/HexcAI.png)
+
+<br />
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -19,7 +25,7 @@
 
 ## 📋 Overview
 
-**HireXAI** transforms the developer hiring process by evaluating candidates based on their **real GitHub repositories** using AI-powered code analysis. The platform generates transparent **Developer Scores** (0-100) across multiple dimensions while respecting developer privacy and consent.
+**HexcAI** transforms the developer hiring process by evaluating candidates based on their **real GitHub repositories** using AI-powered code analysis. The platform generates transparent **Developer Scores** (0-100) across multiple dimensions while respecting developer privacy and consent.
 
 ### 🎯 Key Benefits
 
@@ -127,8 +133,8 @@
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/dev0jha/HireXAI.git
-   cd HireXAI
+   git clone https://github.com/dev0jha/HexcAI.git
+   cd HexcAI
    ```
 
 2. **Install dependencies**
@@ -227,7 +233,7 @@ This creates test users with password `password123`:
 ## 📁 Project Structure
 
 ```
-HireXAI/
+HexcAI/
 ├── apps/
 │   └── web/                    # Next.js 16 application
 │       ├── app/                # App Router pages
